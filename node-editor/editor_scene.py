@@ -27,12 +27,12 @@ class QEditorGraphicsScene(QGraphicsScene):
         horizontal_right = QPoint(rect.topRight().toPoint())
         horizontal_left = QPoint(rect.topLeft().toPoint())
 
-        for n in range(200):
+        for n in range(1000):
             lines.append(QLine(vertical_top, vertical_bottom))
             vertical_top.setX(vertical_top.x() + self.grid_spacing)
             vertical_bottom.setX(vertical_bottom.x() + self.grid_spacing)
 
-        for n in range(200):
+        for n in range(1000):
             lines.append(QLine(horizontal_left, horizontal_right))
             horizontal_left.setY(horizontal_left.y() + self.grid_spacing)
             horizontal_right.setY(horizontal_right.y() + self.grid_spacing)
