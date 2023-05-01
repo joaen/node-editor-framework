@@ -8,7 +8,7 @@ class QEditorGraphicsScene(QGraphicsScene):
 
         self.bg_color = QColor(90, 90, 90)
         self.grid_color = QColor(150, 150, 150)
-        self.grid_spacing = 20
+        self.grid_spacing = 30
 
         self.pen_grid = QPen(self.grid_color)
         self.pen_grid.setWidth(1)
@@ -29,13 +29,13 @@ class QEditorGraphicsScene(QGraphicsScene):
 
         for n in range(200):
             lines.append(QLine(vertical_top, vertical_bottom))
-            vertical_top.setX(vertical_top.x() + 20)
-            vertical_bottom.setX(vertical_bottom.x() + 20)
+            vertical_top.setX(vertical_top.x() + self.grid_spacing)
+            vertical_bottom.setX(vertical_bottom.x() + self.grid_spacing)
 
         for n in range(200):
             lines.append(QLine(horizontal_left, horizontal_right))
-            horizontal_left.setY(horizontal_left.y() + 20)
-            horizontal_right.setY(horizontal_right.y() + 20)
+            horizontal_left.setY(horizontal_left.y() + self.grid_spacing)
+            horizontal_right.setY(horizontal_right.y() + self.grid_spacing)
 
   
 
