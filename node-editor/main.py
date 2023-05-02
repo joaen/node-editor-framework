@@ -7,15 +7,12 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
-
-# Subclass QMainWindow to customize your application's main window
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Node Editor")
         # self.setFixedSize(QSize(400, 300))
-
         self.create_ui_widgets()
         self.create_ui_layout()
         self.create_debug_content()
