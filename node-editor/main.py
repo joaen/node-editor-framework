@@ -29,7 +29,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.view)
 
     def create_debug_content(self):
-        square = self.scene.addRect(100, 100, 80, 100, QPen(Qt.black), QBrush(Qt.green))
+        square = self.scene.addRect(300, 500, 80, 100, QPen(Qt.black), QBrush(Qt.green))
         square.setFlag(QGraphicsItem.ItemIsMovable)
         square.setFlag(QGraphicsItem.ItemIsSelectable)
 

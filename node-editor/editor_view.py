@@ -18,40 +18,40 @@ class QEditorGraphicsView(QGraphicsView):
     # def create_ui(self):
         # self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
     # def mousePressEvent(self, event: QMouseEvent):
-    #     if event.button() ==  Qt.LeftButton:
+    #     if event.button() ==  Qt.RightButton:
     #         self.setDragMode(QGraphicsView.ScrollHandDrag)
     #     else:
     #         return super().mouseDoubleClickEvent(event)
     
     # def mouseReleaseEvent(self, event: QMouseEvent):
-    #     if event.button() == Qt.LeftButton:
+    #     if event.button() == Qt.RightButton:
     #         self.setDragMode(QGraphicsView.NoDrag)
     #     else:
     #         return super().mouseReleaseEvent(event)
         
     # MAC *****
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.RightButton:
             QApplication.setOverrideCursor(Qt.ClosedHandCursor)
             self.__prevMousePos = event.pos()
         else:
-            return super().mouseReleaseEvent(event)
+            return super().mousePressEvent(event)
         
     def mouseReleaseEvent(self, event: QMouseEvent):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.RightButton:
             QApplication.setOverrideCursor(Qt.ArrowCursor)
         else:
             return super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
+        if event.buttons() == Qt.RightButton:
             offset = self.__prevMousePos - event.pos()
             self.__prevMousePos = event.pos()
 
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() + offset.y())
             self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + offset.x())
         else:
-            return super().mouseReleaseEvent(event)
+            return super().mouseMoveEvent(event)
 
     def wheelEvent(self, event):
         if event.angleDelta().y() > 0:
