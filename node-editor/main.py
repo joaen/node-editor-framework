@@ -6,6 +6,8 @@ from editor_view import QEditorGraphicsView
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+from graphics_node import GraphicsNode
+from graphics_port import GraphicsPort
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -29,9 +31,14 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.view)
 
     def create_debug_content(self):
-        square = self.scene.addRect(300, 500, 80, 100, QPen(Qt.black), QBrush(Qt.green))
-        square.setFlag(QGraphicsItem.ItemIsMovable)
-        square.setFlag(QGraphicsItem.ItemIsSelectable)
+
+        graphics_node = GraphicsNode()
+        self.scene.addItem(graphics_node)
+        graphics_node.setFlag(QGraphicsItem.ItemIsMovable)
+        graphics_node.setFlag(QGraphicsItem.ItemIsSelectable)
+
+        graphics_port = GraphicsPort()
+        self.scene.addItem(graphics_port)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
