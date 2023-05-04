@@ -8,7 +8,7 @@ class Port():
     data = None
 
     def __init__(self):
-        self.data = "poop"
+        self.data = "pop"
     
     # def something(self):
         # pass
