@@ -7,17 +7,19 @@ from graphics_rect import GraphicsRect
 
 
 class GraphicsNode(QGraphicsItem):
+
     def __init__(self):
         super().__init__()
-        self.square = GraphicsRect()
-        self.square.setParentItem(self)
+        
+        self.node_shape = GraphicsRect()
+        self.node_shape.setParentItem(self)
 
-        self.circle = GraphicsCircle()
-        self.circle.setParentItem(self)
+        self.port_shape = GraphicsCircle()
+        self.port_shape.setParentItem(self)
 
 
     def boundingRect(self):
-        return self.circle.boundingRect().united(self.square.boundingRect())
+        return self.port_shape.boundingRect().united(self.node_shape.boundingRect())
 
     def paint(self, painter, option, widget):
         pass
