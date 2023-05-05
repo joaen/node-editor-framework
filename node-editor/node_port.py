@@ -10,5 +10,3 @@ class Port():
     def __init__(self):
         self.data = "pop"
     
-    # def something(self):
-        # pass

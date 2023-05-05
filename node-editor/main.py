@@ -1,13 +1,12 @@
 import sys
 from PySide2.QtWidgets import *
-# from main_window import MainWindow
 from editor_scene import QEditorGraphicsScene
 from editor_view import QEditorGraphicsView
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+
 from graphics_node import GraphicsNode
-from graphics_port import GraphicsPort
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -20,25 +19,20 @@ class MainWindow(QWidget):
         self.create_debug_content()
 
     def create_ui_widgets(self):
-        self.scene = QEditorGraphicsScene()
-        self.view = QEditorGraphicsView(self.scene)
-        self.view.setScene(self.scene)
+        self.graphics_scene = QEditorGraphicsScene()
+        self.graphics_view = QEditorGraphicsView(self.graphics_scene)
+        self.graphics_view.setScene(self.graphics_scene)
 
 
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(5, 5, 5, 5)
-        main_layout.addWidget(self.view)
+        main_layout.addWidget(self.graphics_view)
 
     def create_debug_content(self):
-
-        graphics_node = GraphicsNode()
-        self.scene.addItem(graphics_node)
-        graphics_node.setFlag(QGraphicsItem.ItemIsMovable)
-        graphics_node.setFlag(QGraphicsItem.ItemIsSelectable)
-
-        graphics_port = GraphicsPort()
-        self.scene.addItem(graphics_port)
+        node = GraphicsNode()
+        self.graphics_scene.addItem(node)
+        node.setFlag(QGraphicsItem.ItemIsMovable)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

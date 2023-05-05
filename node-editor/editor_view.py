@@ -13,23 +13,7 @@ class QEditorGraphicsView(QGraphicsView):
         self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-    
-    # PC ???? 
-    # def create_ui(self):
-        # self.setViewportUpdateMode(QGraphicsView.FullViewportUpdate)
-    # def mousePressEvent(self, event: QMouseEvent):
-    #     if event.button() ==  Qt.RightButton:
-    #         self.setDragMode(QGraphicsView.ScrollHandDrag)
-    #     else:
-    #         return super().mouseDoubleClickEvent(event)
-    
-    # def mouseReleaseEvent(self, event: QMouseEvent):
-    #     if event.button() == Qt.RightButton:
-    #         self.setDragMode(QGraphicsView.NoDrag)
-    #     else:
-    #         return super().mouseReleaseEvent(event)
-        
-    # MAC *****
+
     def mousePressEvent(self, event):
         if event.button() == Qt.RightButton:
             QApplication.setOverrideCursor(Qt.OpenHandCursor)
