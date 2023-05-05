@@ -10,12 +10,23 @@ class GraphicsNode(QGraphicsItem):
 
     def __init__(self):
         super().__init__()
-        
+
+        self.text = QLabel("WIWOWOWOOWOWOWOWWW")        
+        self.proxy = QGraphicsProxyWidget(parent=self)
+        self.proxy.setWidget(self.text)
+        self.proxy.setPos(220, 250)
+        self.proxy.setZValue(self.zValue() + 1)
+
+
+
+
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
 
         self.port_shape = GraphicsCircle()
         self.port_shape.setParentItem(self)
+
+        # self.edit.setGeometry(x + 5, y + 5, width - 10, height - 10)
 
 
     def boundingRect(self):
