@@ -2,7 +2,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
 
-class QEditorGraphicsScene(QGraphicsScene):
+class EditorGraphicsScene(QGraphicsScene):
     def __init__(self):
         super().__init__()
 

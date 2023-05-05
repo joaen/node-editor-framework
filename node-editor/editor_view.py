@@ -3,7 +3,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
 
-class QEditorGraphicsView(QGraphicsView):
+class EditorGraphicsView(QGraphicsView):
     def __init__(self, scene):
         super().__init__()
         self.graphics_scene = scene

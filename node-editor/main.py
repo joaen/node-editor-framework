@@ -1,7 +1,7 @@
 import sys
 from PySide2.QtWidgets import *
-from editor_scene import QEditorGraphicsScene
-from editor_view import QEditorGraphicsView
+from editor_scene import EditorGraphicsScene
+from editor_view import EditorGraphicsView
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -19,8 +19,8 @@ class MainWindow(QWidget):
         self.create_debug_content()
 
     def create_ui_widgets(self):
-        self.graphics_scene = QEditorGraphicsScene()
-        self.graphics_view = QEditorGraphicsView(self.graphics_scene)
+        self.graphics_scene = EditorGraphicsScene()
+        self.graphics_view = EditorGraphicsView(self.graphics_scene)
         self.graphics_view.setScene(self.graphics_scene)
 
 
