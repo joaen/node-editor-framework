@@ -7,6 +7,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 from graphics_node import GraphicsNode
+from graphics_line import GraphicsLine
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -23,7 +24,6 @@ class MainWindow(QWidget):
         self.graphics_view = EditorGraphicsView(self.graphics_scene)
         self.graphics_view.setScene(self.graphics_scene)
 
-
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(5, 5, 5, 5)
@@ -33,6 +33,14 @@ class MainWindow(QWidget):
         node = GraphicsNode()
         self.graphics_scene.addItem(node)
         node.setFlag(QGraphicsItem.ItemIsMovable)
+
+        # x, y = node.port_pos()
+        # print(x)
+        # print(y)
+        # print(node.port_pos()[0])
+        line = GraphicsLine(node)
+        self.graphics_scene.addItem(line)
+        # line.update()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

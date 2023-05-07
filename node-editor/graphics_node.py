@@ -28,10 +28,12 @@ class GraphicsNode(QGraphicsItem):
 
         # self.edit.setGeometry(x + 5, y + 5, width - 10, height - 10)
 
-
     def boundingRect(self):
         return self.port_shape.boundingRect().united(self.node_shape.boundingRect())
 
     def paint(self, painter, option, widget):
         pass
-    
+
+    def port_pos(self):
+        world_pos = self.port_shape.mapToScene(self.port_shape.pos())
+        return world_pos
