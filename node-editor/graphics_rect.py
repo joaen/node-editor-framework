@@ -8,9 +8,9 @@ class GraphicsRect(QGraphicsItem):
         super().__init__()
 
     def boundingRect(self):
-        return QRectF(200, 200, 300, 300)
+        return QRectF(0, 0, 200, 300)
     
     def paint(self, painter: QPainter, option, widget=None):
         painter.setBrush(QBrush(Qt.gray))
         painter.setPen(QPen(Qt.black))
-        painter.drawRect(200, 200, 300, 300)
+        painter.drawRect(0, 0, 200, 300)

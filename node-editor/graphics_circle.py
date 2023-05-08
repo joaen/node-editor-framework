@@ -4,7 +4,7 @@ from PySide2.QtGui import *
 
 class GraphicsCircle(QGraphicsItem):
 
-    def __init__(self, x=200, y=200, radius=20):
+    def __init__(self, x=0, y=0, radius=20):
         super().__init__()
         self.x = x
         self.y = y

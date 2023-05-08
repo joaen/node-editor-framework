@@ -1,5 +1,4 @@
 import sys
-from PySide2.QtWidgets import *
 from editor_scene import EditorGraphicsScene
 from editor_view import EditorGraphicsView
 from PySide2.QtCore import *
@@ -8,6 +7,7 @@ from PySide2.QtGui import *
 
 from graphics_node import GraphicsNode
 from graphics_line import GraphicsLine
+from graphics_circle import GraphicsCircle
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -30,17 +30,16 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.graphics_view)
 
     def create_debug_content(self):
-        node = GraphicsNode()
+
+        line = GraphicsLine()
+        self.graphics_scene.addItem(line)
+
+        node = GraphicsNode(line)
         self.graphics_scene.addItem(node)
         node.setFlag(QGraphicsItem.ItemIsMovable)
 
-        # x, y = node.port_pos()
-        # print(x)
-        # print(y)
-        # print(node.port_pos()[0])
-        line = GraphicsLine(node)
-        self.graphics_scene.addItem(line)
-        # line.update()
+        # test = GraphicsCircle()
+        # node.setPos(0, 0)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

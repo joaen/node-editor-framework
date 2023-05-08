@@ -37,7 +37,5 @@ class EditorGraphicsScene(QGraphicsScene):
             horizontal_left.setY(horizontal_left.y() + self.grid_spacing)
             horizontal_right.setY(horizontal_right.y() + self.grid_spacing)
 
-  
-
         painter.setPen(self.pen_grid)
         painter.drawLines(lines)
