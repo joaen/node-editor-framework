@@ -14,7 +14,7 @@ class MainWindow(QWidget):
         super().__init__()
 
         self.setWindowTitle("Node Editor")
-        # self.setFixedSize(QSize(400, 300))
+        self.setFixedSize(QSize(600, 600))
         self.create_ui_widgets()
         self.create_ui_layout()
         self.create_debug_content()
@@ -32,26 +32,20 @@ class MainWindow(QWidget):
 
     def create_debug_content(self):
 
-        # self.line = GraphicsLine()
-        # self.scene.addItem(self.line)
-        # self.scene.addItem(self.line)
+        self.line = GraphicsLine()
+        self.scene.addItem(self.line)
+        self.scene.addItem(self.line)
 
         self.node = GraphicsNode()
         self.scene.addItem(self.node)
         self.node.setFlag(QGraphicsItem.ItemIsMovable)
 
-        self.line = QGraphicsLineItem()
-        pen = QPen(Qt.black)
-        self.line.setPen(pen)
-        self.scene.addItem(self.line)
-
     def create_connections(self):
         self.scene.NodeMoved.connect(self.updateLine)
 
-    def updateLine(self, pos):
-        self.line.setLine(QLineF(QPointF(0,0), self.node.pos()))
-        # self.line.end_point_x = self.node.pos().x
-        # self.line.end_point_y = self.node.pos().y
+    def updateLine(self):
+        self.line.end_point_x = self.node.pos().x()
+        self.line.end_point_y = self.node.pos().y()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
