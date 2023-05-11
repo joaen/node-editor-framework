@@ -29,6 +29,3 @@ class GraphicsLine(QGraphicsItem):
         self.path.moveTo(self.start_point_x, self.start_point_y)
         self.path.lineTo(self.end_point_x, self.end_point_y)
         painter.drawPath(self.path)
-        
-        # self.end_point_x = self.node.port_pos().x()
-        # self.end_point_y = self.node.port_pos().y()

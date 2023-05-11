@@ -18,28 +18,40 @@ class MainWindow(QWidget):
         self.create_ui_widgets()
         self.create_ui_layout()
         self.create_debug_content()
+        self.create_connections()
 
     def create_ui_widgets(self):
-        self.graphics_scene = EditorGraphicsScene()
-        self.graphics_view = EditorGraphicsView(self.graphics_scene)
-        self.graphics_view.setScene(self.graphics_scene)
+        self.scene = EditorGraphicsScene()
+        self.view = EditorGraphicsView(self.scene)
+        self.view.setScene(self.scene)
 
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(5, 5, 5, 5)
-        main_layout.addWidget(self.graphics_view)
+        main_layout.addWidget(self.view)
 
     def create_debug_content(self):
 
-        line = GraphicsLine()
-        self.graphics_scene.addItem(line)
+        # self.line = GraphicsLine()
+        # self.scene.addItem(self.line)
+        # self.scene.addItem(self.line)
 
-        node = GraphicsNode(line)
-        self.graphics_scene.addItem(node)
-        node.setFlag(QGraphicsItem.ItemIsMovable)
+        self.node = GraphicsNode()
+        self.scene.addItem(self.node)
+        self.node.setFlag(QGraphicsItem.ItemIsMovable)
 
-        # test = GraphicsCircle()
-        # node.setPos(0, 0)
+        self.line = QGraphicsLineItem()
+        pen = QPen(Qt.black)
+        self.line.setPen(pen)
+        self.scene.addItem(self.line)
+
+    def create_connections(self):
+        self.scene.NodeMoved.connect(self.updateLine)
+
+    def updateLine(self, pos):
+        self.line.setLine(QLineF(QPointF(0,0), self.node.pos()))
+        # self.line.end_point_x = self.node.pos().x
+        # self.line.end_point_y = self.node.pos().y
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
