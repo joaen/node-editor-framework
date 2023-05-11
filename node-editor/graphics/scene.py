@@ -8,9 +8,13 @@ from graphics.node import GraphicsNode
 class EditorGraphicsScene(QGraphicsScene):
 
     NodeMoved = Signal(QPointF)
+    PortPressed = Signal(bool)
+    createNewNodeRequested = Signal()
 
     def __init__(self):
         super().__init__()
+
+        self.nodes = []
 
         self.bg_color = QColor(90, 90, 90)
         self.grid_color = QColor(150, 150, 150)
@@ -19,9 +23,19 @@ class EditorGraphicsScene(QGraphicsScene):
 
         self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.bg_color)
-        self.create_nodes()
+        # self.create_nodes()
         self.create_connections()
-         
+        self.initContextMenu()
+
+    def initContextMenu(self):
+        self.contextMenu = QMenu()
+        self.action1 = QAction("New Node", self)
+        self.action1.triggered.connect(self.create_node)
+        self.contextMenu.addAction(self.action1)
+
+    def contextMenuEvent(self, event):
+        self.contextMenu.exec_(event.screenPos())
+
     def drawBackground(self, painter, rect):
         super().drawBackground(painter, rect)
 
@@ -45,23 +59,34 @@ class EditorGraphicsScene(QGraphicsScene):
         painter.setPen(self.pen_grid)
         painter.drawLines(lines)
 
-    def create_nodes(self):
+    def create_node(self):
 
-        self.node = GraphicsNode(name="Node 001", port_pos=0)
-        self.addItem(self.node)
+        # print("WOW")
+        node = GraphicsNode(name="Node 001", port_pos=0)
+        self.addItem(node)
+        self.nodes.append(node)
 
-        self.node_nr2 = GraphicsNode(name="Node 002", port_pos=1)
-        self.addItem(self.node_nr2)
+        # self.node_nr2 = GraphicsNode(name="Node 002", port_pos=1)
+        # self.addItem(self.node_nr2)
         
-        self.line = GraphicsLine(self.node.port_pos().x(), self.node.port_pos().y(), self.node_nr2.port_pos().x(), self.node_nr2.port_pos().y())
-        self.addItem(self.line)
-
+        # self.line = GraphicsLine(self.node.port_pos().x(), self.node.port_pos().y(), self.node_nr2.port_pos().x(), self.node_nr2.port_pos().y())
+        # self.addItem(self.line)
 
     def create_connections(self):
         self.NodeMoved.connect(self.updateLine)
+        self.PortPressed.connect(self.create_line)
+        self.createNewNodeRequested.connect(self.create_node)
+        
+
+    def create_line(self):
+        self.line = GraphicsLine(self.nodes[0].port_pos().x(), self.nodes[0].port_pos().y(), self.nodes[1].port_pos().x(), self.nodes[1].port_pos().y())
+        self.addItem(self.line)
 
     def updateLine(self):
-        self.line.end_point_x = self.node.port_pos().x()
-        self.line.end_point_y = self.node.port_pos().y()
-        self.line.start_point_x = self.node_nr2.port_pos().x()
-        self.line.start_point_y = self.node_nr2.port_pos().y()
+        try:
+            self.line.end_point_x = self.nodes[0].port_pos().x()
+            self.line.end_point_y = self.nodes[0].port_pos().y()
+            self.line.start_point_x = self.nodes[1].port_pos().x()
+            self.line.start_point_y = self.nodes[1].port_pos().y()
+        except:
+            pass
