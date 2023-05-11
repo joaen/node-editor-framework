@@ -15,12 +15,9 @@ class EditorGraphicsScene(QGraphicsScene):
         self.bg_color = QColor(90, 90, 90)
         self.grid_color = QColor(150, 150, 150)
         self.grid_spacing = 30
+        self.pen_grid = QPen(self.grid_color, 1, Qt.DotLine)
 
-        self.pen_grid = QPen(self.grid_color)
-        self.pen_grid.setWidth(1)
-
-        self.scene_size = [1000, 1000]
-        self.setSceneRect(0, 0, self.scene_size[0], self.scene_size[1])
+        self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.bg_color)
         self.create_nodes()
         self.create_connections()
