@@ -5,12 +5,12 @@ from PySide2.QtGui import *
 
 class GraphicsLine(QGraphicsItem):
 
-    def __init__(self):
+    def __init__(self, start_point_x, start_point_y, end_point_x, end_point_y):
         super().__init__()
-        self.start_point_x = -100
-        self.start_point_y = 100
-        self.end_point_x = 0
-        self.end_point_y = 0
+        self.start_point_x = start_point_x
+        self.start_point_y = start_point_y
+        self.end_point_x = end_point_x
+        self.end_point_y = end_point_y
 
         self.path = QPainterPath()
         self.color = QColor(255, 165, 0)

@@ -5,8 +5,6 @@ from PySide2.QtGui import *
 
 from graphics.scene import EditorGraphicsScene
 from graphics.view import EditorGraphicsView
-from graphics.node import GraphicsNode
-from graphics.line import GraphicsLine
 
 
 class MainWindow(QWidget):

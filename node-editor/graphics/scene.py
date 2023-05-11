@@ -50,12 +50,15 @@ class EditorGraphicsScene(QGraphicsScene):
 
     def create_nodes(self):
 
-        self.line = GraphicsLine()
+        self.node = GraphicsNode(name="Node 001", port_pos=0)
+        self.addItem(self.node)
+
+        self.node_nr2 = GraphicsNode(name="Node 002", port_pos=1)
+        self.addItem(self.node_nr2)
+        
+        self.line = GraphicsLine(self.node.port_pos().x(), self.node.port_pos().y(), self.node_nr2.port_pos().x(), self.node_nr2.port_pos().y())
         self.addItem(self.line)
 
-        self.node = GraphicsNode()
-        self.addItem(self.node)
-        self.node.setFlag(QGraphicsItem.ItemIsMovable)
 
     def create_connections(self):
         self.NodeMoved.connect(self.updateLine)
@@ -63,3 +66,5 @@ class EditorGraphicsScene(QGraphicsScene):
     def updateLine(self):
         self.line.end_point_x = self.node.port_pos().x()
         self.line.end_point_y = self.node.port_pos().y()
+        self.line.start_point_x = self.node_nr2.port_pos().x()
+        self.line.start_point_y = self.node_nr2.port_pos().y()
