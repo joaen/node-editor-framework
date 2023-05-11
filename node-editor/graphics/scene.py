@@ -1,6 +1,8 @@
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
+from graphics.line import GraphicsLine
+from graphics.node import GraphicsNode
 
 
 class EditorGraphicsScene(QGraphicsScene):
@@ -20,6 +22,8 @@ class EditorGraphicsScene(QGraphicsScene):
         self.scene_size = [1000, 1000]
         self.setSceneRect(0, 0, self.scene_size[0], self.scene_size[1])
         self.setBackgroundBrush(self.bg_color)
+        self.create_nodes()
+        self.create_connections()
          
     def drawBackground(self, painter, rect):
         super().drawBackground(painter, rect)
@@ -43,3 +47,19 @@ class EditorGraphicsScene(QGraphicsScene):
 
         painter.setPen(self.pen_grid)
         painter.drawLines(lines)
+
+    def create_nodes(self):
+
+        self.line = GraphicsLine()
+        self.addItem(self.line)
+
+        self.node = GraphicsNode()
+        self.addItem(self.node)
+        self.node.setFlag(QGraphicsItem.ItemIsMovable)
+
+    def create_connections(self):
+        self.NodeMoved.connect(self.updateLine)
+
+    def updateLine(self):
+        self.line.end_point_x = self.node.port_pos().x()
+        self.line.end_point_y = self.node.port_pos().y()

@@ -20,7 +20,11 @@ class GraphicsNode(QGraphicsItem):
 
         self.port_shape = GraphicsCircle()
         self.port_shape.setParentItem(self)
-        self.port_shape.setPos(0, 100)
+        # self.port_shape.setPos(0, 100)
+
+    def port_pos(self):
+        return self.port_shape.mapToScene(self.port_shape.pos())
+        # return self.port_shape.pos()
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
