@@ -2,6 +2,7 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
+
 class GraphicsCircle(QGraphicsItem):
 
     def __init__(self, x=0, y=0, radius=20):

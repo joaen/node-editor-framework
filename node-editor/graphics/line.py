@@ -1,14 +1,12 @@
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-# from graphics_node import GraphicsNode
 
 
 class GraphicsLine(QGraphicsItem):
 
     def __init__(self):
         super().__init__()
-        # self.node = node
         self.start_point_x = -100
         self.start_point_y = 100
         self.end_point_x = 0

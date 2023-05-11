@@ -1,10 +1,8 @@
 from PySide2.QtCore import *
-import PySide2.QtCore
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from graphics_circle import GraphicsCircle
-from graphics_rect import GraphicsRect
-from graphics_line import GraphicsLine
+from graphics.circle import GraphicsCircle
+from graphics.rect import GraphicsRect
 
 
 class GraphicsNode(QGraphicsItem):

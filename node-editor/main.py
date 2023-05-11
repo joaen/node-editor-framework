@@ -1,13 +1,13 @@
 import sys
-from editor_scene import EditorGraphicsScene
-from editor_view import EditorGraphicsView
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
-from graphics_node import GraphicsNode
-from graphics_line import GraphicsLine
-from graphics_circle import GraphicsCircle
+from graphics.scene import EditorGraphicsScene
+from graphics.view import EditorGraphicsView
+from graphics.node import GraphicsNode
+from graphics.line import GraphicsLine
+
 
 class MainWindow(QWidget):
     def __init__(self):
