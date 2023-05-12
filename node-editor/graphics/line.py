@@ -11,9 +11,12 @@ class GraphicsLine(QGraphicsItem):
         self.start_point_y = start_point_y
         self.end_point_x = end_point_x
         self.end_point_y = end_point_y
-
         self.path = QPainterPath()
         self.color = QColor(255, 255, 255)
+
+    # def mousePressEvent(self, event):
+    #     print("PRESSED LINE")
+    #     super().mousePressEvent(event)
 
     def boundingRect(self):
         return self.path.boundingRect()
@@ -23,7 +26,6 @@ class GraphicsLine(QGraphicsItem):
         pen = QPen(self.color)
         pen.setWidth(2)
         painter.setPen(pen)
-
 
         start_point = QPointF(self.start_point_x, self.start_point_y)
         self.path.moveTo(start_point)

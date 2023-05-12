@@ -3,21 +3,25 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from graphics.circle import GraphicsCircle
 from graphics.rect import GraphicsRect
-from enum import Enum
+from graphics.header import GraphicsHeader
 
 
 class GraphicsNode(QGraphicsItem):
 
-    def __init__(self, name="Node", port_pos=int):
+    def __init__(self, name="Node", port_pos=int, header_color=None):
         super().__init__()
-        self.text = QLabel(name)     
+        self.name_label = QLabel(name)
+        self.name_label.setStyleSheet("background-color: transparent; color: white;")
         self.proxy = QGraphicsProxyWidget(parent=self)
-        self.proxy.setWidget(self.text)
-        self.proxy.setPos(50, 100)
+        self.proxy.setWidget(self.name_label)
+        self.proxy.setPos(70, 15)
         self.proxy.setZValue(self.zValue() + 1)
 
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
+
+        self.header_shape = GraphicsHeader(color=header_color)
+        self.header_shape.setParentItem(self)
 
         # Set port position
         self.port_shape = GraphicsCircle()
@@ -37,7 +41,7 @@ class GraphicsNode(QGraphicsItem):
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
-        self.scene().NodeMoved.emit(self.pos())
+        self.scene().NodeMoved.emit()
 
     def boundingRect(self):
         return self.port_shape.boundingRect().united(self.node_shape.boundingRect())

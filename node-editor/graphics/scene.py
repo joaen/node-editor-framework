@@ -7,8 +7,9 @@ from graphics.node import GraphicsNode
 
 class EditorGraphicsScene(QGraphicsScene):
 
-    NodeMoved = Signal(QPointF)
-    PortPressed = Signal(bool)
+    NodeMoved = Signal()
+    PortPressed = Signal()
+    LinePressed = Signal()
     createNewNodeRequested = Signal()
 
     def __init__(self):
@@ -23,10 +24,16 @@ class EditorGraphicsScene(QGraphicsScene):
 
         self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
-        self.create_node(0)
-        self.create_node(1)
+        self.create_node(0, QColor(76, 175, 80))
+        self.create_node(1, QColor(24,150,243))
         self.create_connections()
         self.initContextMenu()
+
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() == Qt.Key_Backspace:
+            self.delete_line()
+        else:
+            super().keyPressEvent(event)
 
     def initContextMenu(self):
         self.contextMenu = QMenu()
@@ -53,22 +60,25 @@ class EditorGraphicsScene(QGraphicsScene):
             painter.setPen(self.pen)
             painter.drawLine(x, top, x, bottom)
 
-    def create_node(self, pos):
-        node = GraphicsNode(name="Node 001", port_pos=pos)
+    def create_node(self, pos, color):
+        node = GraphicsNode(name="Node 001", port_pos=pos, header_color=color)
         self.addItem(node)
         self.nodes.append(node)
 
     def create_connections(self):
         self.NodeMoved.connect(self.updateLine)
         self.PortPressed.connect(self.create_line)
+        self.LinePressed.connect(self.delete_line)
         self.createNewNodeRequested.connect(self.create_node)
 
     def create_line(self):
         self.line = GraphicsLine(self.nodes[0].port_pos().x(), self.nodes[0].port_pos().y(), self.nodes[1].port_pos().x(), self.nodes[1].port_pos().y())
         self.addItem(self.line)
         self.updateLine()
-        
 
+    def delete_line(self):
+        self.removeItem(self.line)
+        
     def updateLine(self):
         try:
             self.line.end_point_x = self.nodes[0].port_pos().x()

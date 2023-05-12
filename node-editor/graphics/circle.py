@@ -21,7 +21,7 @@ class GraphicsCircle(QGraphicsItem):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             print("PRESSED")
-            self.scene().PortPressed.emit(self.pos())
+            self.scene().PortPressed.emit()
             self.brush.setColor(self.click_color)
             self.update()
         else:
