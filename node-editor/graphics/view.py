@@ -18,14 +18,14 @@ class EditorGraphicsView(QGraphicsView):
         self.setOptimizationFlag(QGraphicsView.DontAdjustForAntialiasing)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.MiddleButton:
             QApplication.setOverrideCursor(Qt.OpenHandCursor)
             self.__prevMousePos = event.pos()
         else:
             return super().mousePressEvent(event)
         
     def mouseReleaseEvent(self, event: QMouseEvent):
-        if event.button() == Qt.RightButton:
+        if event.button() == Qt.MiddleButton:
             QApplication.setOverrideCursor(Qt.ArrowCursor)
         else:
             return super().mouseReleaseEvent(event)

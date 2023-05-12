@@ -5,25 +5,31 @@ from PySide2.QtGui import *
 
 class GraphicsCircle(QGraphicsItem):
 
-    def __init__(self, x=0, y=0, radius=20):
+    def __init__(self):
         super().__init__()
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.color = QColor(255, 165, 0)
+        self.x = 0
+        self.y = 0
+        self.radius = 10
+        self.color = QColor(255, 255, 255)
+        self.click_color = QColor(255, 0, 0)
+        self.border_color = QColor(255, 255, 255)
+
+        self.pen = QPen(self.color)
+        self.pen.setWidth(2)
+        self.brush = QBrush(self.color)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             print("PRESSED")
             self.scene().PortPressed.emit(self.pos())
-            self.color = QColor(255, 0, 0)
+            self.brush.setColor(self.click_color)
             self.update()
         else:
             return super().mousePressEvent(event)
         
     def mouseReleaseEvent(self, event: QMouseEvent):
         if event.button() == Qt.LeftButton:
-            self.color = QColor(255, 165, 0)
+            self.brush.setColor(self.color)
             self.update()
         else:
             return super().mouseReleaseEvent(event)
@@ -32,8 +38,6 @@ class GraphicsCircle(QGraphicsItem):
         return QRectF(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
 
     def paint(self, painter: QPainter, option, widget):
-        pen = QPen(QColor(255, 0, 0))
-        pen.setWidth(2)
-        painter.setPen(pen)
-        painter.setBrush(self.color)
+        painter.setPen(self.pen)
+        painter.setBrush(self.brush)
         painter.drawEllipse(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
