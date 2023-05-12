@@ -24,8 +24,9 @@ class EditorGraphicsScene(QGraphicsScene):
 
         self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
-        self.create_node(0, QColor(76, 175, 80))
-        self.create_node(1, QColor(24,150,243))
+        self.create_node(0, QColor(140,195,74))
+        self.create_node(1, QColor(255,152,0))
+        self.create_node(0, QColor(0,169,244))
         self.create_connections()
         self.initContextMenu()
 

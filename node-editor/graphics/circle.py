@@ -9,7 +9,7 @@ class GraphicsCircle(QGraphicsItem):
         super().__init__()
         self.x = 0
         self.y = 0
-        self.radius = 10
+        self.radius = 5
         self.color = QColor(255, 255, 255)
         self.click_color = QColor(255, 0, 0)
         self.border_color = QColor(255, 255, 255)
