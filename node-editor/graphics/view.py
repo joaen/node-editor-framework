@@ -31,7 +31,7 @@ class EditorGraphicsView(QGraphicsView):
             return super().mouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.RightButton:
+        if event.buttons() == Qt.MiddleButton:
             QApplication.setOverrideCursor(Qt.ClosedHandCursor)
             offset = self.__prevMousePos - event.pos()
             self.__prevMousePos = event.pos()
