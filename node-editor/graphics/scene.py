@@ -1,3 +1,4 @@
+from functools import partial
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
@@ -38,9 +39,9 @@ class EditorGraphicsScene(QGraphicsScene):
 
     def initContextMenu(self):
         self.contextMenu = QMenu()
-        self.action1 = QAction("New Node", self)
-        self.action1.triggered.connect(self.create_node)
-        self.contextMenu.addAction(self.action1)
+        self.create_node_action = QAction("New Node", self)
+        self.create_node_action.triggered.connect(partial(self.create_node, 0, QColor(140,195,74)))
+        self.contextMenu.addAction(self.create_node_action)
 
     def contextMenuEvent(self, event):
         self.contextMenu.exec_(event.screenPos())
