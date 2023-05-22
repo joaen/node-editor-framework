@@ -10,10 +10,14 @@ class SumNode():
         self._output_data = 0
 
     def create_connection(self, port_1: Port, port_2: Port):
-        self._connections[port_2] = port_1
-        print("this node is now connected to this node:")
-        print(port_1.node)
-        print(port_2.node)
+        if port_1.is_connected:
+            print("THIS PORT IS ALREADY CONNECTED")
+            print(port_1)
+        else:
+            port_1.is_connected = True
+            port_2.is_connected = True
+            self._connections[port_2] = port_1
+            print("Connected: {} || {}".format(port_1.node, port_2.node))
 
     def break_connection(self, port_1: Port):
         port_2 = port_1.connection

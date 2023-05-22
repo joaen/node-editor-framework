@@ -4,8 +4,10 @@ from node.float_node import FloatNode
 mult_node = SumNode()
 float_node_1 = FloatNode(10)
 float_node_2 = FloatNode(2)
-mult_node.create_connection(float_node_1.output, mult_node.input_port_1)
-mult_node.create_connection(float_node_2.output, mult_node.input_port_2)
+mult_node.create_connection(float_node_2.output, mult_node.input_port_1)
+mult_node.create_connection(float_node_1.output, mult_node.input_port_2)
+
+# mult_node.create_connection(float_node_2.output, mult_node.input_port_2)
 print(mult_node.output())
 
 
