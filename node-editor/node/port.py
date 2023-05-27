@@ -10,7 +10,7 @@ class Port():
         self.is_input = None
         self.type = None
         self._data = data
-        self._connection = None
+        self._connection : Port = None
 
     @property
     def data(self):
