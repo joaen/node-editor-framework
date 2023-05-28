@@ -1,9 +1,13 @@
-
+from node.node import Node
 from node.port import Port
 
 def create_connection(port_1: Port, port_2: Port):
     if port_1.is_connected:
-        print("THIS PORT IS ALREADY CONNECTED")
+        print("THIS PORT IS ALREADY CONNECTED".format(port_1))
+    if port_2.is_connected:
+        print("THIS PORT IS ALREADY CONNECTED".format(port_2))
+    elif port_1.is_input and port_2.is_input:
+        print("YOU CAN'T CONNECT TWO INPUT PORTS")
     else:
         port_1.connection = port_2
         port_2.connection = port_1
@@ -17,3 +21,6 @@ def break_connection(port_1: Port):
     port_2.connection = None
     port_1.is_connected = False
     port_2.is_connected = False
+
+def delete_node(node : Node):
+    node.exsist = False
