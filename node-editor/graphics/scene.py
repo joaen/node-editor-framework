@@ -4,19 +4,22 @@ from PySide2.QtGui import *
 from PySide2.QtCore import *
 from graphics.line import GraphicsLine
 from graphics.node import GraphicsNode
+from node.port import Port
+import node.editor as ne
 
 
 class EditorGraphicsScene(QGraphicsScene):
 
-    NodeMoved = Signal()
-    PortPressed = Signal()
-    LinePressed = Signal()
-    createNewNodeRequested = Signal()
+    node_moved_signal = Signal()
+    port_pressed_signal = Signal(Port)
+    line_pressed_signal = Signal()
+    create_new_node_signal = Signal()
 
     def __init__(self):
         super().__init__()
 
         self.nodes = []
+        self.pressed_ports = []
 
         self.background_color = QColor(30, 30, 30)
         self.grid_color = QColor(45, 45, 48)
@@ -66,12 +69,22 @@ class EditorGraphicsScene(QGraphicsScene):
         node = GraphicsNode(name="Node 001", port_pos=pos, header_color=color)
         self.addItem(node)
         self.nodes.append(node)
+    
+    def create_connection(self, port : Port):
+        if len(self.pressed_ports) <= 0:
+            self.pressed_ports.extend(port)
+        elif len(self.pressed_ports) >= 1:
+            self.pressed_ports.pop(0)
+            self.pressed_ports.extend(port)
+            ne.create_connection(self.pressed_ports[0], self.pressed_ports[1])
 
     def create_connections(self):
-        self.NodeMoved.connect(self.updateLine)
-        self.PortPressed.connect(self.create_line)
-        self.LinePressed.connect(self.delete_line)
-        self.createNewNodeRequested.connect(self.create_node)
+        self.node_moved_signal.connect(self.updateLine)
+        self.port_pressed_signal.connect(self.create_line)
+        self.line_pressed_signal.connect(self.delete_line)
+        self.create_new_node_signal.connect(self.create_node)
+
+
 
     def create_line(self):
         self.line = GraphicsLine(self.nodes[0].port_pos().x(), self.nodes[0].port_pos().y(), self.nodes[1].port_pos().x(), self.nodes[1].port_pos().y())

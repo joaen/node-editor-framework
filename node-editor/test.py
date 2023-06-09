@@ -1,6 +1,6 @@
 from node.sum_node import SumNode
 from node.float_node import FloatNode
-import node_editor as ne
+import node.editor as ne
 
 sum_node = SumNode()
 float_node_1 = FloatNode(10)

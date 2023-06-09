@@ -1,9 +1,10 @@
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
-from graphics.circle import GraphicsCircle
+from graphics.port import GraphicsPort
 from graphics.rect import GraphicsRect
 from graphics.header import GraphicsHeader
+# from node.port import Port
 
 
 class GraphicsNode(QGraphicsItem):
@@ -24,7 +25,10 @@ class GraphicsNode(QGraphicsItem):
         self.header_shape.setParentItem(self)
 
         # Set port position
-        self.port_shape = GraphicsCircle()
+
+        #ADD A VARIABLE FOR THE REAL NODE INSTANCE AND FORWARD THE PORT TO THE GRAPHICS
+        # FOR EACH PORT ON NODE , CREATE A PORT GRAPHICS OBJ
+        self.port_shape = GraphicsPort(parent_port=)
         if port_pos == 0:
             self.port_shape.setPos(QPointF(0, 50))
             self.port_shape.x = 0
@@ -41,7 +45,7 @@ class GraphicsNode(QGraphicsItem):
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
-        self.scene().NodeMoved.emit()
+        self.scene().node_moved_signal.emit()
 
     def boundingRect(self):
         return self.port_shape.boundingRect().united(self.node_shape.boundingRect())

@@ -3,10 +3,11 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 
-class GraphicsCircle(QGraphicsItem):
+class GraphicsPort(QGraphicsItem):
 
-    def __init__(self):
+    def __init__(self, parent_port):
         super().__init__()
+        self.parent_port = parent_port
         self.x = 0
         self.y = 0
         self.radius = 5
@@ -20,9 +21,13 @@ class GraphicsCircle(QGraphicsItem):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+
+            self.scene().port_pressed_signal.emit(self.parent_port)
             print("PRESSED")
-            self.scene().PortPressed.emit()
+            print(self.parent_port)
+
             self.brush.setColor(self.click_color)
+
             self.update()
         else:
             return super().mousePressEvent(event)
