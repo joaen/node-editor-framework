@@ -3,42 +3,32 @@ from node.port import Port
 
 class ExampleNode():
 
+    NAME = "Example Node"
+
     def __init__(self):
-        self._create_inputs()
-        self._create_outputs()
+        # self.input_ports_dict = dict()
+        # self.output_ports_dict = dict()
         self.connections = dict()
-
-    def create_connection(self, port_1: Port, port_2: Port):
-        self.connections[port_2] = port_1
-        # port_2.data = port_1.data
-        # port_1.connection = port_2
-        # port_2.connection = port_1
-        # port_1.is_connected = True
-        # port_2.is_connected = True
-    def update_connections(self):
-        # port_2.data = port_1.data
-        # pass
-        for i in self.connections.keys():
-            # i = self.connections.get(i)
-            # print(i)
-            i.data = self.connections.get(i).data
-            # print(self.connections.get(i))
-            # print(i)
-
-    def break_connection(self, port_1: Port):
-        port_2 = port_1.connection
-        port_1.connection = None
-        port_2.connection = None
-        port_1.is_connected = False
-        port_2.is_connected = False
+        self.input_ports_dict = self._create_inputs()
+        self.output_ports_dict = self._create_outputs()
 
     def _create_inputs(self):
         self.input_port_1 = Port()
         self.input_port_2 = Port()
+
+        inputs_dict = {}
+        inputs_dict["input_port_1"] = self.input_port_1
+        inputs_dict["input_port_2"] = self.input_port_2
+        return inputs_dict
     
     def _create_outputs(self):
         self.output_port_1 = Port(is_input=False)
         self.output_port_2 = Port(is_input=False)
+
+        outputs_dict = {}
+        outputs_dict["output_port_1"] = self.output_port_1
+        outputs_dict["output_port_2"] = self.output_port_2
+        return outputs_dict
 
     @property
     def output_1(self):

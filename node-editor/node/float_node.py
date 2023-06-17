@@ -3,9 +3,13 @@ from node.node import Node
 
 class FloatNode(Node):
 
-    def __init__(self, number):
+    NAME = "Float Node"
+
+    def __init__(self, number=0):
         super().__init__()
-        self._create_outputs()
+        self.connections = None
+        self.input_ports_dict = self._create_inputs()
+        self.output_ports_dict = self._create_outputs()
         self.output_port.data = number
 
     @property
@@ -23,6 +27,8 @@ class FloatNode(Node):
     
     def _create_outputs(self):
         self.output_port = Port(is_input=False, parent_node=self)
+        output_dict = {"ouput_lala" : self.output_port}
+        return output_dict
 
     def output(self):
         return super().output()

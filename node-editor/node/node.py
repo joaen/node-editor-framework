@@ -1,9 +1,12 @@
 from abc import ABC, abstractmethod
 
 class Node(ABC):
+    NAME = None
+
     def __int__(self):
-        self._create_inputs()
-        self._create_outputs()
+        self.connections = {}
+        self.input_ports_dict = self._create_inputs()
+        self.output_ports_dict = self._create_outputs()
 
     @property
     @abstractmethod
@@ -12,11 +15,19 @@ class Node(ABC):
 
     @abstractmethod
     def _create_inputs(self):
-        pass
+        ''' 
+        This is where the input ports are created and
+        then added to the input_ports_dict.
+        '''
+        return {}
     
     @abstractmethod
     def _create_outputs(self):
-       pass
+        ''' 
+        This is where the input ports are created and
+        then added to the input_ports_dict.
+        '''
+        return {}
 
     @abstractmethod
     def _update_connections(self):
@@ -26,7 +37,7 @@ class Node(ABC):
     def _node_operation(self):
         ''' 
         This is where the node operation is done.
-        For exmaple, a math node would do the calculations here
+        For example, a math node would do the calculations here
         before the data is sent to the ouput.
         '''
         self._update_connections()
