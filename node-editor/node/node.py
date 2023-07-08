@@ -4,7 +4,7 @@ class Node(ABC):
     NAME = None
 
     def __int__(self):
-        self.exsists = False
+        self.exsists = True # Should be set to true when instantiated
         self.connections = {}
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()

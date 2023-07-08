@@ -1,19 +1,26 @@
+import traceback
 from node.node import Node
 from node.port import Port
 
 def create_connection(port_1: Port, port_2: Port):
-    if port_1.is_connected:
-        print("THIS PORT IS ALREADY CONNECTED".format(port_1))
-    if port_2.is_connected:
-        print("THIS PORT IS ALREADY CONNECTED".format(port_2))
-    elif port_1.is_input and port_2.is_input:
-        print("YOU CAN'T CONNECT TWO INPUT PORTS")
-    else:
-        port_1.connection = port_2
-        port_2.connection = port_1
-        port_1.is_connected = True
-        port_2.is_connected = True
-        print("Connected: {} || {}".format(port_1.node, port_2.node))
+    try:
+        if port_1.is_connected:
+            print("THIS PORT IS ALREADY CONNECTED".format(port_1))
+        if port_2.is_connected:
+            print("THIS PORT IS ALREADY CONNECTED".format(port_2))
+        elif port_1 == port_2:
+            print("CAN'T CONNECT PORT TO ITSELF")
+        elif port_1.is_input and port_2.is_input:
+            print("YOU CAN'T CONNECT TWO INPUT PORTS")
+        else:
+            port_1.connection = port_2
+            port_2.connection = port_1
+            port_1.is_connected = True
+            port_2.is_connected = True
+            print("Connected: {} || {}".format(port_1.node, port_2.node))
+    except:
+        traceback.print_exc()
+        
 
 def break_connection(port_1: Port):
     port_2 = port_1.connection

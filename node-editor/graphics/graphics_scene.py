@@ -4,25 +4,26 @@ from PySide2.QtGui import *
 from PySide2.QtCore import *
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_node import GraphicsNode
-from node.port import Port
+from graphics.graphics_port import GraphicsPort
 import node.editor as ne
 from node.example_node import ExampleNode
 from node.float_node import FloatNode
 from node.sum_node import SumNode
-
+from node.port import Port
 
 class EditorGraphicsScene(QGraphicsScene):
 
     node_moved_signal = Signal()
-    port_pressed_signal = Signal(Port)
+    port_pressed_signal = Signal(Port, GraphicsPort)
     line_pressed_signal = Signal()
-    # create_new_node_signal = Signal(str)
 
     def __init__(self):
         super().__init__()
 
+        self.port_click = 0
+        self.first_port_clicked = {}
+        self.second_port_clicked = {}
         self.nodes = []
-        # self.pressed_ports = []
 
         self.background_color = QColor(30, 30, 30)
         self.grid_color = QColor(45, 45, 48)
@@ -31,9 +32,6 @@ class EditorGraphicsScene(QGraphicsScene):
 
         self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
-        # self.create_node(0, QColor(140,195,74))
-        # self.create_node(1, QColor(255,152,0))
-        # self.create_node(0, QColor(0,169,244))
         self.create_connections()
         self.initContextMenu()
 
@@ -80,21 +78,20 @@ class EditorGraphicsScene(QGraphicsScene):
     def create_example_node(self):
         logic_node = ExampleNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244))
-        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
-        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
+        graphics_node.create_ports(logic_node.input_ports_dict.values(), input=True)
+        graphics_node.create_ports(logic_node.output_ports_dict.values(), input=False)
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
     def create_float_node(self):
         logic_node = FloatNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0))
-        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
-        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
+        graphics_node.create_ports(logic_node.input_ports_dict.values(), input=True)
+        graphics_node.create_ports(logic_node.output_ports_dict.values(), input=False)
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
     def create_sum_node(self):
-        # print(logic_node.exsists)
         logic_node = SumNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74))
         graphics_node.create_ports(logic_node.input_ports_dict.values(), input=True)
@@ -102,31 +99,49 @@ class EditorGraphicsScene(QGraphicsScene):
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
-        print(logic_node.exsists)
-        logic_node.exsists = False
-        print(logic_node.exsists)
-
     def create_connections(self):
         self.node_moved_signal.connect(self.updateLine)
-        self.port_pressed_signal.connect(self.create_line)
+        self.port_pressed_signal.connect(self.port_pressed)
         self.line_pressed_signal.connect(self.delete_line)
 
-    def create_line(self):
-        self.line = GraphicsLine(self.nodes[0].port_pos().x(), self.nodes[0].port_pos().y(), self.nodes[1].port_pos().x(), self.nodes[1].port_pos().y())
+    def port_pressed(self, port_id, graphics_port):
+        two_ports_clicked = False
+        if self.first_port_clicked and self.second_port_clicked:
+            print("clear")
+            self.first_port_clicked.clear()
+            self.second_port_clicked.clear()
+        if self.first_port_clicked:
+            print("add second")
+            self.second_port_clicked[port_id] = graphics_port
+            two_ports_clicked = True
+        elif self.first_port_clicked == {}:
+            print("add first")
+            self.first_port_clicked[port_id] = graphics_port
+        
+        if two_ports_clicked:
+            ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
+            if list(self.first_port_clicked.keys())[0].is_connected and list(self.second_port_clicked.keys())[0].is_connected:
+                self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
+                
+
+    def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
+        # print(port_one.port_pos())
+        self.line = GraphicsLine(port_one.port_pos().x(), port_one.port_pos().y(), port_two.port_pos().x(), port_two.port_pos().y())
         self.addItem(self.line)
         self.updateLine()
         ## test render lines first
-        self.line.setZValue(self.nodes[0].zValue() - 1)
-        self.line.setStackingOrder(self.nodes[0].stackBefore())
+        # self.line.setZValue(self.nodes[0].zValue() - 1)
+        # self.line.setStackingOrder(self.nodes[0].stackBefore())
 
     def delete_line(self):
         self.removeItem(self.line)
         
     def updateLine(self):
-        try:
-            self.line.end_point_x = self.nodes[0].port_pos().x()
-            self.line.end_point_y = self.nodes[0].port_pos().y()
-            self.line.start_point_x = self.nodes[1].port_pos().x()
-            self.line.start_point_y = self.nodes[1].port_pos().y()
-        except:
-            pass
+        pass
+        # try:
+        #     self.line.end_point_x = self.nodes[0].port_pos().x()
+        #     self.line.end_point_y = self.nodes[0].port_pos().y()
+        #     self.line.start_point_x = self.nodes[1].port_pos().x()
+        #     self.line.start_point_y = self.nodes[1].port_pos().y()
+        # except:
+        #     pass

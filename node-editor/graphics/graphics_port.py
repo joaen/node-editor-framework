@@ -21,13 +21,7 @@ class GraphicsPort(QGraphicsItem):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-
-            self.scene().port_pressed_signal.emit(self.port_id)
-
-            ### DEBUG
-            print("PRESSED")
-            print(self.port_id)
-
+            self.scene().port_pressed_signal.emit(self.port_id, self)
             self.brush.setColor(self.click_color)
             self.update()
         else:
@@ -42,6 +36,9 @@ class GraphicsPort(QGraphicsItem):
 
     def boundingRect(self):
         return QRectF(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
+    
+    def port_pos(self):
+        return self.mapToScene(self.pos())
 
     def paint(self, painter: QPainter, option, widget):
         painter.setPen(self.pen)
