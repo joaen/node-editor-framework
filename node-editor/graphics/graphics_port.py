@@ -5,9 +5,9 @@ from PySide2.QtGui import *
 
 class GraphicsPort(QGraphicsItem):
 
-    def __init__(self, logic_port):
+    def __init__(self, port_id):
         super().__init__()
-        self.logic_port = logic_port
+        self.port_id = port_id
         self.x = 0
         self.y = 0
         self.radius = 5
@@ -22,12 +22,13 @@ class GraphicsPort(QGraphicsItem):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
 
-            self.scene().port_pressed_signal.emit(self.logic_port)
+            self.scene().port_pressed_signal.emit(self.port_id)
+
+            ### DEBUG
             print("PRESSED")
-            print(self.logic_port)
+            print(self.port_id)
 
             self.brush.setColor(self.click_color)
-
             self.update()
         else:
             return super().mousePressEvent(event)

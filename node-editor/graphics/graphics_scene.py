@@ -79,29 +79,27 @@ class EditorGraphicsScene(QGraphicsScene):
 
     def create_example_node(self):
         logic_node = ExampleNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244), logic_node=logic_node)
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244))
+        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
+        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
     def create_float_node(self):
         logic_node = FloatNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0), logic_node=logic_node)
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0))
+        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
+        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
     def create_sum_node(self):
         logic_node = SumNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74), logic_node=logic_node)
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74))
+        graphics_node.create_ports(logic_node.input_ports_dict.values(), input=True)
+        graphics_node.create_ports(logic_node.output_ports_dict.values(), input=False)
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
-
-    # def create_connection(self, port : Port):
-    #     if len(self.pressed_ports) <= 0:
-    #         self.pressed_ports.extend(port)
-    #     elif len(self.pressed_ports) >= 1:
-    #         self.pressed_ports.pop(0)
-    #         self.pressed_ports.extend(port)
-    #         ne.create_connection(self.pressed_ports[0], self.pressed_ports[1])
 
     def create_connections(self):
         self.node_moved_signal.connect(self.updateLine)

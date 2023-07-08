@@ -9,7 +9,7 @@ from node.node import Node
 
 class GraphicsNode(QGraphicsItem):
 
-    def __init__(self, logic_node: Node, name="Node", header_color=None):
+    def __init__(self, name="Node", header_color=None):
         super().__init__()
         self.name_label = QLabel(name)
         self.name_label.setStyleSheet("background-color: transparent; color: white;")
@@ -27,28 +27,25 @@ class GraphicsNode(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
-
-        #ADD A VARIABLE FOR THE LOGIC NODE INSTANCE AND FORWARD THE PORT TO THE GRAPHICS
-        # FOR EACH PORT ON NODE , CREATE A PORT GRAPHICS OBJ
+    def create_ports(self, ports=None, input=False):
         y_position = 50
-        for port in logic_node.input_ports_dict.values():
-            self.port_shape = GraphicsPort(logic_port=port)
-            # Set port position
-            self.port_shape.setPos(QPointF(0, 50))
-            self.port_shape.x = 0
-            self.port_shape.y = y_position
-            self.port_shape.setParentItem(self)
-            y_position += 50
+        if input == True:
+            for port in ports:
+                self.port_shape = GraphicsPort(port_id=port)
+                self.port_shape.setPos(QPointF(0, 50))
+                self.port_shape.x = 0
+                self.port_shape.y = y_position
+                self.port_shape.setParentItem(self)
+                y_position += 50
         
-        for port in logic_node.output_ports_dict.values():
-            self.port_shape = GraphicsPort(logic_port=port)
-
-            # Set port position
-            self.port_shape.setPos(QPointF(100, 50))
-            self.port_shape.x = 100
-            self.port_shape.y = 50
-            self.port_shape.setParentItem(self)
-            y_position += 50
+        if input == False:
+            for port in ports:
+                self.port_shape = GraphicsPort(port_id=port)
+                self.port_shape.setPos(QPointF(100, 50))
+                self.port_shape.x = 100
+                self.port_shape.y = 50
+                self.port_shape.setParentItem(self)
+                y_position += 50
     
 
     def port_pos(self):

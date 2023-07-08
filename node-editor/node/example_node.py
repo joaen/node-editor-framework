@@ -6,8 +6,6 @@ class ExampleNode():
     NAME = "Example Node"
 
     def __init__(self):
-        # self.input_ports_dict = dict()
-        # self.output_ports_dict = dict()
         self.connections = dict()
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
