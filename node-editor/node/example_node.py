@@ -1,11 +1,12 @@
 from node.port import Port
-# from node.node import Node
+from node.node import Node
 
-class ExampleNode():
+class ExampleNode(Node):
 
     NAME = "Example Node"
 
     def __init__(self):
+        self.exsists = True
         self.connections = dict()
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()

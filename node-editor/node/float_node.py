@@ -6,15 +6,11 @@ class FloatNode(Node):
     NAME = "Float Node"
 
     def __init__(self, number=0):
-        super().__init__()
+        self.exsists = True
         self.connections = None
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
         self.output_port.data = number
-
-    @property
-    def exsist(self) -> bool:
-        return super().exsist
 
     def _node_operation(self):
         return super()._node_operation()

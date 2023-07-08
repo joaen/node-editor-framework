@@ -94,12 +94,17 @@ class EditorGraphicsScene(QGraphicsScene):
         self.nodes.append(graphics_node)
 
     def create_sum_node(self):
+        # print(logic_node.exsists)
         logic_node = SumNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74))
         graphics_node.create_ports(logic_node.input_ports_dict.values(), input=True)
         graphics_node.create_ports(logic_node.output_ports_dict.values(), input=False)
         self.addItem(graphics_node)
         self.nodes.append(graphics_node)
+
+        print(logic_node.exsists)
+        logic_node.exsists = False
+        print(logic_node.exsists)
 
     def create_connections(self):
         self.node_moved_signal.connect(self.updateLine)

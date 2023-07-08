@@ -4,14 +4,10 @@ class Node(ABC):
     NAME = None
 
     def __int__(self):
+        self.exsists = False
         self.connections = {}
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
-
-    @property
-    @abstractmethod
-    def exsist(self) -> bool:
-        pass
 
     @abstractmethod
     def _create_inputs(self):
