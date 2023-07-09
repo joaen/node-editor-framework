@@ -107,21 +107,19 @@ class EditorGraphicsScene(QGraphicsScene):
     def port_pressed(self, port_id, graphics_port):
         two_ports_clicked = False
         if self.first_port_clicked and self.second_port_clicked:
-            print("clear")
             self.first_port_clicked.clear()
             self.second_port_clicked.clear()
         if self.first_port_clicked:
-            print("add second")
             self.second_port_clicked[port_id] = graphics_port
             two_ports_clicked = True
         elif self.first_port_clicked == {}:
-            print("add first")
             self.first_port_clicked[port_id] = graphics_port
         
         if two_ports_clicked:
-            ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
-            if list(self.first_port_clicked.keys())[0].is_connected and list(self.second_port_clicked.keys())[0].is_connected:
-                self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
+            connection = ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
+            # if list(self.first_port_clicked.keys())[0].is_connected and list(self.second_port_clicked.keys())[0].is_connected:
+            if connection == True: 
+               self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
                 
 
     def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
