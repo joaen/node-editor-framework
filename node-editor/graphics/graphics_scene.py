@@ -114,20 +114,13 @@ class EditorGraphicsScene(QGraphicsScene):
         if self.first_port_clicked and self.second_port_clicked:
             self.first_port_clicked.clear()
             self.second_port_clicked.clear()
-            print("###########")
-            print(self.first_port_clicked)
-            print(self.second_port_clicked)
+
         if self.first_port_clicked:
             self.second_port_clicked[port_id] = graphics_port
             two_ports_clicked = True
-            print("______________")
-            print(self.first_port_clicked)
-            print(self.second_port_clicked)
+
         elif self.first_port_clicked == {}:
             self.first_port_clicked[port_id] = graphics_port
-            print("_________________")
-            print(self.first_port_clicked)
-            print(self.second_port_clicked)
         
         if two_ports_clicked:
             connection = ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
