@@ -44,7 +44,7 @@ class EditorGraphicsScene(QGraphicsScene):
     def initContextMenu(self):
         self.contextMenu = QMenu()
 
-        self.new_example_node_action = QAction("New Exmaple Node", self)
+        self.new_example_node_action = QAction("New Example Node", self)
         self.new_example_node_action.triggered.connect(self.create_example_node)
         self.contextMenu.addAction(self.new_example_node_action)
 
