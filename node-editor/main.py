@@ -31,3 +31,6 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
     app.exec_()
+
+    def ####### THE GRAPHICS LINE GETS DELETED AND CREATED AGAIN. SO THE DELETE LINE ACTION TRIES TO
+    #DELETE THE OLD LINE OK??

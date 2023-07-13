@@ -16,7 +16,7 @@ class EditorGraphicsScene(QGraphicsScene):
 
     node_moved_signal = Signal()
     port_pressed_signal = Signal(Port, GraphicsPort)
-    line_pressed_signal = Signal()
+    line_pressed_signal = Signal(list, GraphicsLine)
 
     def __init__(self):
         super().__init__()
@@ -124,18 +124,24 @@ class EditorGraphicsScene(QGraphicsScene):
         
         if two_ports_clicked:
             connection = ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
-            if connection == True: 
-               self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
+            if connection:
+               self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0], connection=connection)
                 
 
-    def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
-        line = GraphicsLine(port_one=port_one, port_two=port_two)
+    def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort, connection):
+        line = GraphicsLine(port_one=port_one, port_two=port_two, connection_list=connection)
         self.lines.append(line)
+        print("ADDED A LINE")
+        print(line)
         self.addItem(line)
         self.update_line()
 
-    def delete_line(self):
-        self.removeItem(self.line)
+    def delete_line(self, connection_list, graphics_line):
+        try:
+            self.removeItem(graphics_line)
+            ne.break_connection(connection_list[0])
+        except:
+            traceback.print_exc()
         
     def update_line(self):
         try:

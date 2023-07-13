@@ -12,8 +12,8 @@ class SumNode(Node):
         self.output_ports_dict = self._create_outputs()
         
     def _create_inputs(self):
-        self.input_port_1 = Port(parent_node=self)
-        self.input_port_2 = Port(parent_node=self)
+        self.input_port_1 = Port(is_input=True, parent_node=self)
+        self.input_port_2 = Port(is_input=True, parent_node=self)
         return {"Input 1" : self.input_port_1, "input 02" : self.input_port_2}
     
     def _create_outputs(self):
