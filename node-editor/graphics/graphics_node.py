@@ -32,7 +32,7 @@ class GraphicsNode(QGraphicsItem):
         if input == True:
             for port in ports:
                 self.port_shape = GraphicsPort(port_id=port)
-                self.port_shape.setPos(QPointF(0, 50))
+                self.port_shape.setPos(QPointF(0, y_position))
                 self.port_shape.x = 0
                 self.port_shape.y = y_position
                 self.port_shape.setParentItem(self)

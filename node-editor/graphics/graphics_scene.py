@@ -1,4 +1,5 @@
 from functools import partial
+import traceback
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
@@ -29,11 +30,15 @@ class EditorGraphicsScene(QGraphicsScene):
         self.grid_color = QColor(45, 45, 48)
         self.grid_spacing = 30
         self.pen = QPen(self.grid_color, 1, Qt.DotLine)
+        self.lines = []
 
         self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
         self.create_connections()
         self.initContextMenu()
+        self.create_float_node()
+        self.create_sum_node()
+        self.create_example_node()
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Backspace:
@@ -100,7 +105,7 @@ class EditorGraphicsScene(QGraphicsScene):
         self.nodes.append(graphics_node)
 
     def create_connections(self):
-        self.node_moved_signal.connect(self.updateLine)
+        self.node_moved_signal.connect(self.update_line)
         self.port_pressed_signal.connect(self.port_pressed)
         self.line_pressed_signal.connect(self.delete_line)
 
@@ -109,37 +114,39 @@ class EditorGraphicsScene(QGraphicsScene):
         if self.first_port_clicked and self.second_port_clicked:
             self.first_port_clicked.clear()
             self.second_port_clicked.clear()
+            print("###########")
+            print(self.first_port_clicked)
+            print(self.second_port_clicked)
         if self.first_port_clicked:
             self.second_port_clicked[port_id] = graphics_port
             two_ports_clicked = True
+            print("______________")
+            print(self.first_port_clicked)
+            print(self.second_port_clicked)
         elif self.first_port_clicked == {}:
             self.first_port_clicked[port_id] = graphics_port
+            print("_________________")
+            print(self.first_port_clicked)
+            print(self.second_port_clicked)
         
         if two_ports_clicked:
             connection = ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
-            # if list(self.first_port_clicked.keys())[0].is_connected and list(self.second_port_clicked.keys())[0].is_connected:
             if connection == True: 
                self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
                 
 
     def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
-        # print(port_one.port_pos())
-        self.line = GraphicsLine(port_one.port_pos().x(), port_one.port_pos().y(), port_two.port_pos().x(), port_two.port_pos().y())
-        self.addItem(self.line)
-        self.updateLine()
-        ## test render lines first
-        # self.line.setZValue(self.nodes[0].zValue() - 1)
-        # self.line.setStackingOrder(self.nodes[0].stackBefore())
+        line = GraphicsLine(port_one=port_one, port_two=port_two)
+        self.lines.append(line)
+        self.addItem(line)
+        self.update_line()
 
     def delete_line(self):
         self.removeItem(self.line)
         
-    def updateLine(self):
-        pass
-        # try:
-        #     self.line.end_point_x = self.nodes[0].port_pos().x()
-        #     self.line.end_point_y = self.nodes[0].port_pos().y()
-        #     self.line.start_point_x = self.nodes[1].port_pos().x()
-        #     self.line.start_point_y = self.nodes[1].port_pos().y()
-        # except:
-        #     pass
+    def update_line(self):
+        try:
+            for line in self.lines:
+                line.update_pos()
+        except:
+            pass
