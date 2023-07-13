@@ -31,7 +31,7 @@ class GraphicsNode(QGraphicsItem):
         y_position = 50
         if input == True:
             for port in ports:
-                self.port_shape = GraphicsPort(port_id=port)
+                self.port_shape = GraphicsPort(port_id=port, is_input=True)
                 self.port_shape.setPos(QPointF(0, y_position))
                 self.port_shape.x = 0
                 self.port_shape.y = y_position
@@ -40,7 +40,7 @@ class GraphicsNode(QGraphicsItem):
         
         if input == False:
             for port in ports:
-                self.port_shape = GraphicsPort(port_id=port)
+                self.port_shape = GraphicsPort(port_id=port, is_input=False)
                 self.port_shape.setPos(QPointF(100, 50))
                 self.port_shape.x = 100
                 self.port_shape.y = 50

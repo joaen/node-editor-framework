@@ -33,8 +33,16 @@ class GraphicsLine(QGraphicsItem):
         start_point = QPointF(self.start_point_x, self.start_point_y)
         self.path.moveTo(start_point)
 
-        point1 = QPointF((self.start_point_x + 100), self.start_point_y)
-        point2 = QPointF((self.end_point_x - 100), self.end_point_y)
+        if self.port_one.is_input == True:
+            point1 = QPointF((self.start_point_x - 100), self.start_point_y)
+        else:
+            point1 = QPointF((self.start_point_x + 100), self.start_point_y)
+        
+        if self.port_two.is_input == True:
+            point2 = QPointF((self.end_point_x - 100), self.end_point_y)
+        else:
+            point2 = QPointF((self.end_point_x + 100), self.end_point_y)
+
         end_point = QPointF(self.end_point_x, self.end_point_y)
         self.path.cubicTo(point1, point2, end_point)
         painter.drawPath(self.path)
