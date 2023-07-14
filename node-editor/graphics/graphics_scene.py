@@ -22,14 +22,21 @@ class EditorGraphicsScene(QGraphicsScene):
         self.grid_spacing = 30
         self.pen = QPen(self.grid_color, 1, Qt.DotLine)
 
+        self.key_events = {}
+
         self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
 
+    def create_key_event(self, key : Qt.Key, command):
+        self.key_events[key] = command
+
     def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Backspace:
-            self.delete_line()
-        else:
-            super().keyPressEvent(event)
+        for key in self.key_events.keys():
+            if event.key() == key:
+                command = self.key_events.get(key)
+                command()
+            else:
+                super().keyPressEvent(event)
 
     def add_contextmenu_item(self, command, name):
         self.new_example_node_action = QAction(name, self)

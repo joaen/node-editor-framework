@@ -1,3 +1,4 @@
+from functools import partial
 import sys
 import traceback
 from PySide2.QtCore import *
@@ -30,6 +31,7 @@ class MainWindow(QWidget):
         self.lines = []
         self.first_port_clicked = {}
         self.second_port_clicked = {}
+        self.selected_line = []
 
         ##DEBUG
         self.create_example_node()
@@ -39,14 +41,21 @@ class MainWindow(QWidget):
         self.scene = EditorGraphicsScene()
         self.view = EditorGraphicsView(self.scene)
         self.view.setScene(self.scene)
-        self.scene.add_contextmenu_item(self.create_example_node, "Example Node")
-        self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
-        self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
 
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)
         main_layout.setContentsMargins(5, 5, 5, 5)
         main_layout.addWidget(self.view)
+
+    def create_connections(self):
+        self.scene.add_contextmenu_item(self.create_example_node, "Example Node")
+        self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
+        self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
+    
+        self.scene.node_moved_signal.connect(self.update_line)
+        self.scene.port_pressed_signal.connect(self.port_pressed)
+        self.scene.line_pressed_signal.connect(self.select_line)
+        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_line))
 
     def create_example_node(self):
         logic_node = ExampleNode()
@@ -71,11 +80,6 @@ class MainWindow(QWidget):
         graphics_node.create_ports(logic_node.output_ports_dict.values(), input=False)
         self.scene.addItem(graphics_node)
         self.nodes.append(graphics_node)
-
-    def create_connections(self):
-        self.scene.node_moved_signal.connect(self.update_line)
-        self.scene.port_pressed_signal.connect(self.port_pressed)
-        self.scene.line_pressed_signal.connect(self.delete_line)
 
     def port_pressed(self, port_id, graphics_port):
         two_ports_clicked = False
@@ -102,12 +106,15 @@ class MainWindow(QWidget):
         self.scene.addItem(line)
         self.update_line()
 
-    def delete_line(self, connection_list, graphics_line):
+    def select_line(self, connection_list, graphics_line):
+        self.selected_line = [connection_list, graphics_line]
+
+    def delete_line(self):
         try:
-            self.scene.removeItem(graphics_line)
-            ne.break_connection(connection_list[0])
+            ne.break_connection(self.selected_line[0][0])
+            self.scene.removeItem(self.selected_line[1])
         except:
-            traceback.print_exc()
+            pass
         
     def update_line(self):
         try:
