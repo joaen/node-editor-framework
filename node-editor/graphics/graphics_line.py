@@ -30,12 +30,12 @@ class GraphicsLine(QGraphicsPathItem):
         return self.line_path.boundingRect()
 
     def paint(self, painter: QPainter, option, widget=None):
-        # self.line_path.clear()
 
         if self.isSelected():
             pen = QPen(QColor(0, 255, 0))
         else:
             pen = QPen(self.color)
+            
         pen.setWidth(4)
         painter.setPen(pen)
 
