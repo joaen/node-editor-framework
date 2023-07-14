@@ -15,7 +15,7 @@ class GraphicsLine(QGraphicsPathItem):
         self.start_point_y = self.port_one.port_pos().y()
         self.end_point_x = self.port_two.port_pos().x()
         self.end_point_y = self.port_two.port_pos().y()
-        self.line_path = QPainterPath()
+        self.line_path = None
         self.color = QColor(255, 255, 255)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
@@ -26,11 +26,8 @@ class GraphicsLine(QGraphicsPathItem):
         else:
             super().mousePressEvent(event)
 
-    def boundingRect(self):
-        return self.line_path.boundingRect()
-
     def paint(self, painter: QPainter, option, widget=None):
-
+        self.line_path = QPainterPath()
         if self.isSelected():
             pen = QPen(QColor(0, 255, 0))
         else:
@@ -54,11 +51,8 @@ class GraphicsLine(QGraphicsPathItem):
 
         end_point = QPointF(self.end_point_x, self.end_point_y)
         self.line_path.cubicTo(point1, point2, end_point)
-        painter.drawPath(self.shape())
+        painter.drawPath(self.line_path)
         self.setPath(self.line_path)
-
-    def shape(self):
-        return self.line_path
     
     def update_pos(self):
         self.line_path.clear()
@@ -66,5 +60,4 @@ class GraphicsLine(QGraphicsPathItem):
         self.start_point_y = self.port_one.port_pos().y()
         self.end_point_x = self.port_two.port_pos().x()
         self.end_point_y = self.port_two.port_pos().y()
-        self.update()
         
