@@ -31,12 +31,12 @@ def create_connection(port_1: Port, port_2: Port):
         return None
         
 
-def break_connection(port_1: Port):
-    port_2 = port_1.connection
+def break_connection(port_1: Port, port_2: Port):
     port_1.connection = None
     port_2.connection = None
     port_1.is_connected = False
     port_2.is_connected = False
+    print("Broke connection between: {} AND {} ".format(port_1, port_2))
 
 def delete_node(node : Node):
     node.exsist = False

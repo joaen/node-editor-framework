@@ -97,22 +97,23 @@ class MainWindow(QWidget):
         if two_ports_clicked:
             connection = ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
             if connection:
-               self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0], connection=connection)
+               self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
                 
 
-    def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort, connection):
-        line = GraphicsLine(port_one=port_one, port_two=port_two, connection_list=connection)
+    def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
+        line = GraphicsLine(port_one=port_one, port_two=port_two)
         self.lines.append(line)
         self.scene.addItem(line)
         self.update_line()
 
-    def select_line(self, connection_list, graphics_line):
-        self.selected_line = [connection_list, graphics_line]
+    def select_line(self, graphics_line : GraphicsLine, graphics_port_one, graphics_port_two):
+        self.selected_line = graphics_line
 
     def delete_line(self):
         try:
-            ne.break_connection(self.selected_line[0][0])
-            self.scene.removeItem(self.selected_line[1])
+            if self.selected_line.isSelected():
+                ne.break_connection(self.selected_line.port_one.port_id, self.selected_line.port_two.port_id)
+                self.scene.removeItem(self.selected_line)
         except:
             pass
         

@@ -6,9 +6,8 @@ from graphics.graphics_port import GraphicsPort
 
 class GraphicsLine(QGraphicsPathItem):
 
-    def __init__(self, port_one : GraphicsPort, port_two : GraphicsPort, connection_list):
+    def __init__(self, port_one : GraphicsPort, port_two : GraphicsPort):
         super().__init__()
-        self.connection = connection_list
         self.port_one = port_one
         self.port_two = port_two
         self.start_point_x = self.port_one.port_pos().x()
@@ -19,12 +18,11 @@ class GraphicsLine(QGraphicsPathItem):
         self.color = QColor(255, 255, 255)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.scene().line_pressed_signal.emit(self.connection, self)
-            print("CLICKED LINE")
-        else:
-            super().mousePressEvent(event)
+    def itemChange(self, change, value):
+        if change == QGraphicsItem.ItemSelectedChange:
+            if value:
+                self.scene().line_pressed_signal.emit(self, self.port_one, self.port_two)
+        return super().itemChange(change, value)
 
     def paint(self, painter: QPainter, option, widget=None):
         self.line_path = QPainterPath()
