@@ -15,7 +15,7 @@ class GraphicsLine(QGraphicsPathItem):
         self.start_point_y = self.port_one.port_pos().y()
         self.end_point_x = self.port_two.port_pos().x()
         self.end_point_y = self.port_two.port_pos().y()
-        self.test_path = QPainterPath()
+        self.line_path = QPainterPath()
         self.color = QColor(255, 255, 255)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
@@ -23,16 +23,14 @@ class GraphicsLine(QGraphicsPathItem):
         if event.button() == Qt.LeftButton:
             self.scene().line_pressed_signal.emit(self.connection, self)
             print("CLICKED LINE")
-            # print(self.connection)
-            # print(self)
         else:
             super().mousePressEvent(event)
 
     def boundingRect(self):
-        return self.test_path.boundingRect()
+        return self.line_path.boundingRect()
 
     def paint(self, painter: QPainter, option, widget=None):
-        self.test_path.clear()
+        # self.line_path.clear()
 
         if self.isSelected():
             pen = QPen(QColor(0, 255, 0))
@@ -42,7 +40,7 @@ class GraphicsLine(QGraphicsPathItem):
         painter.setPen(pen)
 
         start_point = QPointF(self.start_point_x, self.start_point_y)
-        self.test_path.moveTo(start_point)
+        self.line_path.moveTo(start_point)
 
         if self.port_one.is_input == True:
             point1 = QPointF((self.start_point_x - 100), self.start_point_y)
@@ -55,17 +53,15 @@ class GraphicsLine(QGraphicsPathItem):
             point2 = QPointF((self.end_point_x + 100), self.end_point_y)
 
         end_point = QPointF(self.end_point_x, self.end_point_y)
-        self.test_path.cubicTo(point1, point2, end_point)
+        self.line_path.cubicTo(point1, point2, end_point)
         painter.drawPath(self.shape())
-        self.setPath(self.test_path)
+        self.setPath(self.line_path)
 
     def shape(self):
-        return self.test_path
-    
-    def midpoint(self, point1, point2):
-        return QPointF((point1.x() + point2.x()) / 2, (point1.y() + point2.y()) / 2)
+        return self.line_path
     
     def update_pos(self):
+        self.line_path.clear()
         self.start_point_x = self.port_one.port_pos().x()
         self.start_point_y = self.port_one.port_pos().y()
         self.end_point_x = self.port_two.port_pos().x()
