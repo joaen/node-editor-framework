@@ -38,7 +38,7 @@ class MainWindow(QWidget):
         ##DEBUG
         self.create_example_node()
         self.create_float_node()
-
+    
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
         self.view = EditorGraphicsView(self.scene)
@@ -110,8 +110,6 @@ class MainWindow(QWidget):
             self.graphics_mouse_line = GraphicsMouseLine(point_one=clicked_one_graphics.port_pos(), point_two=clicked_one_graphics.port_pos())
             self.scene.addItem(self.graphics_mouse_line)
             self.is_following_mouse = True
-        
-        
 
     def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
         line = GraphicsLine(port_one=port_one, port_two=port_two)

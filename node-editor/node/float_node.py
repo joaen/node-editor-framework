@@ -23,7 +23,7 @@ class FloatNode(Node):
     
     def _create_outputs(self):
         self.output_port = Port(is_input=False, parent_node=self)
-        output_dict = {"ouput_lala" : self.output_port}
+        output_dict = {"Output" : self.output_port}
         return output_dict
 
     def output(self):

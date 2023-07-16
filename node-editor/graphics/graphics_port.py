@@ -11,10 +11,11 @@ class GraphicsPort(QGraphicsItem):
         self.is_input = is_input
         self.x = 0
         self.y = 0
-        self.radius = 5
+        self.radius = 8
         self.color = QColor(255, 255, 255)
         self.click_color = QColor(255, 0, 0)
         self.border_color = QColor(255, 255, 255)
+        self.diameter = max(self.boundingRect().width(), self.boundingRect().height())
 
         self.pen = QPen(self.color)
         self.pen.setWidth(2)

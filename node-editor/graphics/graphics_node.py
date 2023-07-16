@@ -13,7 +13,9 @@ class GraphicsNode(QGraphicsItem):
         super().__init__()
 
         self.name_label = QLabel(name)
-        self.name_label.setStyleSheet("background-color: transparent; color: white;")
+        self.name_label.setStyleSheet("background-color: transparent; color: white; text-align:center;")
+        self.name_label.setAlignment(Qt.AlignCenter)
+
         self.name_label_widget = QGraphicsProxyWidget(parent=self)
         self.name_label_widget.setWidget(self.name_label)
         self.name_label_widget.setPos(70, 15)
@@ -29,43 +31,23 @@ class GraphicsNode(QGraphicsItem):
 
     def create_ports(self, ports : dict, input=False):
         y_position = 50
-        if input == True:
-            for key in ports.keys():
+        for key in ports.keys():
+            x_position = (lambda: 0 if input else 100)()
+            is_input = (lambda: True if input else False)()
+            self.port_shape = GraphicsPort(port_id=ports.get(key), is_input=is_input)
+            self.port_shape.setPos(QPointF(x_position, y_position))
+            self.port_shape.x = x_position
+            self.port_shape.y = y_position
+            self.port_shape.setParentItem(self)
 
-                self.port_shape = GraphicsPort(port_id=ports.get(key), is_input=True)
-                self.port_shape.setPos(QPointF(0, y_position))
-                self.port_shape.x = 0
-                self.port_shape.y = y_position
-                self.port_shape.setParentItem(self)
-
-                name_label = QLabel(key)
-                name_label.setStyleSheet("background-color: transparent; color: white; text-align: right;")
-                port_name_label = QGraphicsProxyWidget(parent=self)
-                port_name_label.setWidget(name_label)
-                port_name_label.setPos(self.port_shape.port_pos())
-                port_name_label.setZValue(self.zValue() + 1)
-                y_position += 50
-
-        
-        if input == False:
-            for key in ports.keys():
-            
-                self.port_shape = GraphicsPort(port_id=ports.get(key), is_input=False)
-                self.port_shape.setPos(QPointF(100, y_position))
-                self.port_shape.x = 100
-                self.port_shape.y = y_position
-                self.port_shape.setParentItem(self)
-
-                name_label = QLabel(key)
-                name_label.setStyleSheet("background-color: transparent; color: white; text-align: left;")
-                port_name_label = QGraphicsProxyWidget(parent=self)
-                port_name_label.setWidget(name_label)
-                port_name_label.setPos(self.port_shape.port_pos())
-                port_name_label.setZValue(self.zValue() + 1)
-                y_position += 50
-        
-        
-    
+            name_label = QLabel(key)
+            name_label.setStyleSheet("background-color: transparent; color: white; text-align: right;")
+            port_name_proxy = QGraphicsProxyWidget(parent=self)
+            port_name_proxy.setWidget(name_label)
+            label_pos_x = (lambda: self.port_shape.diameter if input else (name_label.width() * -1) - self.port_shape.diameter)()
+            port_name_proxy.setPos(self.port_shape.port_pos().x() + label_pos_x, (self.port_shape.port_pos().y() - 11))
+            port_name_proxy.setZValue(self.zValue() + 1)
+            y_position += 50
 
     def port_pos(self):
         return self.port_shape.mapToScene(self.port_shape.pos())

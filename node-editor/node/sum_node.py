@@ -14,11 +14,11 @@ class SumNode(Node):
     def _create_inputs(self):
         self.input_port_1 = Port(is_input=True, parent_node=self)
         self.input_port_2 = Port(is_input=True, parent_node=self)
-        return {"Input 1" : self.input_port_1, "input 02" : self.input_port_2}
+        return {"X (Float)" : self.input_port_1, "Y (Float)" : self.input_port_2}
     
     def _create_outputs(self):
         self.output_port_1 = Port(is_input=False, parent_node=self)
-        return {"output1" : self.output_port_1}
+        return {"Output" : self.output_port_1}
     
     def _node_operation(self):
         return super()._node_operation()
