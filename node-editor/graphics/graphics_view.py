@@ -17,6 +17,9 @@ class EditorGraphicsView(QGraphicsView):
         self.setRenderHint(QPainter.SmoothPixmapTransform)
         self.setOptimizationFlag(QGraphicsView.DontAdjustForAntialiasing)
 
+        self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setRubberBandSelectionMode(Qt.IntersectsItemShape)
+
     def mousePressEvent(self, event):
         if event.button() == Qt.MiddleButton:
             QApplication.setOverrideCursor(Qt.OpenHandCursor)
