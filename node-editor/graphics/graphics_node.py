@@ -12,17 +12,17 @@ class GraphicsNode(QGraphicsItem):
     def __init__(self, name="Node", header_color=None):
         super().__init__()
 
-        self.name_label = QLabel(name)
-        self.name_label.setStyleSheet("background-color: transparent; color: white; text-align:center;")
-        self.name_label.setAlignment(Qt.AlignCenter)
-
-        self.name_label_widget = QGraphicsProxyWidget(parent=self)
-        self.name_label_widget.setWidget(self.name_label)
-        self.name_label_widget.setPos(70, 15)
-        self.name_label_widget.setZValue(self.zValue() + 1)
         
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
+
+        self.name_label = QLabel(name)
+        self.name_label.setStyleSheet("background-color: transparent; color: white;")
+
+        self.name_label_widget = QGraphicsProxyWidget(parent=self)
+        self.name_label_widget.setWidget(self.name_label)
+        self.name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (self.name_label.width() / 2), 15)
+        self.name_label_widget.setZValue(self.zValue() + 1)
 
         self.header_shape = GraphicsHeader(color=header_color)
         self.header_shape.setParentItem(self)
