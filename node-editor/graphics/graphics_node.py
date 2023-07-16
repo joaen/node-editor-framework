@@ -55,8 +55,13 @@ class GraphicsNode(QGraphicsItem):
         super().mouseMoveEvent(event)
         self.scene().node_moved_signal.emit()
 
+    def itemChange(self, change, value):
+        if change == QGraphicsItem.ItemSelectedChange:
+            if value:
+                self.scene().node_pressed_signal.emit(self)
+        return super().itemChange(change, value)
+
     def boundingRect(self):
-        # return self.port_shape.boundingRect().united(self.node_shape.boundingRect())
         return self.node_shape.boundingRect()
 
     def paint(self, painter, option, widget):

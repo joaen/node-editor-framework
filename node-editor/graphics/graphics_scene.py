@@ -5,14 +5,16 @@ from PySide2.QtGui import *
 from PySide2.QtCore import *
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_port import GraphicsPort
+from graphics.graphics_node import GraphicsNode
 from node.port import Port
 
 class EditorGraphicsScene(QGraphicsScene):
 
     node_moved_signal = Signal()
-    port_pressed_signal = Signal(Port, GraphicsPort)
-    line_pressed_signal = Signal(GraphicsLine, GraphicsPort, GraphicsPort)
     mouse_position_signal = Signal(QPointF)
+    port_pressed_signal = Signal(Port, GraphicsPort)
+    line_pressed_signal = Signal(GraphicsLine)
+    node_pressed_signal = Signal(GraphicsNode)
 
     def __init__(self):
         super().__init__()

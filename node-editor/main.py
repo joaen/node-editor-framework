@@ -31,7 +31,7 @@ class MainWindow(QWidget):
         self.nodes = []
         self.lines: list[GraphicsLine] = []
         self.clicked_ports = []
-        self.selected_line = []
+        self.selected_object = None
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
 
@@ -54,12 +54,13 @@ class MainWindow(QWidget):
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
     
-        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_line))
+        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_object))
 
         self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)
         self.scene.port_pressed_signal.connect(self.port_pressed)
-        self.scene.line_pressed_signal.connect(self.select_line)
+        self.scene.line_pressed_signal.connect(self.select_object)
+        self.scene.node_pressed_signal.connect(self.select_object)
 
     def mouse_moved(self, mouse_pos):
         if self.is_following_mouse == True:
@@ -118,16 +119,20 @@ class MainWindow(QWidget):
         self.scene.addItem(line)
         self.update_line()
 
-    def select_line(self, graphics_line : GraphicsLine, graphics_port_one, graphics_port_two):
-        self.selected_line = graphics_line
+    def select_object(self, object):
+        self.selected_object = object
 
-    def delete_line(self):
+    def delete_object(self):
         try:
-            if self.selected_line.isSelected():
-                ne.break_connection(self.selected_line.port_one.port_id, self.selected_line.port_two.port_id)
-                self.scene.removeItem(self.selected_line)
+            if self.selected_object.isSelected():
+                if isinstance(self.selected_object, GraphicsLine):
+                    ne.break_connection(self.selected_object.port_one.port_id, self.selected_object.port_two.port_id)
+                    self.scene.removeItem(self.selected_object)
+                if isinstance(self.selected_object, GraphicsNode):
+                    ne.delete_node(self.selected_object)
+                    self.scene.removeItem(self.selected_object)
         except:
-            pass
+            traceback.print_exc()
         
     def update_line(self):
         try:

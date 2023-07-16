@@ -21,7 +21,7 @@ class GraphicsLine(QGraphicsPathItem):
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemSelectedChange:
             if value:
-                self.scene().line_pressed_signal.emit(self, self.port_one, self.port_two)
+                self.scene().line_pressed_signal.emit(self)
         return super().itemChange(change, value)
 
     def paint(self, painter: QPainter, option, widget=None):
