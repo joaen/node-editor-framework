@@ -11,6 +11,7 @@ from graphics.graphics_view import EditorGraphicsView
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
+from graphics.graphics_mouse_line import GraphicsMouseLine
 import node.editor as ne
 from node.example_node import ExampleNode
 from node.float_node import FloatNode
@@ -28,9 +29,12 @@ class MainWindow(QWidget):
         self.create_ui_layout()
         self.create_connections()
         self.nodes = []
-        self.lines = []
+        self.lines: list[GraphicsLine] = []
         self.clicked_ports = []
         self.selected_line = []
+        # self.mouse_position = None
+        self.line_follow_mouse = False
+        self.mouse_line: GraphicsMouseLine = None
 
         ##DEBUG
         self.create_example_node()
@@ -51,10 +55,17 @@ class MainWindow(QWidget):
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
     
+        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_line))
+
+        self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)
         self.scene.port_pressed_signal.connect(self.port_pressed)
         self.scene.line_pressed_signal.connect(self.select_line)
-        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_line))
+
+    def mouse_moved(self, mouse_pos):
+        if self.line_follow_mouse == True:
+            clicked_one, clicked_one_graphics = self.clicked_ports[0]
+            self.mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
     def create_example_node(self):
         logic_node = ExampleNode()
@@ -80,17 +91,35 @@ class MainWindow(QWidget):
         self.scene.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
-    def port_pressed(self, port_id, graphics_port):        
+    def port_pressed(self, port_id, graphics_port):  
+        # try:
+        #     self.scene.removeItem(self.mouse_line)
+        # except:
+        #     pass
+           
+        # if len(self.clicked_ports) > 2:
+        #     self.clicked_ports.clear()
+
         self.clicked_ports.append((port_id, graphics_port))
 
         if len(self.clicked_ports) == 2:
+            self.scene.removeItem(self.mouse_line)
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             clicked_two, clicked_two_graphics = self.clicked_ports[1]
             connection = ne.create_connection(clicked_one, clicked_two)
             if connection:
                self.create_line(clicked_one_graphics, clicked_two_graphics)
-            
+
+            self.line_follow_mouse = False
             self.clicked_ports.clear()
+        
+        if len(self.clicked_ports) == 1:
+            clicked_one, clicked_one_graphics = self.clicked_ports[0]
+            self.mouse_line = GraphicsMouseLine(point_one=clicked_one_graphics.port_pos(), point_two=clicked_one_graphics.port_pos())
+            self.scene.addItem(self.mouse_line)
+            self.line_follow_mouse = True
+        
+        
 
     def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
         line = GraphicsLine(port_one=port_one, port_two=port_two)

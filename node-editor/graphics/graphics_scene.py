@@ -12,6 +12,7 @@ class EditorGraphicsScene(QGraphicsScene):
     node_moved_signal = Signal()
     port_pressed_signal = Signal(Port, GraphicsPort)
     line_pressed_signal = Signal(GraphicsLine, GraphicsPort, GraphicsPort)
+    mouse_position_signal = Signal(QPointF)
 
     def __init__(self):
         super().__init__()
@@ -37,6 +38,11 @@ class EditorGraphicsScene(QGraphicsScene):
                 command()
             else:
                 super().keyPressEvent(event)
+
+    def mouseMoveEvent(self, event):
+        mouse_position = event.scenePos()
+        self.mouse_position_signal.emit(mouse_position)
+        super().mouseMoveEvent(event)
 
     def add_contextmenu_item(self, command, name):
         self.new_example_node_action = QAction(name, self)
