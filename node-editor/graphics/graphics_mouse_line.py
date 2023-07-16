@@ -10,7 +10,7 @@ class GraphicsMouseLine(QGraphicsPathItem):
         self.point_one = point_one
         self.point_two = point_two
         self.line_path = None
-        self.color = QColor(255, 255, 255)
+        self.color = QColor(150, 150, 150)
 
     def paint(self, painter: QPainter, option, widget=None):
         self.line_path = QPainterPath()
