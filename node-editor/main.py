@@ -31,7 +31,7 @@ class MainWindow(QWidget):
         self.nodes = []
         self.lines: list[GraphicsLine] = []
         self.clicked_ports = []
-        self.selected_object = None
+        self.selected_objects = []
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
 
@@ -120,17 +120,18 @@ class MainWindow(QWidget):
         self.update_line()
 
     def select_object(self, object):
-        self.selected_object = object
+        self.selected_objects.append(object)
 
     def delete_object(self):
         try:
-            if self.selected_object.isSelected():
-                if isinstance(self.selected_object, GraphicsLine):
-                    ne.break_connection(self.selected_object.port_one.port_id, self.selected_object.port_two.port_id)
-                    self.scene.removeItem(self.selected_object)
-                if isinstance(self.selected_object, GraphicsNode):
-                    ne.delete_node(self.selected_object)
-                    self.scene.removeItem(self.selected_object)
+            for obj in self.selected_objects:
+                if obj.isSelected():
+                    if isinstance(obj, GraphicsLine):
+                        ne.break_connection(obj.port_one.port_id, obj.port_two.port_id)
+                        self.scene.removeItem(obj)
+                    if isinstance(obj, GraphicsNode):
+                        ne.delete_node(obj)
+                        self.scene.removeItem(obj)
         except:
             traceback.print_exc()
         
