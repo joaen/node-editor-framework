@@ -118,7 +118,10 @@ class MainWindow(QWidget):
         self.update_line()
 
     def select_object(self, object):
-        self.selected_objects.append(object)
+        if object in self.selected_objects:
+            pass
+        else:
+            self.selected_objects.append(object)
 
     def delete_object(self):
         try:
@@ -130,6 +133,7 @@ class MainWindow(QWidget):
                     if isinstance(obj, GraphicsNode):
                         ne.delete_node(obj)
                         self.scene.removeItem(obj)
+            self.selected_objects.clear()
         except:
             traceback.print_exc()
         
