@@ -29,8 +29,7 @@ class MainWindow(QWidget):
         self.create_connections()
         self.nodes = []
         self.lines = []
-        self.first_port_clicked = {}
-        self.second_port_clicked = {}
+        self.clicked_ports = []
         self.selected_line = []
 
         ##DEBUG
@@ -81,24 +80,17 @@ class MainWindow(QWidget):
         self.scene.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
-    def port_pressed(self, port_id, graphics_port):
-        two_ports_clicked = False
-        if self.first_port_clicked and self.second_port_clicked:
-            self.first_port_clicked.clear()
-            self.second_port_clicked.clear()
+    def port_pressed(self, port_id, graphics_port):        
+        self.clicked_ports.append((port_id, graphics_port))
 
-        if self.first_port_clicked:
-            self.second_port_clicked[port_id] = graphics_port
-            two_ports_clicked = True
-
-        elif self.first_port_clicked == {}:
-            self.first_port_clicked[port_id] = graphics_port
-        
-        if two_ports_clicked:
-            connection = ne.create_connection(list(self.first_port_clicked.keys())[0], list(self.second_port_clicked.keys())[0])
+        if len(self.clicked_ports) == 2:
+            clicked_one, clicked_one_graphics = self.clicked_ports[0]
+            clicked_two, clicked_two_graphics = self.clicked_ports[1]
+            connection = ne.create_connection(clicked_one, clicked_two)
             if connection:
-               self.create_line(list(self.first_port_clicked.values())[0], list(self.second_port_clicked.values())[0])
-                
+               self.create_line(clicked_one_graphics, clicked_two_graphics)
+            
+            self.clicked_ports.clear()
 
     def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
         line = GraphicsLine(port_one=port_one, port_two=port_two)
