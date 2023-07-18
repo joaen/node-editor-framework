@@ -4,11 +4,8 @@ from node.port import Port
 
 def create_connection(port_1: Port, port_2: Port):
     try:
-        if port_1.is_connected:
-            print("THIS PORT IS ALREADY CONNECTED".format(port_1))
-            return None
-        elif port_2.is_connected:
-            print("THIS PORT IS ALREADY CONNECTED".format(port_2))
+        if port_1.is_connected and port_2.is_connected:
+            print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
             return None
         elif port_1 == port_2:
             print("CAN'T CONNECT PORT TO ITSELF")
@@ -18,6 +15,9 @@ def create_connection(port_1: Port, port_2: Port):
             return None
         elif port_1.is_input == False and port_2.is_input == False:
             print("YOU CAN'T CONNECT TWO OUTPUT PORTS")
+            return None
+        elif port_1.node == port_2.node:
+            print("YOU CAN'T CONNECT NODE TO ITSELF")
             return None
         else:
             port_1.connection = port_2
