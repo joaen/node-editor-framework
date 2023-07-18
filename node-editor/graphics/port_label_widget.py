@@ -18,7 +18,13 @@ class PortLabelWidget(QWidget):
         self.text_label = QLabel(self.label_name)
         self.text_edit = QLineEdit()
         self.text_edit.setFixedWidth(40)
-        self.setStyleSheet("background-color: transparent; color: white;")
+        self.text_edit.setFixedHeight(25)
+        self.text_label.setStyleSheet("color: white;")
+        self.text_edit.setStyleSheet("color: white;"
+                        "border-radius: 5px;"
+                        "background-color: #262626;"
+                        "border-style: none;");
+        self.setStyleSheet("background-color: #2D2D30;")
 
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)

@@ -35,7 +35,7 @@ class GraphicsNode(QGraphicsItem):
         for key, value in kwargs.items():
             for port in value.keys():
                 x_position = (lambda: 0 if key == "input" else 100)()
-                self.port_shape = GraphicsPort(port_id=value.get(port))
+                self.port_shape = GraphicsPort(port_id=value.get(port), is_input=(lambda: True if key == "input" else False)())
                 self.port_shape.setPos(QPointF(x_position, y_position))
                 self.port_shape.x = x_position
                 self.port_shape.y = y_position
@@ -44,26 +44,9 @@ class GraphicsNode(QGraphicsItem):
                 port_label_widget = PortLabelWidget(label=port, alignment=(lambda: "left" if key == "input" else "right")())
                 port_label_proxy = QGraphicsProxyWidget(parent=self)
                 port_label_proxy.setWidget(port_label_widget)
-                port_label_proxy.setZValue(self.zValue() + 1)
                 port_label_proxy.setPos(0, (self.port_shape.port_pos().y() - 15))
-                print(input)
-                print(y_position)
+                self.port_shape.setZValue(self.zValue() + 1)
                 y_position += 35
-            print("--")
-
-
-            # Try to add a vlue 
-            # Add the value box position at the name_label + the name_label x value (width)
-            # value_box_pos_x = (lambda: True if input else False)()
-            # label_width = (lambda: label_pos_x + name_label.width() if input else (name_label.width() * -1) + label_pos_x)()
-            # value_box = QLineEdit()
-            # value_box.setFixedWidth(40)
-            # value_box_pos = (label_pos_x + -label_pos_x) - name_label.width()
-            # # name_label.setStyleSheet("background-color: transparent; color: white; text-align: right;")
-            # value_box_proxy = QGraphicsProxyWidget(parent=self)
-            # value_box_proxy.setWidget(value_box)
-            # value_box_proxy.setPos(value_box_pos, self.port_shape.port_pos().y() - 11)
-            
 
     def port_pos(self):
         return self.port_shape.mapToScene(self.port_shape.pos())
