@@ -11,6 +11,9 @@ class GraphicsRect(QGraphicsItem):
         self.outline_color = QColor(30, 30, 30)
         self.color = QColor(45, 45, 48)
 
+        self.width = 200
+        self.height = 200
+
         self.shadow = QGraphicsDropShadowEffect()
         self.shadow.setBlurRadius(60)
         self.shadow.setOffset(2, 2)
@@ -19,9 +22,9 @@ class GraphicsRect(QGraphicsItem):
 
 
     def boundingRect(self):
-        return QRectF(0, 0, 200, 300)
+        return QRectF(0, 0, self.width, self.height)
     
     def paint(self, painter: QPainter, option, widget=None):
         painter.setBrush(QBrush(self.color))
         painter.setPen(QPen(self.outline_color))
-        painter.drawRoundedRect(0, 0, 200, 300, 15, 15)
+        painter.drawRoundedRect(0, 0, self.boundingRect().width(), self.boundingRect().height(), 15, 15)

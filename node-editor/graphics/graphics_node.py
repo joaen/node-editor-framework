@@ -16,6 +16,7 @@ class GraphicsNode(QGraphicsItem):
         
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
+        # self.node_shape.height = 100
 
         self.name_label = QLabel(name)
         self.name_label.setStyleSheet("background-color: transparent; color: white;")
@@ -46,6 +47,7 @@ class GraphicsNode(QGraphicsItem):
                 port_label_proxy.setWidget(port_label_widget)
                 port_label_proxy.setPos(0, (self.port_shape.port_pos().y() - 15))
                 self.port_shape.setZValue(self.zValue() + 1)
+                self.node_shape.height += 40
                 y_position += 35
 
     def port_pos(self):
@@ -67,4 +69,4 @@ class GraphicsNode(QGraphicsItem):
     def paint(self, painter, option, widget):
         if self.isSelected():
             painter.setPen(QPen(QColor(255, 255, 255), 5, Qt.SolidLine))
-            painter.drawRoundedRect(0, 0, 200, 300, 15, 15)
+            painter.drawRoundedRect(0, 0, self.node_shape.width, self.node_shape.height, 15, 15)
