@@ -36,8 +36,9 @@ class MainWindow(QWidget):
         self.graphics_mouse_line: GraphicsMouseLine = None
 
         ##DEBUG
-        self.create_example_node()
-        self.create_float_node()
+        # self.create_example_node()
+        # self.create_float_node()
+        self.create_sum_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -70,24 +71,21 @@ class MainWindow(QWidget):
     def create_example_node(self):
         logic_node = ExampleNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244))
-        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
-        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
+        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
     def create_float_node(self):
         logic_node = FloatNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0))
-        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
-        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
+        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
         self.nodes.append(graphics_node)
 
     def create_sum_node(self):
         logic_node = SumNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74))
-        graphics_node.create_ports(logic_node.input_ports_dict, input=True)
-        graphics_node.create_ports(logic_node.output_ports_dict, input=False)
+        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
         self.nodes.append(graphics_node)
 

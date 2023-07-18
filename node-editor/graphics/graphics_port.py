@@ -5,10 +5,9 @@ from PySide2.QtGui import *
 
 class GraphicsPort(QGraphicsItem):
 
-    def __init__(self, port_id, is_input):
+    def __init__(self, port_id):
         super().__init__()
         self.port_id = port_id
-        self.is_input = is_input
         self.x = 0
         self.y = 0
         self.radius = 8
