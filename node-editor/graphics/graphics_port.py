@@ -1,16 +1,18 @@
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+from graphics.port_label_widget import PortLabelWidget
+
 
 
 class GraphicsPort(QGraphicsItem):
 
-    def __init__(self, port_id, is_input):
+    def __init__(self, port_id, is_input, label, pos: QPointF):
         super().__init__()
+        self.setPos(pos)
         self.port_id = port_id
         self.is_input = is_input
-        self.x = 0
-        self.y = 0
+        self.port_widget: PortLabelWidget
         self.radius = 8
         self.color = QColor(255, 255, 255)
         self.click_color = QColor(255, 0, 0)
@@ -20,6 +22,23 @@ class GraphicsPort(QGraphicsItem):
         self.pen = QPen(self.color)
         self.pen.setWidth(2)
         self.brush = QBrush(self.color)
+        self.create_port_widget(label)
+        self.port_widget.text_edit.textChanged.connect(self.text_changed)
+
+    def text_changed(self):
+        self.scene().port_text_changed_signal.emit()
+        
+
+    def create_port_widget(self, label_text):
+        port_label_widget = PortLabelWidget(label=label_text, alignment=(lambda: "left" if self.is_input == True else "right")())
+        port_label_proxy = QGraphicsProxyWidget(parent=self)
+        port_label_proxy.setWidget(port_label_widget)
+        port_pos_x = (lambda: self.pos().x() if self.is_input == True else (self.pos().x() - port_label_widget.width()))()
+        port_label_proxy.setPos(port_pos_x, (self.pos().y() - 15))
+        self.port_widget = port_label_widget
+
+    def update_port_widget_text(self):
+        self.port_widget.te
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -37,7 +56,7 @@ class GraphicsPort(QGraphicsItem):
             return super().mouseReleaseEvent(event)
 
     def boundingRect(self):
-        return QRectF(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
+        return QRectF(self.pos().x() - self.radius, self.pos().y() - self.radius, self.radius * 2, self.radius * 2)
     
     def port_pos(self):
         return self.mapToScene(self.pos())
@@ -45,4 +64,4 @@ class GraphicsPort(QGraphicsItem):
     def paint(self, painter: QPainter, option, widget):
         painter.setPen(self.pen)
         painter.setBrush(self.brush)
-        painter.drawEllipse(self.x - self.radius, self.y - self.radius, self.radius * 2, self.radius * 2)
+        painter.drawEllipse(self.pos().x() - self.radius, self.pos().y() - self.radius, self.radius * 2, self.radius * 2)
