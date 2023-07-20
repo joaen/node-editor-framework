@@ -39,8 +39,8 @@ class MainWindow(QWidget):
 
         ##DEBUG
         # self.create_example_node()
-        self.create_float_node()
         self.create_sum_node()
+        self.create_float_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -143,7 +143,7 @@ class MainWindow(QWidget):
             if connection:
                 self.connections.append((clicked_port_1, clicked_port_1_graphics, clicked_port_2, clicked_port_2_graphics))
                 self.create_line(clicked_port_1_graphics, clicked_port_2_graphics)
-                # self.update_ports()
+                self.update_nodes()
 
             self.is_following_mouse = False
             self.clicked_ports.clear()
