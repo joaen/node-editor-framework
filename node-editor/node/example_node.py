@@ -25,7 +25,7 @@ class ExampleNode(Node):
     def _node_operation(self):
         return super()._node_operation()
     
-    def _update_connections(self):
+    def update(self):
         return super()._update_connections()
     
     def output(self):

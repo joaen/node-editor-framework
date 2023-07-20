@@ -26,7 +26,7 @@ class Node(ABC):
         return {}
 
     @abstractmethod
-    def _update_connections(self):
+    def update(self):
         pass
 
     @abstractmethod
@@ -36,7 +36,6 @@ class Node(ABC):
         For example, a math node would do the calculations here
         before the data is sent to the ouput.
         '''
-        self._update_connections()
         pass
 
     @abstractmethod

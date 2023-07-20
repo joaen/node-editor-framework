@@ -5,7 +5,7 @@ class FloatNode(Node):
 
     NAME = "Float Node"
 
-    def __init__(self, number=0):
+    def __init__(self, number=5):
         self.exsists = True
         self.connections = None
         self.input_ports_dict = self._create_inputs()
@@ -15,8 +15,8 @@ class FloatNode(Node):
     def _node_operation(self):
         return super()._node_operation()
     
-    def _update_connections(self):
-        return super()._update_connections()
+    def update(self):
+        self._node_operation()
     
     def _create_inputs(self):
         return super()._create_inputs()

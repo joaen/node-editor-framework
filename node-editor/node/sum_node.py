@@ -21,10 +21,11 @@ class SumNode(Node):
         return {"Output" : self.output_port_1}
     
     def _node_operation(self):
-        return super()._node_operation()
+        self.output_port_1.data = (self.input_port_1.data + self.input_port_2.data)
+        return self.output_port_1.data
     
-    def _update_connections(self):
-        return super()._update_connections()
+    def update(self):
+        return self._node_operation()
     
     def output(self):
-        return super().output()
+        return self.output_port_1.data

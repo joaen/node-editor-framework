@@ -26,8 +26,8 @@ class PortLabelWidget(QWidget):
                         "border-style: none;");
         self.setStyleSheet("background-color: transparent;")
 
-    def set_text(self, text):
-        self.text_edit.setText(text)
+    # def set_text(self, text):
+    #     self.text_edit.setText(text)
 
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)
