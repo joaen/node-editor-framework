@@ -7,6 +7,12 @@ def create_connection(port_1: Port, port_2: Port):
         if port_1.is_connected and port_2.is_connected:
             print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
             return None
+        if port_2.is_connected and port_2.is_input:
+            print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
+            return None
+        if port_1.is_connected and port_1.is_input:
+            print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
+            return None
         elif port_1 == port_2:
             print("CAN'T CONNECT PORT TO ITSELF")
             return None
