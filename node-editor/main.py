@@ -13,7 +13,7 @@ from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
 import node.editor as ne
-from node.example_node import ExampleNode
+from node.int_node import IntNode
 from node.float_node import FloatNode
 from node.sum_node import SumNode
 from node.node import Node
@@ -38,9 +38,9 @@ class MainWindow(QWidget):
         self.graphics_mouse_line: GraphicsMouseLine = None
 
         ##DEBUG
-        # self.create_example_node()
         self.create_sum_node()
         self.create_float_node()
+        self.create_int_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -53,9 +53,9 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.view)
 
     def create_connections(self):
-        self.scene.add_contextmenu_item(self.create_example_node, "Example Node")
+        self.scene.add_contextmenu_item(self.create_int_node, "Int Node")
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
-        self.scene.add_contextmenu_item(self.create_float_node, "Int Node")
+        self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
     
         self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_object))
 
@@ -75,8 +75,8 @@ class MainWindow(QWidget):
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
-    def create_example_node(self):
-        logic_node = ExampleNode()
+    def create_int_node(self):
+        logic_node = IntNode()
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244))
         graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
