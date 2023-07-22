@@ -7,12 +7,13 @@ import PySide2.QtWidgets
 
 
 class PortLabelWidget(QWidget):
-    def __init__(self, label : str, alignment="left"):
+    def __init__(self, label : str, alignment="left", default_value=0):
         super().__init__()
         self.alignment = alignment
         self.label_name = label
         self.create_widgets()
         self.create_ui_layout()
+        self.text_edit.setText(str(default_value))
 
     def create_widgets(self):
         self.text_label = QLabel(self.label_name)
@@ -26,8 +27,8 @@ class PortLabelWidget(QWidget):
                         "border-style: none;");
         self.setStyleSheet("background-color: transparent;")
 
-    def set_text(self, text):
-        self.text_edit.setText(text)
+    # def set_text(self, text):
+    #     self.text_edit.setText(text)
 
     def create_ui_layout(self):
         main_layout = QHBoxLayout(self)

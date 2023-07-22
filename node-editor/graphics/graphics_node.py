@@ -12,33 +12,35 @@ class GraphicsNode(QGraphicsItem):
         super().__init__()
 
         
+        self.ports = []
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
-        self.name_label = QLabel(name)
-        self.name_label.setStyleSheet("background-color: transparent; color: white;")
+        name_label = QLabel(name)
+        name_label.setStyleSheet("background-color: transparent; color: white;")
 
-        self.name_label_widget = QGraphicsProxyWidget(parent=self)
-        self.name_label_widget.setWidget(self.name_label)
-        self.name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (self.name_label.width() / 2), 15)
-        self.name_label_widget.setZValue(self.zValue() + 1)
+        name_label_widget = QGraphicsProxyWidget(parent=self)
+        name_label_widget.setWidget(name_label)
+        name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (name_label.width() / 2), 15)
+        name_label_widget.setZValue(self.zValue() + 1)
 
         self.header_shape = GraphicsHeader(color=header_color)
         self.header_shape.setParentItem(self)
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
+
     def create_ports(self, **kwargs):
+        # ports
         y_position = 50
         for key, value in kwargs.items():
             for port in value.keys():
                 x_position = (lambda: 0 if key == "input" else 100)()
-                self.port_shape = GraphicsPort(port_id=value.get(port), pos=QPointF(x_position, y_position), label=port, is_input=(lambda: True if key == "input" else False)())
-                self.port_shape.setParentItem(self)
+                port_shape = GraphicsPort(port_id=value.get(port), pos=QPointF(x_position, y_position), label=port, is_input=(lambda: True if key == "input" else False)())
+                port_shape.setParentItem(self)
                 self.node_shape.height += 40
                 y_position += 35
-
-    def port_pos(self):
-        return self.port_shape.mapToScene(self.port_shape.pos())
+                self.ports.append((key, port_shape))
+            # return ports
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
