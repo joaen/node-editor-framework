@@ -5,7 +5,7 @@ from PySide2.QtGui import *
 class Port():
 
     def __init__(self, is_input=True, parent_node=None):
-        self.data = 0
+        self._data = 0
         self.node = parent_node
         self.connection : Port = None
         self.is_connected = False
@@ -13,6 +13,14 @@ class Port():
 
     def set_data(self, data):
         self.data = data
+
+    @property
+    def data(self):
+        return self._data
+    
+    @data.setter
+    def data(self, value):
+        self._data = value
 
 
     

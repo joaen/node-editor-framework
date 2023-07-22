@@ -66,17 +66,9 @@ class MainWindow(QWidget):
         self.scene.node_pressed_signal.connect(self.select_object)
         self.scene.port_text_changed_signal.connect(self.port_text_changed)
 
-    def port_text_changed(self, port: Port, graphics_port: GraphicsPort):
+    def port_text_changed(self, port: Port, value):
+        port.data = value
         self.update_nodes()
-        # graphics_port.set_input_text(str(5))
-        # port.data = graphics_port.input_text
-        pass
-        # print(5)
-        # port.data = graphics_port.port_text_input
-        # print(graphics_port.port_text_input)
-        # self.update_ports()
-        # self.update_ports()
-        # self.update_nodes()
 
     def mouse_moved(self, mouse_pos):
         if self.is_following_mouse == True:
@@ -105,32 +97,25 @@ class MainWindow(QWidget):
         self.nodes.append((logic_node, graphics_node))
 
     def update_nodes(self):
-        # pass
         for node in self.nodes:
             logic_node: Node
             graphics_node: GraphicsNode
-            
             logic_node, graphics_node = node
-            
-            for port in graphics_node.ports:
-                port.set_input_text(port.port_id.data)
-
-    def update_ports(self):
-        pass
-        # logic_node: Node
-        # graphics_node: GraphicsNode
-        # for node in self.nodes:
-        #     logic_node, graphics_node = node
-        #     output = logic_node.update()
-        #     graphics_node
+            logic_node.update()
         
-        # for connection in self.connections:
-        #     port_1: Port
-        #     port_2: Port
-        #     port_2_graphics: GraphicsPort
-        #     port_1, port_1_graphics, port_2, port_2_graphics = connection
-        #     port_2.data = port_1.data
-        #     port_2_graphics.port_widget.set_text(str(port_1.data))
+            for port in graphics_node.ports:
+                key, port_shape = port
+                if key != "input":
+                    port_shape.set_input_text(port_shape.port_id.data)
+        
+        for connection in self.connections:
+            port_1, port_1_shape, port_2, port_2_shape = connection
+            if port_1.is_input:
+                port_1_shape.set_input_text(port_2_shape.port_id.data)
+            if port_2.is_input:
+                port_2_shape.set_input_text(port_1_shape.port_id.data)
+
+
 
     def port_pressed(self, port_id, graphics_port):  
         self.clicked_ports.append((port_id, graphics_port))

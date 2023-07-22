@@ -17,16 +17,15 @@ class ExampleNode(Node):
         return {"X (Int)" : self.input_port_1, "Y (Int)" : self.input_port_2}
     
     def _create_outputs(self):
-        return {}
-        # self.output_port_1 = Port(is_input=False, parent_node=self)
-        # self.output_port_2 = Port(is_input=False, parent_node=self)
-        # return {"Local" : self.output_port_1, "World" : self.output_port_2}
+        self.output_port_1 = Port(is_input=False, parent_node=self)
+        self.output_port_2 = Port(is_input=False, parent_node=self)
+        return {"Local" : self.output_port_1, "World" : self.output_port_2}
 
     def _node_operation(self):
         return super()._node_operation()
     
     def update(self):
-        return super()._update_connections()
+        pass
     
     def output(self):
         return super().output()

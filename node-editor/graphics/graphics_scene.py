@@ -15,7 +15,7 @@ class EditorGraphicsScene(QGraphicsScene):
     port_pressed_signal = Signal(Port, GraphicsPort)
     line_pressed_signal = Signal(GraphicsLine)
     node_pressed_signal = Signal(GraphicsNode)
-    port_text_changed_signal = Signal(Port, GraphicsPort)
+    port_text_changed_signal = Signal(Port, str)
 
     def __init__(self):
         super().__init__()

@@ -39,7 +39,7 @@ class GraphicsNode(QGraphicsItem):
                 port_shape.setParentItem(self)
                 self.node_shape.height += 40
                 y_position += 35
-                self.ports.append(port_shape)
+                self.ports.append((key, port_shape))
             # return ports
 
     def mouseMoveEvent(self, event):

@@ -21,8 +21,7 @@ class SumNode(Node):
         return {"Output" : self.output_port_1}
     
     def _node_operation(self):
-        self.output_port_1.data = (self.input_port_1.data + self.input_port_2.data)
-        return self.output_port_1.data
+        self.output_port_1.data = int(self.input_port_1.data) + int(self.input_port_2.data)
     
     def update(self):
         return self._node_operation()
