@@ -3,7 +3,7 @@ from node.node import Node
 
 class FloatNode(Node):
 
-    NAME = "Float Node"
+    NAME = "Int Node"
 
     def __init__(self):
         self.exsists = True

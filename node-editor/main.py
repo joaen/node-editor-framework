@@ -55,7 +55,7 @@ class MainWindow(QWidget):
     def create_connections(self):
         self.scene.add_contextmenu_item(self.create_example_node, "Example Node")
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
-        self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
+        self.scene.add_contextmenu_item(self.create_float_node, "Int Node")
     
         self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_object))
 
