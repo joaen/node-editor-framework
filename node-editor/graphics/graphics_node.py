@@ -48,8 +48,6 @@ class GraphicsNode(QGraphicsItem):
     def create_port_widget(self, label_text, port, alignment):
         port_label_widget = PortLabelWidget(label=label_text, alignment=alignment)
         port_label_proxy = QGraphicsProxyWidget(parent=self)
-        # port_label_proxy.setZValue(port_label_proxy.zValue() - 1)
-        # port_label_proxy.setAcceptHoverEvents(False)
         port_label_proxy.setWidget(port_label_widget)
         port_label_proxy.setPos(0, (port.port_pos().y() - 15))
         port_label_widget.text_edit.textChanged.connect(partial(self.text_changed, port.port_id))
