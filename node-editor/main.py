@@ -151,6 +151,11 @@ class MainWindow(QWidget):
                         if graphics_node == item:
                             ne.delete_node(logic_node)
                     self.scene.removeItem(item)
+
+            for line in self.lines:
+                if line.port_one.parent.scene() == None or line.port_two.parent.scene() == None:
+                        self.scene.removeItem(line)
+                        ne.break_connection(line.port_one, line.port_two)
         except:
             traceback.print_exc()
         

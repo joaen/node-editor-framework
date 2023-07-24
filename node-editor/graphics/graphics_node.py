@@ -34,7 +34,7 @@ class GraphicsNode(QGraphicsItem):
         for key, value in kwargs.items():
             for port in value.keys():
                 x_position = (lambda: 0 if key == "input" else 100)()
-                port_shape = GraphicsPort(port_id=value.get(port), pos=QPointF(x_position, y_position), is_input=(lambda: True if key == "input" else False)())
+                port_shape = GraphicsPort(port_id=value.get(port), parent=self, pos=QPointF(x_position, y_position), is_input=(lambda: True if key == "input" else False)())
                 port_shape.setParentItem(self)
                 port_shape.setZValue(port_shape.zValue() + 1)
                 port_label_widget = self.create_port_widget(label_text=port, port=port_shape, alignment=(lambda: "left" if key == "input" else "right")())
