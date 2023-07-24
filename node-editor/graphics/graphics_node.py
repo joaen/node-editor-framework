@@ -12,7 +12,6 @@ class GraphicsNode(QGraphicsItem):
 
     def __init__(self, name="Node", header_color=None):
         super().__init__()
-
         
         self.ports = []
         self.node_shape = GraphicsRect()
@@ -31,7 +30,6 @@ class GraphicsNode(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
     def create_ports(self, **kwargs):
-        # ports
         y_position = 50
         for key, value in kwargs.items():
             for port in value.keys():

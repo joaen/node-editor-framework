@@ -4,7 +4,6 @@ from PySide2.QtGui import *
 from graphics.port_label_widget import PortLabelWidget
 
 
-
 class GraphicsPort(QGraphicsItem):
 
     def __init__(self, port_id, is_input, pos: QPointF):
