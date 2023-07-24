@@ -14,7 +14,7 @@ class GraphicsPort(QGraphicsItem):
         self.port_widget: PortLabelWidget
         self.radius = 10
         self.color = QColor(255, 255, 255)
-        self.click_color = QColor(255, 0, 0)
+        self.click_color = QColor(0, 255, 0)
         self.border_color = QColor(255, 255, 255)
         self.hover_color = QColor(155, 155, 155)
         self.diameter = max(self.boundingRect().width(), self.boundingRect().height())
