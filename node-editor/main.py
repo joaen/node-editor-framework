@@ -30,9 +30,9 @@ class MainWindow(QWidget):
         self.create_ui_layout()
         self.create_connections()
         self.nodes = []
-        self.lines: list[GraphicsLine] = []
-        self.clicked_ports = []
+        self.lines = []
         self.connections = []
+        self.clicked_ports = []
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
 
@@ -146,7 +146,10 @@ class MainWindow(QWidget):
                     ne.break_connection(item.port_one.port_id, item.port_two.port_id)
                     self.scene.removeItem(item)
                 if isinstance(item, GraphicsNode):
-                    ne.delete_node(item)
+                    for node in self.nodes:
+                        logic_node, graphics_node = node
+                        if graphics_node == item:
+                            ne.delete_node(logic_node)
                     self.scene.removeItem(item)
         except:
             traceback.print_exc()

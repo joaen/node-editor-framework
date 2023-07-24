@@ -46,3 +46,4 @@ def break_connection(port_1: Port, port_2: Port):
 
 def delete_node(node : Node):
     node.exsist = False
+    print("Deleted node: {}".format(node))
