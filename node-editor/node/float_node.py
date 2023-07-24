@@ -6,6 +6,7 @@ class FloatNode(Node):
     NAME = "Float Node"
 
     def __init__(self):
+        self.default_value = 0.0
         self.exsists = True
         self.connections = None
         self.output_port = None
@@ -13,7 +14,10 @@ class FloatNode(Node):
         self.output_ports_dict = self._create_outputs()
 
     def _node_operation(self):
-        self.output_port.data = self.input_port.data
+        try:
+            self.output_port.data = float(self.input_port.data)
+        except:
+            self.output_port.data = self.default_value
     
     def update(self):
         self._node_operation()

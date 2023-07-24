@@ -1,11 +1,12 @@
 from node.port import Port
 from node.node import Node
 
-class SumNode(Node):
+class AddNode(Node):
 
-    NAME = "Sum Node"
+    NAME = "Add Node"
 
     def __init__(self):
+        self.default_value = 0.0
         self.exsists = True
         self.connections = {}
         self.input_ports_dict = self._create_inputs()
@@ -14,14 +15,17 @@ class SumNode(Node):
     def _create_inputs(self):
         self.input_port_1 = Port(is_input=True, parent_node=self)
         self.input_port_2 = Port(is_input=True, parent_node=self)
-        return {"X (Float)" : self.input_port_1, "Y (Float)" : self.input_port_2}
+        return {"Input 1" : self.input_port_1, "Input 2" : self.input_port_2}
     
     def _create_outputs(self):
         self.output_port_1 = Port(is_input=False, parent_node=self)
         return {"Output" : self.output_port_1}
     
     def _node_operation(self):
-        self.output_port_1.data = int(self.input_port_1.data) + int(self.input_port_2.data)
+        try:
+            self.output_port_1.data = float(self.input_port_1.data) + float(self.input_port_2.data)
+        except:
+            self.output_port_1.data = self.default_value
     
     def update(self):
         return self._node_operation()

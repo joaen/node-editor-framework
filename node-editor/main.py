@@ -13,9 +13,9 @@ from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
 import node.editor as ne
-from node.int_node import IntNode
+from node.multiply_node import MultiplyNode
 from node.float_node import FloatNode
-from node.sum_node import SumNode
+from node.add_node import AddNode
 from node.node import Node
 from node.port import Port
 
@@ -40,7 +40,7 @@ class MainWindow(QWidget):
         ##DEBUG
         self.create_sum_node()
         self.create_float_node()
-        self.create_int_node()
+        self.create_multiply_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -53,8 +53,8 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.view)
 
     def create_connections(self):
-        self.scene.add_contextmenu_item(self.create_int_node, "Int Node")
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
+        self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
     
         self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_object))
@@ -75,23 +75,23 @@ class MainWindow(QWidget):
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
-    def create_int_node(self):
-        logic_node = IntNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244))
+    def create_multiply_node(self):
+        logic_node = MultiplyNode()
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244), default_value=logic_node.default_value)
         graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
         self.nodes.append((logic_node, graphics_node))
 
     def create_float_node(self):
         logic_node = FloatNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0))
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0), default_value=logic_node.default_value)
         graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
         self.nodes.append((logic_node, graphics_node))
 
     def create_sum_node(self):
-        logic_node = SumNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74))
+        logic_node = AddNode()
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74), default_value=logic_node.default_value)
         graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
         self.scene.addItem(graphics_node)
         self.nodes.append((logic_node, graphics_node))

@@ -7,13 +7,12 @@ import PySide2.QtWidgets
 
 
 class PortLabelWidget(QWidget):
-    def __init__(self, label : str, alignment="left", default_value=0):
+    def __init__(self, label : str, alignment="left"):
         super().__init__()
         self.alignment = alignment
         self.label_name = label
         self.create_widgets()
         self.create_ui_layout()
-        self.text_edit.setText(str(default_value))
 
     def create_widgets(self):
         self.text_label = QLabel(self.label_name)

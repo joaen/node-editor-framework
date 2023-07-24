@@ -10,9 +10,9 @@ from graphics.port_label_widget import PortLabelWidget
 
 class GraphicsNode(QGraphicsItem):
 
-    def __init__(self, name="Node", header_color=None):
+    def __init__(self, name="Node", header_color=None, default_value=0):
         super().__init__()
-        
+        self.default_value = default_value
         self.ports = []
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
@@ -45,6 +45,7 @@ class GraphicsNode(QGraphicsItem):
             
     def create_port_widget(self, label_text, port, alignment):
         port_label_widget = PortLabelWidget(label=label_text, alignment=alignment)
+        port_label_widget.text_edit.setText(str(self.default_value))
         port_label_proxy = QGraphicsProxyWidget(parent=self)
         port_label_proxy.setWidget(port_label_widget)
         port_label_proxy.setPos(0, (port.port_pos().y() - 15))
