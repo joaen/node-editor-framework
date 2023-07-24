@@ -115,8 +115,6 @@ class MainWindow(QWidget):
             if port_2.is_input:
                 port_2_shape.set_input_text(port_1_shape.port_id.data)
 
-
-
     def port_pressed(self, port_id, graphics_port):  
         self.clicked_ports.append((port_id, graphics_port))
         
