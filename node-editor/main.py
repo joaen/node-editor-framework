@@ -32,7 +32,6 @@ class MainWindow(QWidget):
         self.nodes = []
         self.lines: list[GraphicsLine] = []
         self.clicked_ports = []
-        self.selected_objects = []
         self.connections = []
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
@@ -56,14 +55,10 @@ class MainWindow(QWidget):
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
         self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
-    
         self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_object))
-
         self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)
         self.scene.port_pressed_signal.connect(self.port_pressed)
-        self.scene.line_pressed_signal.connect(self.select_object)
-        self.scene.node_pressed_signal.connect(self.select_object)
         self.scene.port_text_changed_signal.connect(self.port_text_changed)
 
     def port_text_changed(self, port: Port, value):
@@ -144,23 +139,15 @@ class MainWindow(QWidget):
         self.scene.addItem(line)
         self.update_line()
 
-    def select_object(self, object):
-        if object in self.selected_objects:
-            pass
-        else:
-            self.selected_objects.append(object)
-
     def delete_object(self):
         try:
-            for obj in self.selected_objects:
-                if obj.isSelected():
-                    if isinstance(obj, GraphicsLine):
-                        ne.break_connection(obj.port_one.port_id, obj.port_two.port_id)
-                        self.scene.removeItem(obj)
-                    if isinstance(obj, GraphicsNode):
-                        ne.delete_node(obj)
-                        self.scene.removeItem(obj)
-            self.selected_objects.clear()
+            for item in self.scene.selectedItems():
+                if isinstance(item, GraphicsLine):
+                    ne.break_connection(item.port_one.port_id, item.port_two.port_id)
+                    self.scene.removeItem(item)
+                if isinstance(item, GraphicsNode):
+                    ne.delete_node(item)
+                    self.scene.removeItem(item)
         except:
             traceback.print_exc()
         
