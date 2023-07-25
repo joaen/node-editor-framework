@@ -1,8 +1,8 @@
 import traceback
-from node.logic_node import Node
-from node.logic_port import Port
+from node.logic_node import LogicNode
+from node.logic_port import LogicPort
 
-def create_connection(port_1: Port, port_2: Port):
+def create_connection(port_1: LogicPort, port_2: LogicPort):
     try:
         if port_1.is_connected and port_2.is_connected:
             print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
@@ -36,13 +36,13 @@ def create_connection(port_1: Port, port_2: Port):
         traceback.print_exc()
         return None
 
-def break_connection(port_1: Port, port_2: Port):
+def break_connection(port_1: LogicPort, port_2: LogicPort):
     port_1.connection = None
     port_2.connection = None
     port_1.is_connected = False
     port_2.is_connected = False
     print("Broke connection between: {} AND {} ".format(port_1, port_2))
 
-def delete_node(node : Node):
+def delete_node(node : LogicNode):
     node.exsist = False
     print("Deleted node: {}".format(node))

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-class Node(ABC):
+class LogicNode(ABC):
+
     NAME = None
 
     def __int__(self):
@@ -12,7 +13,7 @@ class Node(ABC):
     @abstractmethod
     def _create_inputs(self):
         ''' 
-        This is where the input ports are created and
+        This is where the input LogicPort instances are created and
         then added to the input_ports_dict.
         '''
         return {}
@@ -20,13 +21,16 @@ class Node(ABC):
     @abstractmethod
     def _create_outputs(self):
         ''' 
-        This is where the input ports are created and
-        then added to the input_ports_dict.
+        This is where the output LogicPort instances are created and
+        then added to the output_ports_dict.
         '''
         return {}
 
     @abstractmethod
     def update(self):
+        ''' 
+        This method can be used to trigger the node operation externally.
+        '''
         pass
 
     @abstractmethod
@@ -38,7 +42,3 @@ class Node(ABC):
         '''
         pass
 
-    @abstractmethod
-    def output(self):
-        self._node_operation()
-        return None

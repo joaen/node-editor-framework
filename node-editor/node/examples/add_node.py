@@ -1,7 +1,7 @@
-from node.logic_port import Port
-from node.logic_node import Node
+from node.logic_port import LogicPort
+from node.logic_node import LogicNode
 
-class AddNode(Node):
+class AddNode(LogicNode):
 
     NAME = "Add Node"
 
@@ -13,12 +13,12 @@ class AddNode(Node):
         self.output_ports_dict = self._create_outputs()
         
     def _create_inputs(self):
-        self.input_port_1 = Port(is_input=True, parent_node=self)
-        self.input_port_2 = Port(is_input=True, parent_node=self)
+        self.input_port_1 = LogicPort(is_input=True, parent_node=self)
+        self.input_port_2 = LogicPort(is_input=True, parent_node=self)
         return {"Input 1" : self.input_port_1, "Input 2" : self.input_port_2}
     
     def _create_outputs(self):
-        self.output_port_1 = Port(is_input=False, parent_node=self)
+        self.output_port_1 = LogicPort(is_input=False, parent_node=self)
         return {"Output" : self.output_port_1}
     
     def _node_operation(self):
@@ -29,6 +29,3 @@ class AddNode(Node):
     
     def update(self):
         return self._node_operation()
-    
-    def output(self):
-        return self.output_port_1.data

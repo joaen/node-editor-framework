@@ -16,8 +16,8 @@ import node.node_editor as ne
 from node.examples.multiply_node import MultiplyNode
 from node.examples.float_node import FloatNode
 from node.examples.add_node import AddNode
-from node.logic_node import Node
-from node.logic_port import Port
+from node.logic_node import LogicNode
+from node.logic_port import LogicPort
 
 
 class MainWindow(QWidget): 
@@ -68,7 +68,7 @@ class MainWindow(QWidget):
             self.clicked_ports.clear()
             self.scene.removeItem(self.graphics_mouse_line)
 
-    def port_text_changed(self, port: Port, value):
+    def port_text_changed(self, port: LogicPort, value):
         port.data = value
         self.update_nodes()
 
@@ -100,7 +100,7 @@ class MainWindow(QWidget):
 
     def update_nodes(self):
         for node in self.nodes:
-            logic_node: Node
+            logic_node: LogicNode
             graphics_node: GraphicsNode
             logic_node, graphics_node = node
             logic_node.update()

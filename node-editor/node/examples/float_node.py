@@ -1,7 +1,7 @@
-from node.logic_port import Port
-from node.logic_node import Node
+from node.logic_port import LogicPort
+from node.logic_node import LogicNode
 
-class FloatNode(Node):
+class FloatNode(LogicNode):
 
     NAME = "Float Node"
 
@@ -23,17 +23,13 @@ class FloatNode(Node):
         self._node_operation()
     
     def _create_inputs(self):
-        self.input_port = Port(is_input=True, parent_node=self)
+        self.input_port = LogicPort(is_input=True, parent_node=self)
         input_dict = {"Input" : self.input_port}
         return input_dict
     
     def _create_outputs(self):
-        self.output_port = Port(is_input=False, parent_node=self)
+        self.output_port = LogicPort(is_input=False, parent_node=self)
         output_dict = {"Output" : self.output_port}
         return output_dict
-
-    def output(self):
-        return super().output()
-
 
 

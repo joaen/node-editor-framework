@@ -2,12 +2,12 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
-class Port():
+class LogicPort():
 
     def __init__(self, is_input=True, parent_node=None):
         self._data = 0
         self.node = parent_node
-        self.connection : Port = None
+        self.connection : LogicPort = None
         self.is_connected = False
         self.is_input = is_input
 
