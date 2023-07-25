@@ -12,12 +12,12 @@ from graphics.graphics_line import GraphicsLine
 from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
-import node.editor as ne
-from node.multiply_node import MultiplyNode
-from node.float_node import FloatNode
-from node.add_node import AddNode
-from node.node import Node
-from node.port import Port
+import node.node_editor as ne
+from node.examples.multiply_node import MultiplyNode
+from node.examples.float_node import FloatNode
+from node.examples.add_node import AddNode
+from node.logic_node import Node
+from node.logic_port import Port
 
 
 class MainWindow(QWidget): 

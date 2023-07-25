@@ -1,6 +1,6 @@
 import traceback
-from node.node import Node
-from node.port import Port
+from node.logic_node import Node
+from node.logic_port import Port
 
 def create_connection(port_1: Port, port_2: Port):
     try:
@@ -35,7 +35,6 @@ def create_connection(port_1: Port, port_2: Port):
     except:
         traceback.print_exc()
         return None
-        
 
 def break_connection(port_1: Port, port_2: Port):
     port_1.connection = None
