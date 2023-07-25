@@ -60,6 +60,13 @@ class MainWindow(QWidget):
         self.scene.node_moved_signal.connect(self.update_line)
         self.scene.port_pressed_signal.connect(self.port_pressed)
         self.scene.port_text_changed_signal.connect(self.port_text_changed)
+        self.scene.clicked_view_signal.connect(self.clear_mouse_line)
+
+    def clear_mouse_line(self):
+        if self.is_following_mouse:
+            self.is_following_mouse = False
+            self.clicked_ports.clear()
+            self.scene.removeItem(self.graphics_mouse_line)
 
     def port_text_changed(self, port: Port, value):
         port.data = value

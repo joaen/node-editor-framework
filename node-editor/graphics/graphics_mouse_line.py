@@ -28,6 +28,6 @@ class GraphicsMouseLine(QGraphicsPathItem):
     def update_pos(self, pos1, pos2):
         self.line_path.clear()
         self.point_one = pos1
-        self.point_two = pos2
+        self.point_two = QPointF(pos2.x(), pos2.y() + 8)
         self.update()
         

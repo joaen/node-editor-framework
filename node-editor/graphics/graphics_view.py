@@ -21,6 +21,10 @@ class EditorGraphicsView(QGraphicsView):
         self.setRubberBandSelectionMode(Qt.IntersectsItemShape)
 
     def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            item = self.itemAt(event.pos())
+            if item is None:
+                self.scene().clicked_view_signal.emit()
         if event.button() == Qt.MiddleButton:
             QApplication.setOverrideCursor(Qt.OpenHandCursor)
             self.__prevMousePos = event.pos()
