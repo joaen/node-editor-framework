@@ -2,9 +2,10 @@ import traceback
 from core.logic_node import LogicNode
 from core.logic_port import LogicPort
 from graphics.graphics_node import GraphicsNode
-from example_nodes.multiply_node import MultiplyNode
-from example_nodes.float_node import FloatNode
-from example_nodes.add_node import AddNode
+
+from example_nodes.multiply_node import MultiplyNode # Example node
+from example_nodes.float_node import FloatNode # Example node
+from example_nodes.add_node import AddNode # Example node
 
 def create_connection(port_1: LogicPort, port_2: LogicPort):
     try:
