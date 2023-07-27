@@ -1,6 +1,6 @@
 import traceback
-from node.logic_node import LogicNode
-from node.logic_port import LogicPort
+from core.logic_node import LogicNode
+from core.logic_port import LogicPort
 from graphics.graphics_node import GraphicsNode
 from example_nodes.multiply_node import MultiplyNode
 from example_nodes.float_node import FloatNode

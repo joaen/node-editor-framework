@@ -5,7 +5,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from functools import partial
 
-import node.node_editor as ne
+import core.node_editor as ne
 from graphics.graphics_scene import EditorGraphicsScene
 from graphics.graphics_view import EditorGraphicsView
 
@@ -14,8 +14,8 @@ from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
 
-from node.logic_node import LogicNode
-from node.logic_port import LogicPort
+from core.logic_node import LogicNode
+from core.logic_port import LogicPort
 
 
 class MainWindow(QWidget): 

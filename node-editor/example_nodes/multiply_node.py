@@ -1,5 +1,5 @@
-from node.logic_port import LogicPort
-from node.logic_node import LogicNode
+from core.logic_port import LogicPort
+from core.logic_node import LogicNode
 
 class MultiplyNode(LogicNode):
 

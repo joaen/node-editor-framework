@@ -6,7 +6,7 @@ from PySide2.QtCore import *
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_node import GraphicsNode
-from node.logic_port import LogicPort
+from core.logic_port import LogicPort
 
 class EditorGraphicsScene(QGraphicsScene):
 
