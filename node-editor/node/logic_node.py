@@ -7,6 +7,7 @@ class LogicNode(ABC):
     def __int__(self):
         self.exsists = True # Should be set to true when instantiated
         self.connections = {}
+        self.node_color = (255, 255, 255)
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
 

@@ -1,6 +1,10 @@
 import traceback
 from node.logic_node import LogicNode
 from node.logic_port import LogicPort
+from graphics.graphics_node import GraphicsNode
+from example_nodes.multiply_node import MultiplyNode
+from example_nodes.float_node import FloatNode
+from example_nodes.add_node import AddNode
 
 def create_connection(port_1: LogicPort, port_2: LogicPort):
     try:
@@ -46,3 +50,15 @@ def break_connection(port_1: LogicPort, port_2: LogicPort):
 def delete_node(node : LogicNode):
     node.exsist = False
     print("Deleted node: {}".format(node))
+
+def create_node(node_name):
+    node_class = globals().get(node_name)
+
+    if node_class and issubclass(node_class, LogicNode):
+        logic_node = node_class()
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
+        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
+        return logic_node, graphics_node
+    else:
+        raise ValueError(f"No LogicNode subclass named {node_name} exists in the current namespace")
+

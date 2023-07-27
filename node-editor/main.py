@@ -1,10 +1,11 @@
-from functools import partial
 import sys
 import traceback
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
+from functools import partial
 
+import node.node_editor as ne
 from graphics.graphics_scene import EditorGraphicsScene
 from graphics.graphics_view import EditorGraphicsView
 
@@ -12,10 +13,7 @@ from graphics.graphics_line import GraphicsLine
 from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
-import node.node_editor as ne
-from node.examples.multiply_node import MultiplyNode
-from node.examples.float_node import FloatNode
-from node.examples.add_node import AddNode
+
 from node.logic_node import LogicNode
 from node.logic_port import LogicPort
 
@@ -78,23 +76,17 @@ class MainWindow(QWidget):
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
     def create_multiply_node(self):
-        logic_node = MultiplyNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(0,169,244), default_value=logic_node.default_value)
-        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
+        logic_node, graphics_node = ne.create_node("MultiplyNode")
         self.scene.addItem(graphics_node)
         self.nodes.append((logic_node, graphics_node))
 
     def create_float_node(self):
-        logic_node = FloatNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(255,152,0), default_value=logic_node.default_value)
-        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
+        logic_node, graphics_node = ne.create_node("FloatNode")
         self.scene.addItem(graphics_node)
         self.nodes.append((logic_node, graphics_node))
 
     def create_sum_node(self):
-        logic_node = AddNode()
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=QColor(140,195,74), default_value=logic_node.default_value)
-        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
+        logic_node, graphics_node = ne.create_node("AddNode")
         self.scene.addItem(graphics_node)
         self.nodes.append((logic_node, graphics_node))
 

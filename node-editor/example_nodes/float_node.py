@@ -8,6 +8,7 @@ class FloatNode(LogicNode):
     def __init__(self):
         self.default_value = 0.0
         self.exsists = True
+        self.node_color = (0, 169, 244)
         self.connections = None
         self.output_port = None
         self.input_ports_dict = self._create_inputs()

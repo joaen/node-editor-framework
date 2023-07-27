@@ -1,13 +1,14 @@
 from node.logic_port import LogicPort
 from node.logic_node import LogicNode
 
-class AddNode(LogicNode):
+class MultiplyNode(LogicNode):
 
-    NAME = "Add Node"
+    NAME = "Multiply Node"
 
     def __init__(self):
         self.default_value = 0.0
         self.exsists = True
+        self.node_color = (140,195,74)
         self.connections = {}
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
@@ -23,7 +24,7 @@ class AddNode(LogicNode):
     
     def _node_operation(self):
         try:
-            self.output_port_1.data = float(self.input_port_1.data) + float(self.input_port_2.data)
+            self.output_port_1.data =  round(float(self.input_port_1.data) * float(self.input_port_2.data), 3)
         except:
             self.output_port_1.data = self.default_value
     
