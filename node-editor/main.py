@@ -33,6 +33,8 @@ class MainWindow(QWidget):
         self.clicked_ports = []
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
+        
+        #### REBUILD NODE EDITOR TO BE A CLASS WHERE CONNECTIONS AND NODES ARE STORED
 
         ##DEBUG
         self.create_sum_node()
