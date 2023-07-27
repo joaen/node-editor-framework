@@ -6,10 +6,9 @@ class AddNode(LogicNode):
     NAME = "Add Node"
 
     def __init__(self):
-        self.default_value = 0.0
         self.exsists = True
+        self.default_value = 0.0
         self.node_color = (255, 152, 0)
-        self.connections = {}
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
         
