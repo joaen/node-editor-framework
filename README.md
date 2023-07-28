@@ -75,9 +75,9 @@ self.scene.add_contextmenu_item(self.create_my_custom_node, "Custom Node")
 
 ```python
 def create_my_custom_node(self):
-    logic_node = self.controller.create_node("ExampleNode") #Create an instance of the logic node
-    graphics_node = self.create_ui_node(logic_node) #Create an instance of the ui node
-    self.controller.nodes[logic_node] = graphics_node #Add the node to the controller
+    logic_node = self.controller.create_node("ExampleNode") # Create the logic node
+    graphics_node = GraphicsNode.create_ui_node(logic_node, scene=scene) # Create the ui node
+    self.controller.nodes[logic_node] = graphics_node # Add the node to the controller
 ```
 
 # List of Features
