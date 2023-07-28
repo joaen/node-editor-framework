@@ -22,6 +22,8 @@ In your new class need to define the name of your node and define the input and 
 You also need to create a node_operation method which is the expression or action of the node. For example, a multiply expression node would have the node_operation look something like this:
 > output_port.data = (input1_port.data + input2_port.data)
 
+Here is an example on how you can create your own expression node:
+
 ```python
 from core.logic_port import LogicPort
 from core.logic_node import LogicNode
