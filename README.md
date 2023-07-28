@@ -12,7 +12,7 @@ To install the dependencies in your current environment you can run the followin
 pip install -r requirements.txt
 ```
 # How to run
-You start the application by running main.py. Make sure the depdencies have been installed first.
+You start the application by running main.py. Make sure the dependencies have been installed first.
 
 # How to create a custom nodes
 To create your own custom node you can easily create new child class of the abstract class **LogicNode** and use it as a template.
