@@ -22,7 +22,8 @@ You also need to create a node_operation method where the actual expression is r
 
 To make the node show up in the application you need to pass an instance of your logic node to the create_ui_node method which exsists within the GraphicsNode class.
 The easiest approach is to create new a method to create your custom node and then create new context menu item in the scene and connect that menu item action to your method.
-```
+
+```python
 from core.logic_port import LogicPort
 from core.logic_node import LogicNode
 
