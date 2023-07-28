@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QWidget):
         main_layout.addWidget(self.view)
 
     def create_ui_connections(self):
-        self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
+        self.scene.add_contextmenu_item(self.create_add_node, "Add Node")
         self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
         self.scene.create_key_event(QtCore.Qt.Key_Delete, partial(self.delete_object))
@@ -73,7 +73,7 @@ class MainWindow(QtWidgets.QWidget):
         graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
         self.controller.nodes[logic_node] = graphics_node
 
-    def create_sum_node(self):
+    def create_add_node(self):
         logic_node = self.controller.create_node("AddNode")
         graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
         self.controller.nodes[logic_node] = graphics_node
