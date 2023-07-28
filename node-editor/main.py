@@ -63,25 +63,19 @@ class MainWindow(QtWidgets.QWidget):
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
-    def create_ui_node(self, logic_node):
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
-        graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
-        self.scene.addItem(graphics_node)
-        return graphics_node
-
     def create_multiply_node(self):
         logic_node = self.controller.create_node("MultiplyNode")
-        graphics_node = self.create_ui_node(logic_node)
+        graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
         self.controller.nodes[logic_node] = graphics_node
 
     def create_float_node(self):
         logic_node = self.controller.create_node("FloatNode")
-        graphics_node = self.create_ui_node(logic_node)
+        graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
         self.controller.nodes[logic_node] = graphics_node
 
     def create_sum_node(self):
         logic_node = self.controller.create_node("AddNode")
-        graphics_node = self.create_ui_node(logic_node)
+        graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
         self.controller.nodes[logic_node] = graphics_node
 
     def update_nodes(self):
