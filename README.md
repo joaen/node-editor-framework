@@ -1,7 +1,8 @@
 # Python + PySide2 Node Editor
 Node editor framework which can be used as a standalone application or integrated into Python + PySide2 projects.
 
- ![image](https://github.com/joaen/node-editor-framework/assets/6629861/9a3bac56-ef48-40a8-bf78-44a5ae5ee893)
+![Animation](https://github.com/joaen/node-editor-framework/assets/6629861/51a84e31-ebde-419b-9013-a154e5efb311)
+
 
  # Dependencies
 * PySide2==5.15.2.1
