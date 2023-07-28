@@ -62,9 +62,7 @@ class Controller():
 
         if node_class and issubclass(node_class, LogicNode):
             logic_node = node_class()
-            graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
-            graphics_node.create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
-            return logic_node, graphics_node
+            return logic_node
         else:
             raise ValueError(f"No LogicNode subclass named {node_name} exists in the current namespace")
 
