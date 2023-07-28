@@ -1,4 +1,5 @@
 import sys
+import os
 import traceback
 from PySide2 import QtCore, QtWidgets
 from functools import partial
@@ -41,6 +42,8 @@ class MainWindow(QtWidgets.QWidget):
         self.scene.add_contextmenu_item(self.create_add_node, "Add Node")
         self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
+        self.scene.add_contextmenu_item(self.save_scene, "Save Scene")
+        self.scene.add_contextmenu_item(self.load_scene, "Load Scene")
         self.scene.create_key_event(QtCore.Qt.Key_Delete, partial(self.delete_object))
         self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)
@@ -150,6 +153,41 @@ class MainWindow(QtWidgets.QWidget):
                 line.update_pos()
         except:
             pass
+
+    def load_scene(self):
+        file_path = QtWidgets.QFileDialog.getOpenFileName(self, "Load scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
+        if file_path[0]:
+            import json
+            with open(file_path[0], 'r') as file:
+                data = json.load(file)
+            print(data)
+            return data
+
+    def save_scene(self):
+        file_path = QtWidgets.QFileDialog.getSaveFileName(self, "Save scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
+        if file_path[0]:
+            import json
+            data = []
+            node_data = []
+            for node in self.controller.nodes.keys():
+                node_data.append(str(node))
+            for connection in self.controller.connections:
+                node_data.append(str(connection[0]))
+            data = [node_data]
+            with open(file_path[0], 'w') as file:
+                json.dump(data, file, indent=2)
+
+    # def save_pose_dialog(self):
+        # file_path = QtWidgets.QFileDialog.getSaveFileName(self, "Save pose file", self.pose_folder_path, "Pose file (*.json);;All files (*.*)")
+        # if file_path[0]:
+            # self.save_pose(file_path[0])
+            # print("Saved pose: "+file_path[0])
+
+    # def load_pose_dialog(self):
+    #     file_path = QtWidgets.QFileDialog.getOpenFileName(self, "Save pose file", self.pose_folder_path, "Pose file (*.json);;All files (*.*)")
+    #     if file_path[0]:
+    #         self.load_pose(file_path[0])
+    #         print("Loaded pose: "+file_path[0])
 
 
 if __name__ == "__main__":
