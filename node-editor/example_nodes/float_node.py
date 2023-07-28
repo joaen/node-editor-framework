@@ -11,7 +11,6 @@ class FloatNode(LogicNode):
         self.node_color = (0, 169, 244)
         self.input_ports_dict = self._create_inputs()
         self.output_ports_dict = self._create_outputs()
-        self.output_port = None
 
     def _node_operation(self):
         try:

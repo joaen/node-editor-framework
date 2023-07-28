@@ -5,7 +5,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from functools import partial
 
-import core.node_editor as ne
+import core.controller as ne
 from graphics.graphics_scene import EditorGraphicsScene
 from graphics.graphics_view import EditorGraphicsView
 
@@ -16,6 +16,7 @@ from graphics.graphics_mouse_line import GraphicsMouseLine
 
 from core.logic_node import LogicNode
 from core.logic_port import LogicPort
+from core.controller import Controller
 
 
 class MainWindow(QWidget): 
@@ -26,10 +27,13 @@ class MainWindow(QWidget):
         self.setBaseSize(QSize(600, 600))
         self.create_ui_widgets()
         self.create_ui_layout()
-        self.create_connections()
-        self.nodes = []
+        self.create_ui_connections()
+
+        self.controller = Controller()
+        self.controller.nodes = []
+        self.controller.connections = []
+
         self.lines = []
-        self.connections = []
         self.clicked_ports = []
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
@@ -51,7 +55,7 @@ class MainWindow(QWidget):
         main_layout.setContentsMargins(5, 5, 5, 5)
         main_layout.addWidget(self.view)
 
-    def create_connections(self):
+    def create_ui_connections(self):
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
         self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
@@ -78,22 +82,22 @@ class MainWindow(QWidget):
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
     def create_multiply_node(self):
-        logic_node, graphics_node = ne.create_node("MultiplyNode")
+        logic_node, graphics_node = Controller.create_node("MultiplyNode")
         self.scene.addItem(graphics_node)
-        self.nodes.append((logic_node, graphics_node))
+        self.controller.nodes.append((logic_node, graphics_node))
 
     def create_float_node(self):
-        logic_node, graphics_node = ne.create_node("FloatNode")
+        logic_node, graphics_node = Controller.create_node("FloatNode")
         self.scene.addItem(graphics_node)
-        self.nodes.append((logic_node, graphics_node))
+        self.controller.nodes.append((logic_node, graphics_node))
 
     def create_sum_node(self):
-        logic_node, graphics_node = ne.create_node("AddNode")
+        logic_node, graphics_node = Controller.create_node("AddNode")
         self.scene.addItem(graphics_node)
-        self.nodes.append((logic_node, graphics_node))
+        self.controller.nodes.append((logic_node, graphics_node))
 
     def update_nodes(self):
-        for node in self.nodes:
+        for node in self.controller.nodes:
             logic_node: LogicNode
             graphics_node: GraphicsNode
             logic_node, graphics_node = node
@@ -104,7 +108,7 @@ class MainWindow(QWidget):
                 if key != "input":
                     port_shape.set_input_text(port_shape.port_id.data)
         
-        for connection in self.connections:
+        for connection in self.controller.connections:
             port_1, port_1_shape, port_2, port_2_shape = connection
             if port_1.is_input:
                 port_1_shape.set_input_text(port_2_shape.port_id.data)
@@ -118,9 +122,9 @@ class MainWindow(QWidget):
             self.scene.removeItem(self.graphics_mouse_line)
             clicked_port_1, clicked_port_1_graphics = self.clicked_ports[0]
             clicked_port_2, clicked_port_2_graphics = self.clicked_ports[1]
-            connection = ne.create_connection(clicked_port_1, clicked_port_2)
+            connection = Controller.create_connection(clicked_port_1, clicked_port_2)
             if connection:
-                self.connections.append((clicked_port_1, clicked_port_1_graphics, clicked_port_2, clicked_port_2_graphics))
+                self.controller.connections.append((clicked_port_1, clicked_port_1_graphics, clicked_port_2, clicked_port_2_graphics))
                 self.create_line(clicked_port_1_graphics, clicked_port_2_graphics)
                 self.update_nodes()
 
@@ -144,19 +148,19 @@ class MainWindow(QWidget):
         try:
             for item in self.scene.selectedItems():
                 if isinstance(item, GraphicsLine):
-                    ne.break_connection(item.port_one.port_id, item.port_two.port_id)
+                    Controller.break_connection(item.port_one.port_id, item.port_two.port_id)
                     self.scene.removeItem(item)
                 if isinstance(item, GraphicsNode):
-                    for node in self.nodes:
+                    for node in self.controller.nodes:
                         logic_node, graphics_node = node
                         if graphics_node == item:
-                            ne.delete_node(logic_node)
+                            Controller.delete_node(logic_node)
                     self.scene.removeItem(item)
 
             for line in self.lines:
                 if line.port_one.parent.scene() == None or line.port_two.parent.scene() == None:
                         self.scene.removeItem(line)
-                        ne.break_connection(line.port_one, line.port_two)
+                        Controller.break_connection(line.port_one, line.port_two)
         except:
             traceback.print_exc()
         
