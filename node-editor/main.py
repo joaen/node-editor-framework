@@ -177,17 +177,34 @@ class MainWindow(QtWidgets.QWidget):
             with open(file_path[0], 'w') as file:
                 json.dump(data, file, indent=2)
 
-    # def save_pose_dialog(self):
-        # file_path = QtWidgets.QFileDialog.getSaveFileName(self, "Save pose file", self.pose_folder_path, "Pose file (*.json);;All files (*.*)")
-        # if file_path[0]:
-            # self.save_pose(file_path[0])
-            # print("Saved pose: "+file_path[0])
+# {
+#     "nodes": [
+#         {
+#             "id": "node1",
+#             "node_type" : AddNode
+#             "input_port_1" : 3.0
+#             "pos": (20, 30),
+#         },
+#         {
+#             "id": "node2",
+#             "node_type" : AddNode
+#             "input_port_1" : 10.0
+#             "input_port_2" : 10.0
+#             "pos": (30, 40),
+#         },
+#         {
+#             "id": "node3",
+#             "node_type" : AddNode
+#             "input_port_1" : 3.0
+#             "pos": (0, 0),
+#         }
+#     ]
+#     "connections": [
+#           [node1.port1, node2.port2],
+#           [node3.port1, node2.port2],
+#     ]
+# }
 
-    # def load_pose_dialog(self):
-    #     file_path = QtWidgets.QFileDialog.getOpenFileName(self, "Save pose file", self.pose_folder_path, "Pose file (*.json);;All files (*.*)")
-    #     if file_path[0]:
-    #         self.load_pose(file_path[0])
-    #         print("Loaded pose: "+file_path[0])
 
 
 if __name__ == "__main__":
