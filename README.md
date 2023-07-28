@@ -66,7 +66,7 @@ class ExampleNode(LogicNode):
 ```
 
 To make the node show up in the application you need to pass an instance of your logic node to the create_ui_node class method in the **GraphicsNode** class.
-The easiest approach is to create a new context menu item, create new a method where you create the logic node and graphics node, and then connect that context menu item action to your method.
+The easiest approach is to create a new context menu item, create new a method where you create the logic node and graphics node, and then connect that context menu item action to your method:
 
 
 ```python
