@@ -14,9 +14,8 @@ pip install -r requirements.txt
 # How to use
 * Start the application by running main.py (Make sure the dependencies have been installed first).
 * Use mouse right-click button to show the context menu and create nodes.
-* Click the **Delete** keyboard key to delete selected items.
+* Click the **Delete** keyboard button to delete nodes and connections.
 * Use scroll to zoom in/out and middle-mouse button to pan the view.
-* Click on node ports to connect them.
 * Use mouse right-click context menu to save and load scenes.
 
 # How to create a custom nodes
@@ -81,7 +80,7 @@ self.scene.add_contextmenu_item(self.create_my_custom_node, "Custom Node")
 ```python
 def create_my_custom_node(self):
     logic_node = self.controller.create_node("ExampleNode") # Create the logic node
-    graphics_node = GraphicsNode.create_ui_node(logic_node, scene=scene) # Create the ui node
+    graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene) # Create the ui node
     self.controller.nodes[logic_node] = graphics_node # Add the node to the controller
 ```
 
