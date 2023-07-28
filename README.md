@@ -11,8 +11,13 @@ To install the dependencies in your current environment you can run the followin
 ```
 pip install -r requirements.txt
 ```
-# How to run
-You start the application by running main.py. Make sure the dependencies have been installed first.
+# How to use
+* Start the application by running main.py (Make sure the dependencies have been installed first).
+* Use mouse right-click button to show the context menu and create nodes.
+* Click the **Delete** keyboard key to delete selected items.
+* Use scroll to zoom in/out and middle-mouse button to pan the view.
+* Click on node ports to connect them.
+* Use mouse right-click context menu to save and load scenes.
 
 # How to create a custom nodes
 To create your own custom node you can easily create new child class of the abstract class **LogicNode** and use it as a template.
@@ -79,8 +84,6 @@ def create_my_custom_node(self):
     graphics_node = GraphicsNode.create_ui_node(logic_node, scene=scene) # Create the ui node
     self.controller.nodes[logic_node] = graphics_node # Add the node to the controller
 ```
-
-
 
 
 
