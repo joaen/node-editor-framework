@@ -1,20 +1,18 @@
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
+from PySide2 import QtCore, QtWidgets, QtGui
 
 
-class GraphicsMouseLine(QGraphicsPathItem):
+class GraphicsMouseLine(QtWidgets.QGraphicsPathItem):
 
-    def __init__(self, point_one : QPointF, point_two : QPointF):
+    def __init__(self, point_one : QtCore.QPointF, point_two : QtCore.QPointF):
         super().__init__()
         self.point_one = point_one
         self.point_two = point_two
         self.line_path = None
-        self.color = QColor(150, 150, 150)
+        self.color = QtGui.QColor(150, 150, 150)
 
-    def paint(self, painter: QPainter, option, widget=None):
-        self.line_path = QPainterPath()
-        pen = QPen(self.color)
+    def paint(self, painter: QtGui.QPainter, option, widget=None):
+        self.line_path = QtGui.QPainterPath()
+        pen = QtGui.QPen(self.color)
             
         pen.setWidth(4)
         painter.setPen(pen)
@@ -28,6 +26,6 @@ class GraphicsMouseLine(QGraphicsPathItem):
     def update_pos(self, pos1, pos2):
         self.line_path.clear()
         self.point_one = pos1
-        self.point_two = QPointF(pos2.x(), pos2.y() + 8)
+        self.point_two = QtCore.QPointF(pos2.x(), pos2.y() + 8)
         self.update()
         

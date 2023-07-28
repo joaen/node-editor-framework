@@ -1,30 +1,24 @@
 import sys
 import traceback
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
+from PySide2 import QtCore, QtWidgets
 from functools import partial
-
-import core.controller as ne
 from graphics.graphics_scene import EditorGraphicsScene
 from graphics.graphics_view import EditorGraphicsView
-
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
-
 from core.logic_node import LogicNode
 from core.logic_port import LogicPort
 from core.controller import Controller
 
 
-class MainWindow(QWidget): 
+class MainWindow(QtWidgets.QWidget): 
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Node Editor")
-        self.setBaseSize(QSize(600, 600))
+        self.setBaseSize(QtCore.QSize(600, 600))
         self.create_ui_widgets()
         self.create_ui_layout()
         self.create_ui_connections()
@@ -37,13 +31,6 @@ class MainWindow(QWidget):
         self.clicked_ports = []
         self.is_following_mouse = False
         self.graphics_mouse_line: GraphicsMouseLine = None
-        
-        #### REBUILD NODE EDITOR TO BE A CLASS WHERE CONNECTIONS AND NODES ARE STORED
-
-        ##DEBUG
-        self.create_sum_node()
-        self.create_float_node()
-        self.create_multiply_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -51,7 +38,7 @@ class MainWindow(QWidget):
         self.view.setScene(self.scene)
 
     def create_ui_layout(self):
-        main_layout = QHBoxLayout(self)
+        main_layout = QtWidgets.QHBoxLayout(self)
         main_layout.setContentsMargins(5, 5, 5, 5)
         main_layout.addWidget(self.view)
 
@@ -59,7 +46,7 @@ class MainWindow(QWidget):
         self.scene.add_contextmenu_item(self.create_sum_node, "Sum Node")
         self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
-        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_object))
+        self.scene.create_key_event(QtCore.Qt.Key_Delete, partial(self.delete_object))
         self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)
         self.scene.port_pressed_signal.connect(self.port_pressed)
@@ -140,6 +127,7 @@ class MainWindow(QWidget):
         if len(self.clicked_ports) == 1:
             clicked_port_1, clicked_port_1_graphics = self.clicked_ports[0]
             self.graphics_mouse_line = GraphicsMouseLine(point_one=clicked_port_1_graphics.port_pos(), point_two=clicked_port_1_graphics.port_pos())
+            self.graphics_mouse_line.setZValue(self.graphics_mouse_line.zValue() - 1)
             self.scene.addItem(self.graphics_mouse_line)
             self.is_following_mouse = True
 
@@ -179,7 +167,7 @@ class MainWindow(QWidget):
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     app.exec_()
