@@ -17,7 +17,6 @@ pip install -r requirements.txt
 * Use mouse right-click button to show the context menu and create nodes.
 * Click the **Delete** keyboard button to delete nodes and connections.
 * Use scroll to zoom in/out and middle-mouse button to pan the view.
-* Use mouse right-click context menu to save and load scenes.
 
 # How to create a custom nodes
 To create your own custom node you can easily create new child class of the abstract class **LogicNode** and use it as a template.
