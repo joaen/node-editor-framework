@@ -38,16 +38,23 @@ class ExampleNode(LogicNode):
         self.output_ports_dict = self._create_outputs()
 
     def _node_operation(self):
-        # Do something here
+        '''
+        Write the actual node expression here
+        '''
     
     def update(self):
+        '''
+         Update the node externally using this method
+         '''
         self._node_operation()
     
     def _create_inputs(self):
-        return {"Input" : self.input_port}
+        input_port = LogicPort(is_input=True, parent_node=self)
+        return {"Input" : input_port}
     
     def _create_outputs(self):
-        return {"Output" : self.output_port}
+        ourtput_port = LogicPort(is_input=False, parent_node=self)
+        return {"Output" : output_port}
 
 ```
 # List of Features
