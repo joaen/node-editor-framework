@@ -80,8 +80,6 @@ def create_my_custom_node(self):
     self.controller.nodes[logic_node] = graphics_node # Add the node to the controller
 ```
 
-# List of Features
-
 
 
 
