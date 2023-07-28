@@ -68,6 +68,19 @@ class ExampleNode(LogicNode):
 To make the node show up in the application you need to pass an instance of your logic node to the create_ui_node method which exsists within the **GraphicsNode** class.
 The easiest approach is to create a new context menu item, create new a method where you create the logic node and graphics node, and then connect that context menu item action to your method.
 
+
+```python
+self.scene.add_contextmenu_item(self.create_my_custom_node, "Custom Node")
+```
+
+```python
+def create_my_custom_node(self):
+    logic_node = self.controller.create_node("ExampleNode") #Create an instance of the logic node
+    graphics_node = self.create_ui_node(logic_node) #Create an instance of the ui node so it can be displayed in the application.
+    self.controller.nodes[logic_node] = graphics_node #Add the node to the controller
+```
+
+
 # List of Features
 
 
