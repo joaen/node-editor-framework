@@ -9,7 +9,7 @@ class Controller():
 
     def __init__(self):
         self.connections = []
-        self.nodes = []
+        self.nodes = {}
 
     @classmethod
     def create_connection(cls, port_1: LogicPort, port_2: LogicPort):
@@ -50,17 +50,17 @@ class Controller():
         port_2.is_connected = False
         print("Broke connection between: {} AND {} ".format(port_1, port_2))
 
-    @classmethod
-    def delete_node(cls, node : LogicNode):
+    def delete_node(self, node : LogicNode):
         node.exsist = False
+        self.nodes.pop(node)
         print("Deleted node: {}".format(node))
 
-    @classmethod
-    def create_node(cls, node_name):
+    def create_node(self, node_name):
         node_class = globals().get(node_name)
 
         if node_class and issubclass(node_class, LogicNode):
             logic_node = node_class()
+            self.nodes[logic_node] = None
             return logic_node
         else:
             raise ValueError(f"No LogicNode subclass named {node_name} exists in the current namespace")

@@ -8,14 +8,13 @@ from graphics.graphics_line import GraphicsLine
 from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
-from core.logic_node import LogicNode
-from core.logic_port import LogicPort
 from core.controller import Controller
 
 
 class MainWindow(QtWidgets.QWidget): 
     def __init__(self):
         super().__init__()
+        self.controller = Controller()
 
         self.setWindowTitle("Node Editor")
         self.setBaseSize(QtCore.QSize(600, 600))
@@ -23,14 +22,10 @@ class MainWindow(QtWidgets.QWidget):
         self.create_ui_layout()
         self.create_ui_connections()
 
-        self.controller = Controller()
-        self.controller.nodes = []
-        self.controller.connections = []
-
         self.lines = []
         self.clicked_ports = []
         self.is_following_mouse = False
-        self.graphics_mouse_line: GraphicsMouseLine = None
+        self.graphics_mouse_line = None
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -59,7 +54,7 @@ class MainWindow(QtWidgets.QWidget):
             self.clicked_ports.clear()
             self.scene.removeItem(self.graphics_mouse_line)
 
-    def port_text_changed(self, port: LogicPort, value):
+    def port_text_changed(self, port, value):
         port.data = value
         self.update_nodes()
 
@@ -75,28 +70,25 @@ class MainWindow(QtWidgets.QWidget):
         return graphics_node
 
     def create_multiply_node(self):
-        logic_node = Controller.create_node("MultiplyNode")
+        logic_node = self.controller.create_node("MultiplyNode")
         graphics_node = self.create_ui_node(logic_node)
-        self.controller.nodes.append((logic_node, graphics_node))
+        self.controller.nodes[logic_node] = graphics_node
 
     def create_float_node(self):
-        logic_node = Controller.create_node("FloatNode")
+        logic_node = self.controller.create_node("FloatNode")
         graphics_node = self.create_ui_node(logic_node)
-        self.controller.nodes.append((logic_node, graphics_node))
+        self.controller.nodes[logic_node] = graphics_node
 
     def create_sum_node(self):
-        logic_node = Controller.create_node("AddNode")
+        logic_node = self.controller.create_node("AddNode")
         graphics_node = self.create_ui_node(logic_node)
-        self.controller.nodes.append((logic_node, graphics_node))
+        self.controller.nodes[logic_node] = graphics_node
 
     def update_nodes(self):
-        for node in self.controller.nodes:
-            logic_node: LogicNode
-            graphics_node: GraphicsNode
-            logic_node, graphics_node = node
-            logic_node.update()
+        for node in self.controller.nodes.keys():
+            node.update()
         
-            for port in graphics_node.ports:
+            for port in self.controller.nodes.get(node).ports:
                 key, port_shape = port
                 if key != "input":
                     port_shape.set_input_text(port_shape.port_id.data)
@@ -145,12 +137,12 @@ class MainWindow(QtWidgets.QWidget):
                     Controller.break_connection(item.port_one.port_id, item.port_two.port_id)
                     self.scene.removeItem(item)
                 if isinstance(item, GraphicsNode):
-                    for node in self.controller.nodes:
-                        logic_node, graphics_node = node
-                        if graphics_node == item:
-                            Controller.delete_node(logic_node)
+                    for node in self.controller.nodes.keys():
+                        if self.controller.nodes.get(node) == item:
+                            self.controller.delete_node(node)
+                            break
                     self.scene.removeItem(item)
-
+            
             for line in self.lines:
                 if line.port_one.parent.scene() == None or line.port_two.parent.scene() == None:
                         self.scene.removeItem(line)
