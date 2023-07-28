@@ -14,7 +14,7 @@ pip install -r requirements.txt
 # How to run
 You start the application by running main.py. Make sure the depdencies have been installed first.
 
-# How to create custom nodes
+# How to create a custom nodes
 To create a custom node you can create a new class child class of LogicNode. 
 There you can set the name of the node and declare the input and ouput ports of the node.
 You also need to create a node_operation method where the actual expression is run. For exmaple inside the exmaple AddNode the node_operation module is:
@@ -44,8 +44,8 @@ class ExampleNode(LogicNode):
     
     def update(self):
         '''
-         Update the node externally using this method
-         '''
+        This method is used to update the node externally
+        '''
         self._node_operation()
     
     def _create_inputs(self):
@@ -58,6 +58,8 @@ class ExampleNode(LogicNode):
 
 ```
 # List of Features
+
+
 
 
 
