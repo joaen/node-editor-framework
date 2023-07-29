@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 import traceback
 from PySide2 import QtCore, QtWidgets
 from functools import partial
@@ -97,6 +98,13 @@ class MainWindow(QtWidgets.QWidget):
             if port_2.is_input:
                 port_2_shape.set_input_text(port_1_shape.port_id.data)
 
+    # def create_connection(self, port1, port2):
+    #     connection = Controller.create_connection(clicked_port_1, clicked_port_2)
+    #     if connection:
+    #         self.controller.connections.append((clicked_port_1, clicked_port_1_graphics, clicked_port_2, clicked_port_2_graphics))
+    #         self.create_line(clicked_port_1_graphics, clicked_port_2_graphics)
+    #         self.update_nodes()
+
     def port_pressed(self, port_id, graphics_port):  
         self.clicked_ports.append((port_id, graphics_port))
         
@@ -155,56 +163,62 @@ class MainWindow(QtWidgets.QWidget):
             pass
 
     def load_scene(self):
+        data = self.load_json()
+        if data:
+            for data_set in data:
+                node_id = data_set.get('id')
+                node_name = data_set.get('node_name')
+                node_pos = data_set.get('pos')
+                connections = data_set.get('connections') 
+
+                logic_node = self.controller.create_node(node_name)
+                graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
+                self.controller.nodes[logic_node] = graphics_node
+                logic_node.id = node_id
+                graphics_node.setPos(node_pos[0], node_pos[1])
+
+                if connections:
+                    for connection in connections:
+                        port1 : str
+                        port2 : str
+                        port1, port2 = connection
+
+                        port1_parent = port1.split(".")[0]
+                        port2_parent = port2.split(".")[0]
+                        port1_name = port1.split(".")[1]
+                        port2_name = port2.split(".")[1]
+
+                        print(port1_name)
+                        print(port2_name)
+        else:
+            pass
+        
+    def load_json(self):
         file_path = QtWidgets.QFileDialog.getOpenFileName(self, "Load scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
         if file_path[0]:
             import json
             with open(file_path[0], 'r') as file:
                 data = json.load(file)
-            print(data)
             return data
+
 
     def save_scene(self):
         file_path = QtWidgets.QFileDialog.getSaveFileName(self, "Save scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
         if file_path[0]:
-            import json
             data = []
-            node_data = []
+
             for node in self.controller.nodes.keys():
-                node_data.append(str(node))
-            for connection in self.controller.connections:
-                node_data.append(str(connection[0]))
-            data = [node_data]
+                connections = []
+                for port in node.input_ports.values():
+                    if port.is_connected:
+                        connections.append(["{}.{}".format(node.id, port.name,), "{}.{}".format(port.connection.parent_node.id, port.connection.name)])
+
+                graphics_node = self.controller.nodes.get(node)
+                node_data = {"id" : str(node.id), "node_name" : str(type(node).__name__), "pos" : [graphics_node.pos().x(), graphics_node.pos().y()], "connections" : connections}
+                data.append(node_data)
+
             with open(file_path[0], 'w') as file:
                 json.dump(data, file, indent=2)
-
-# {
-#     "nodes": [
-#         {
-#             "id": "node1",
-#             "node_type" : AddNode
-#             "input_port_1" : 3.0
-#             "pos": (20, 30),
-#         },
-#         {
-#             "id": "node2",
-#             "node_type" : AddNode
-#             "input_port_1" : 10.0
-#             "input_port_2" : 10.0
-#             "pos": (30, 40),
-#         },
-#         {
-#             "id": "node3",
-#             "node_type" : AddNode
-#             "input_port_1" : 3.0
-#             "pos": (0, 0),
-#         }
-#     ]
-#     "connections": [
-#           [node1.port1, node2.port2],
-#           [node3.port1, node2.port2],
-#     ]
-# }
-
 
 
 if __name__ == "__main__":

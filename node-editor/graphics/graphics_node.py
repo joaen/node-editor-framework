@@ -74,6 +74,6 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
     @classmethod
     def create_ui_node(cls, logic_node, scene):
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
-        graphics_node._create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
+        graphics_node._create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
         scene.addItem(graphics_node)
         return graphics_node

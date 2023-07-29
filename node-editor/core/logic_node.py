@@ -1,20 +1,21 @@
 from abc import ABC, abstractmethod
+import uuid
 
 class LogicNode(ABC):
 
     NAME = None
 
     def __int__(self):
-        self.exsists = True # Should be set to true when instantiated
+        self._id = uuid.uuid4() # The node need an unique id for save/load functionality to work
         self.node_color = (255, 255, 255)
-        self.input_ports_dict = self._create_inputs()
-        self.output_ports_dict = self._create_outputs()
+        self.input_ports = self._create_inputs()
+        self.output_ports = self._create_outputs()
 
     @abstractmethod
     def _create_inputs(self):
         ''' 
         This is where the input LogicPort instances are created and
-        then added to the input_ports_dict.
+        then added to the input_ports.
         '''
         return {}
     
@@ -22,7 +23,7 @@ class LogicNode(ABC):
     def _create_outputs(self):
         ''' 
         This is where the output LogicPort instances are created and
-        then added to the output_ports_dict.
+        then added to the output_ports.
         '''
         return {}
 
@@ -41,4 +42,14 @@ class LogicNode(ABC):
         before the data is sent to the ouput.
         '''
         pass
+
+    @property
+    @abstractmethod
+    def id(self):
+        return self._id
+
+    @id.setter
+    @abstractmethod
+    def id(self, new_id):
+        self._id = new_id
 

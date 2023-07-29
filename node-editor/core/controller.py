@@ -31,7 +31,7 @@ class Controller():
         elif port_1.is_input == False and port_2.is_input == False:
             print("YOU CAN'T CONNECT TWO OUTPUT PORTS")
             return None
-        elif port_1.node == port_2.node:
+        elif port_1.parent_node == port_2.parent_node:
             print("YOU CAN'T CONNECT NODE TO ITSELF")
             return None
         else:
@@ -39,7 +39,7 @@ class Controller():
             port_2.connection = port_1
             port_1.is_connected = True
             port_2.is_connected = True
-            print("Connected: {} || {}".format(port_1.node, port_2.node))
+            print("Connected: {} || {}".format(port_1.parent_node, port_2.parent_node))
             return [port_1, port_2]
 
     @classmethod

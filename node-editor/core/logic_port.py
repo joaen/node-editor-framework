@@ -1,9 +1,10 @@
 
 class LogicPort():
 
-    def __init__(self, is_input=True, parent_node=None):
+    def __init__(self, is_input=True, parent_node=None, name=None):
+        self.name = name
         self._data = 0
-        self.node = parent_node
+        self.parent_node = parent_node
         self.connection : LogicPort = None
         self.is_connected = False
         self.is_input = is_input
