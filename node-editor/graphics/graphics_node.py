@@ -11,7 +11,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
     def __init__(self, name="Node", header_color=None, default_value=0):
         super().__init__()
         self.default_value = default_value
-        self.ports = []
+        self.ports = {}
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
         name_label = QtWidgets.QLabel(name)
@@ -39,7 +39,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
                 port_shape.port_widget = port_label_widget
                 self.node_shape.height += 40
                 y_position += 35
-                self.ports.append((key, port_shape))
+                self.ports[key] = port_shape
             
     def _create_port_widget(self, label_text, port, alignment):
         port_label_widget = PortLabelWidget(label=label_text, alignment=alignment)

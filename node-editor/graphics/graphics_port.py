@@ -6,7 +6,7 @@ class GraphicsPort(QtWidgets.QGraphicsItem):
 
     def __init__(self, port_id, is_input, pos: QtCore.QPointF, parent):
         super().__init__()
-        self.parent = parent
+        self.parent_node = parent
         self.setPos(pos)
         self.port_id = port_id
         self.is_input = is_input

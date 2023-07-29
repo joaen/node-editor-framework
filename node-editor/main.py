@@ -11,6 +11,7 @@ from graphics.graphics_node import GraphicsNode
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
 from core.controller import Controller
+from core.logic_port import LogicPort
 
 
 class MainWindow(QtWidgets.QWidget): 
@@ -86,10 +87,9 @@ class MainWindow(QtWidgets.QWidget):
         for node in self.controller.nodes.keys():
             node.update()
         
-            for port in self.controller.nodes.get(node).ports:
-                key, port_shape = port
+            for key in self.controller.nodes.get(node).ports.keys():
                 if key != "input":
-                    port_shape.set_input_text(port_shape.port_id.data)
+                    self.controller.nodes.get(node).ports.get(key).set_input_text(self.controller.nodes.get(node).ports.get(key).port_id.data)
         
         for connection in self.controller.connections:
             port_1, port_1_shape, port_2, port_2_shape = connection
@@ -98,12 +98,20 @@ class MainWindow(QtWidgets.QWidget):
             if port_2.is_input:
                 port_2_shape.set_input_text(port_1_shape.port_id.data)
 
-    # def create_connection(self, port1, port2):
-    #     connection = Controller.create_connection(clicked_port_1, clicked_port_2)
-    #     if connection:
-    #         self.controller.connections.append((clicked_port_1, clicked_port_1_graphics, clicked_port_2, clicked_port_2_graphics))
-    #         self.create_line(clicked_port_1_graphics, clicked_port_2_graphics)
-    #         self.update_nodes()
+    def create_connection(self, port1: LogicPort, port2: LogicPort):
+        connection = Controller.create_connection(port1, port2)
+        if connection:
+            for ui_node in self.controller.nodes.values():
+                for port in ui_node.ports.values():
+                    if port1 == port.port_id:
+                        print("WTF")
+                    
+                
+            # port1.parent_node
+            # for port in port1.parent.input_ports:
+            # self.controller.connections.append((port1, port2))
+            # self.create_line(port1.parent_node., clicked_port_2_graphics)
+            # self.update_nodes()
 
     def port_pressed(self, port_id, graphics_port):  
         self.clicked_ports.append((port_id, graphics_port))
@@ -149,7 +157,7 @@ class MainWindow(QtWidgets.QWidget):
                     self.scene.removeItem(item)
             
             for line in self.lines:
-                if line.port_one.parent.scene() == None or line.port_two.parent.scene() == None:
+                if line.port_one.parent_node.scene() == None or line.port_two.parent_node.scene() == None:
                         self.scene.removeItem(line)
                         Controller.break_connection(line.port_one, line.port_two)
         except:
@@ -174,6 +182,7 @@ class MainWindow(QtWidgets.QWidget):
                 logic_node = self.controller.create_node(node_name)
                 graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
                 self.controller.nodes[logic_node] = graphics_node
+
                 logic_node.id = node_id
                 graphics_node.setPos(node_pos[0], node_pos[1])
 
