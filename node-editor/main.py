@@ -30,8 +30,8 @@ class MainWindow(QtWidgets.QWidget):
         self.is_following_mouse = False
         self.graphics_mouse_line = None
 
-        self.create_add_node()
-        self.create_add_node()
+        # self.create_add_node()
+        # self.create_add_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -181,7 +181,6 @@ class MainWindow(QtWidgets.QWidget):
                 node_id = data_set.get('id')
                 node_name = data_set.get('node_name')
                 node_pos = data_set.get('pos')
-                connections = data_set.get('connections') 
 
                 logic_node = self.controller.create_node(node_name)
                 graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
@@ -189,9 +188,12 @@ class MainWindow(QtWidgets.QWidget):
 
                 logic_node.id = node_id
                 graphics_node.setPos(node_pos[0], node_pos[1])
-
+            
+            for data_set in data: 
+                connections = data_set.get('connections') 
                 if connections:
                     for connection in connections:
+                        print(connection)
                         port1 : str
                         port2 : str
                         port1, port2 = connection
@@ -201,15 +203,18 @@ class MainWindow(QtWidgets.QWidget):
                         port1_name = port1.split(".")[1]
                         port2_name = port2.split(".")[1]
 
+                        connect_ports = []
                         for node, ui_node in self.controller.nodes.items():
                             if port1_parent == node.id:
                                 for port, ui_port in ui_node.ports.items():
                                     if port.name == port1_name:
-                                        print(port)
+                                        connect_ports.append((port, ui_port))
+                            if port2_parent == node.id:
+                                for port, ui_port in ui_node.ports.items():
+                                    if port.name == port2_name:
+                                        connect_ports.append((port, ui_port))
 
-                        # print(port1_name)
-                        # print(port2_name)
-                        # self.create_connection()
+                        self.create_connection(connect_ports[0][0], connect_ports[1][0])
         else:
             pass
         
