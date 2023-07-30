@@ -49,7 +49,7 @@ class MainWindow(QtWidgets.QWidget):
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
         self.scene.add_contextmenu_item(self.save_scene, "Save Scene")
         self.scene.add_contextmenu_item(self.load_scene, "Load Scene")
-        self.scene.create_key_event(QtCore.Qt.Key_Delete, partial(self.delete_object))
+        self.scene.create_key_event(QtCore.Qt.Key_Delete, partial(self.deleted_selected))
         self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)
         self.scene.port_pressed_signal.connect(self.port_pressed)
@@ -147,7 +147,11 @@ class MainWindow(QtWidgets.QWidget):
         self.scene.addItem(line)
         self.update_line()
 
-    def delete_object(self):
+    def select_all_items(self):
+        for item in self.scene.items():
+            item.setSelected(True)
+
+    def deleted_selected(self):
         try:
             for item in self.scene.selectedItems():
                 if isinstance(item, GraphicsLine):
@@ -175,6 +179,8 @@ class MainWindow(QtWidgets.QWidget):
             pass
 
     def load_scene(self):
+        self.select_all_items()
+        self.deleted_selected()
         data = self.load_json()
         if data:
             for data_set in data:
@@ -225,7 +231,6 @@ class MainWindow(QtWidgets.QWidget):
             with open(file_path[0], 'r') as file:
                 data = json.load(file)
             return data
-
 
     def save_scene(self):
         file_path = QtWidgets.QFileDialog.getSaveFileName(self, "Save scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
