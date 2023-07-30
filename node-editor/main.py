@@ -29,6 +29,9 @@ class MainWindow(QtWidgets.QWidget):
         self.clicked_ports = []
         self.is_following_mouse = False
         self.graphics_mouse_line = None
+
+        self.create_add_node()
+        self.create_add_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
@@ -86,10 +89,10 @@ class MainWindow(QtWidgets.QWidget):
     def update_nodes(self):
         for node in self.controller.nodes.keys():
             node.update()
-        
-            for key in self.controller.nodes.get(node).ports.keys():
-                if key != "input":
-                    self.controller.nodes.get(node).ports.get(key).set_input_text(self.controller.nodes.get(node).ports.get(key).port_id.data)
+            ports = self.controller.nodes.get(node).ports
+            for logic_port in ports.keys():
+                if logic_port.is_input == False:
+                    ports.get(logic_port).set_input_text(ports.get(logic_port).port_id.data)
         
         for connection in self.controller.connections:
             port_1, port_1_shape, port_2, port_2_shape = connection
@@ -101,17 +104,22 @@ class MainWindow(QtWidgets.QWidget):
     def create_connection(self, port1: LogicPort, port2: LogicPort):
         connection = Controller.create_connection(port1, port2)
         if connection:
+            ports_to_connect = []
             for ui_node in self.controller.nodes.values():
-                for port in ui_node.ports.values():
-                    if port1 == port.port_id:
-                        print("WTF")
+                for logic_port, ui_port in ui_node.ports.items():
+                    if logic_port == port1:
+                        ports_to_connect.append(ui_port)
+                    if logic_port == port2:
+                        ports_to_connect.append(ui_port)
+
+            self.create_line(ports_to_connect[0], ports_to_connect[1])
+            self.controller.connections.append((port1, ports_to_connect[0], port2, ports_to_connect[1]))
                     
-                
-            # port1.parent_node
-            # for port in port1.parent.input_ports:
-            # self.controller.connections.append((port1, port2))
-            # self.create_line(port1.parent_node., clicked_port_2_graphics)
-            # self.update_nodes()
+    def get_key(self, dictionary, value):
+        for key, val in dictionary.items():
+            if val == value:
+                return key
+        return None    
 
     def port_pressed(self, port_id, graphics_port):  
         self.clicked_ports.append((port_id, graphics_port))
@@ -120,12 +128,8 @@ class MainWindow(QtWidgets.QWidget):
             self.scene.removeItem(self.graphics_mouse_line)
             clicked_port_1, clicked_port_1_graphics = self.clicked_ports[0]
             clicked_port_2, clicked_port_2_graphics = self.clicked_ports[1]
-            connection = Controller.create_connection(clicked_port_1, clicked_port_2)
-            if connection:
-                self.controller.connections.append((clicked_port_1, clicked_port_1_graphics, clicked_port_2, clicked_port_2_graphics))
-                self.create_line(clicked_port_1_graphics, clicked_port_2_graphics)
-                self.update_nodes()
 
+            self.create_connection(clicked_port_1, clicked_port_2)
             self.is_following_mouse = False
             self.clicked_ports.clear()
         
@@ -197,8 +201,15 @@ class MainWindow(QtWidgets.QWidget):
                         port1_name = port1.split(".")[1]
                         port2_name = port2.split(".")[1]
 
-                        print(port1_name)
-                        print(port2_name)
+                        for node, ui_node in self.controller.nodes.items():
+                            if port1_parent == node.id:
+                                for port, ui_port in ui_node.ports.items():
+                                    if port.name == port1_name:
+                                        print(port)
+
+                        # print(port1_name)
+                        # print(port2_name)
+                        # self.create_connection()
         else:
             pass
         

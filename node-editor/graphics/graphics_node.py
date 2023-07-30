@@ -27,19 +27,23 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
 
-    def _create_ports(self, **kwargs):
+    def _create_ports(self, input, output):
         y_position = 50
-        for key, value in kwargs.items():
-            for port in value.keys():
-                x_position = (lambda: 0 if key == "input" else 100)()
-                port_shape = GraphicsPort(port_id=value.get(port), parent=self, pos=QtCore.QPointF(x_position, y_position), is_input=(lambda: True if key == "input" else False)())
+        combined_dict = input.copy()
+        combined_dict.update(output)
+        
+        for name in combined_dict.keys():
+            if name:
+                x_position = (lambda: 0 if combined_dict.get(name).is_input else 100)()
+                port_shape = GraphicsPort(port_id=combined_dict.get(name), parent=self, pos=QtCore.QPointF(x_position, y_position), is_input=combined_dict.get(name).is_input)
                 port_shape.setParentItem(self)
                 port_shape.setZValue(port_shape.zValue() + 1)
-                port_label_widget = self._create_port_widget(label_text=port, port=port_shape, alignment=(lambda: "left" if key == "input" else "right")())
+                port_label_widget = self._create_port_widget(label_text=name, port=port_shape, alignment=(lambda: "left" if combined_dict.get(name).is_input else "right")())
                 port_shape.port_widget = port_label_widget
                 self.node_shape.height += 40
                 y_position += 35
-                self.ports[key] = port_shape
+                self.ports[combined_dict.get(name)] = port_shape
+
             
     def _create_port_widget(self, label_text, port, alignment):
         port_label_widget = PortLabelWidget(label=label_text, alignment=alignment)
