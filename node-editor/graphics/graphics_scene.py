@@ -23,7 +23,6 @@ class EditorGraphicsScene(QtWidgets.QGraphicsScene):
         self.grid_color = QtGui.QColor(45, 45, 48)
         self.grid_spacing = 30
         self.pen = QtGui.QPen(self.grid_color, 1, QtGui.Qt.DotLine)
-
         self.key_events = {}
 
         self.setSceneRect(QtCore.QRectF(-1000, -1000, 2000, 2000))

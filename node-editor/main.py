@@ -29,9 +29,6 @@ class MainWindow(QtWidgets.QWidget):
         self.clicked_ports = []
         self.is_following_mouse = False
         self.graphics_mouse_line = None
-
-        # self.create_add_node()
-        # self.create_add_node()
     
     def create_ui_widgets(self):
         self.scene = EditorGraphicsScene()
