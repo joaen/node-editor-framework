@@ -2,7 +2,7 @@ import sys
 import os
 import json
 import traceback
-from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2 import QtCore, QtWidgets
 from functools import partial
 from graphics.graphics_scene import EditorGraphicsScene
 from graphics.graphics_view import EditorGraphicsView
