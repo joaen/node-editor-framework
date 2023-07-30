@@ -2,7 +2,7 @@ import sys
 import os
 import json
 import traceback
-from PySide2 import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets, QtGui
 from functools import partial
 from graphics.graphics_scene import EditorGraphicsScene
 from graphics.graphics_view import EditorGraphicsView
@@ -47,8 +47,13 @@ class MainWindow(QtWidgets.QWidget):
         self.scene.add_contextmenu_item(self.create_add_node, "Add Node")
         self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
         self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
-        self.scene.add_contextmenu_item(self.save_scene, "Save Scene")
-        self.scene.add_contextmenu_item(self.load_scene, "Load Scene")
+
+        self.scene.contextMenu.addSeparator()
+        save_action = self.scene.add_contextmenu_item(self.save_scene, "Save Scene")
+        load_action = self.scene.add_contextmenu_item(self.load_scene, "Load Scene")
+        save_action.setIcon(app.style().standardIcon(QtWidgets.QStyle.SP_DialogSaveButton))
+        load_action.setIcon(app.style().standardIcon(QtWidgets.QStyle.SP_DialogOpenButton))
+
         self.scene.create_key_event(QtCore.Qt.Key_Delete, partial(self.deleted_selected))
         self.scene.mouse_position_signal.connect(self.mouse_moved)
         self.scene.node_moved_signal.connect(self.update_line)

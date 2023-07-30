@@ -46,9 +46,10 @@ class EditorGraphicsScene(QtWidgets.QGraphicsScene):
         super().mouseMoveEvent(event)
 
     def add_contextmenu_item(self, command, name):
-        self.new_example_node_action = QtWidgets.QAction(name, self)
-        self.new_example_node_action.triggered.connect(command)
-        self.contextMenu.addAction(self.new_example_node_action)
+        action = QtWidgets.QAction(name, self)
+        action.triggered.connect(command)
+        self.contextMenu.addAction(action)
+        return action
 
     def contextMenuEvent(self, event):
         self.contextMenu.exec_(event.screenPos())
