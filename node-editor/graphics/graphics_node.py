@@ -51,11 +51,12 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         port_label_proxy = QtWidgets.QGraphicsProxyWidget(parent=self)
         port_label_proxy.setWidget(port_label_widget)
         port_label_proxy.setPos(0, (port.port_pos().y() - 15))
-        port_label_widget.text_edit.textChanged.connect(partial(self._text_changed, port.port_id))
+        port_label_widget.text_edit.returnPressed.connect(partial(self._text_changed, port))
+        port_label_widget.text_edit.editingFinished.connect(partial(self._text_changed, port))    
         return port_label_widget
 
-    def _text_changed(self, port_id, text):
-        self.scene().port_text_changed_signal.emit(port_id, text)
+    def _text_changed(self, port):
+        self.scene().port_text_changed_signal.emit(port.port_id, port.port_widget.text_edit.text())
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)

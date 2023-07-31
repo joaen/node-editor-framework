@@ -88,10 +88,11 @@ class MainWindow(QtWidgets.QWidget):
         
         for connection in self.controller.connections:
             port_1, port_1_shape, port_2, port_2_shape = connection
+            
             if port_1.is_input:
                 port_1_shape.set_input_text(port_2_shape.port_id.data)
-            if port_2.is_input:
-                port_2_shape.set_input_text(port_1_shape.port_id.data)
+            elif port_2.is_input:
+                port_1_shape.set_input_text(port_2_shape.port_id.data)
 
     def create_connection(self, port1: LogicPort, port2: LogicPort):
         connection = self.controller.create_connection(port1, port2)
@@ -106,6 +107,7 @@ class MainWindow(QtWidgets.QWidget):
 
             self.create_line(ports_to_connect[0], ports_to_connect[1])
             self.controller.connections.append((port1, ports_to_connect[0], port2, ports_to_connect[1]))
+            self.update_nodes()
                     
     def get_key(self, dictionary, value):
         for key, val in dictionary.items():

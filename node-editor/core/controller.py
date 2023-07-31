@@ -39,7 +39,6 @@ class Controller():
             port1.is_connected = True
             port2.is_connected = True
             print("Connected: {} || {}".format(port1.parent_node, port2.parent_node))
-            self.connections.append((port1, self.get_ui_node(port1), port2, self.get_ui_node(port2)))
             return True
 
     def get_ui_node(self, port: LogicPort):
@@ -59,7 +58,6 @@ class Controller():
         ports_to_check = {port_1, port_2}
         self.connections = [connection for connection in self.connections if not ports_to_check.issubset(set(connection))]
         print("Broke connection between: {} AND {} ".format(port_1, port_2))
-        print(len(self.connections))
 
     def delete_node(self, node : LogicNode):
         node.exsist = False
