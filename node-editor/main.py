@@ -79,20 +79,11 @@ class MainWindow(QtWidgets.QWidget):
         self.controller.nodes[logic_node] = graphics_node
 
     def update_nodes(self):
-        for node in self.controller.nodes.keys():
+        for node in reversed(self.controller.nodes.keys()):
             node.update()
             ports = self.controller.nodes.get(node).ports
             for logic_port in ports.keys():
-                if logic_port.is_input == False:
-                    ports.get(logic_port).set_input_text(ports.get(logic_port).port_id.data)
-        
-        for connection in self.controller.connections:
-            port_1, port_1_shape, port_2, port_2_shape = connection
-            
-            if port_1.is_input:
-                port_1_shape.set_input_text(port_2_shape.port_id.data)
-            elif port_2.is_input:
-                port_1_shape.set_input_text(port_2_shape.port_id.data)
+                ports.get(logic_port).set_input_text(logic_port.data)
 
     def create_connection(self, port1: LogicPort, port2: LogicPort):
         connection = self.controller.create_connection(port1, port2)
@@ -178,19 +169,29 @@ class MainWindow(QtWidgets.QWidget):
         data = self.load_json()
         if data:
             for data_set in data:
-                node_id = data_set.get('id')
-                node_name = data_set.get('node_name')
-                node_pos = data_set.get('pos')
+                node_id = data_set.get("id")
+                node_name = data_set.get("node_name")
+                node_pos = data_set.get("pos")
 
                 logic_node = self.controller.create_node(node_name)
                 graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
                 self.controller.nodes[logic_node] = graphics_node
-
                 logic_node.id = node_id
                 graphics_node.setPos(node_pos[0], node_pos[1])
             
             for data_set in data: 
-                connections = data_set.get('connections') 
+                connections = data_set.get("connections") 
+                port_data = data_set.get("port_data")
+
+                if port_data:
+                    for port, data in port_data.items():
+                        port_parent = port.split(".")[0]
+                        port_name = port.split(".")[1]
+                        for node, ui_node in self.controller.nodes.items():
+                            if port_parent == node.id:
+                                node.input_ports.get(port_name).data = data
+                                self.update_nodes()
+
                 if connections:
                     for connection in connections:
                         port1, port2 = connection
@@ -211,9 +212,7 @@ class MainWindow(QtWidgets.QWidget):
                                         connect_ports.append((port, ui_port))
 
                         self.create_connection(connect_ports[0][0], connect_ports[1][0])
-        else:
-            pass
-        
+
     def load_json(self):
         file_path = QtWidgets.QFileDialog.getOpenFileName(self, "Load scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
         if file_path[0]:
@@ -229,12 +228,19 @@ class MainWindow(QtWidgets.QWidget):
 
             for node in self.controller.nodes.keys():
                 connections = []
+                input_port_data = {}
                 for port in node.input_ports.values():
+                    input_port_data["{}.{}".format(node.id, port.name)] = port.data
                     if port.is_connected:
-                        connections.append(["{}.{}".format(node.id, port.name,), "{}.{}".format(port.connection.parent_node.id, port.connection.name)])
+                        connections.append(["{}.{}".format(node.id, port.name), "{}.{}".format(port.connection.parent_node.id, port.connection.name)])
+
 
                 graphics_node = self.controller.nodes.get(node)
-                node_data = {"id" : str(node.id), "node_name" : str(type(node).__name__), "pos" : [graphics_node.pos().x(), graphics_node.pos().y()], "connections" : connections}
+                node_data = {"id" : str(node.id),
+                            "node_name" : str(type(node).__name__),
+                            "pos" : [graphics_node.pos().x(), graphics_node.pos().y()],
+                            "connections" : connections,
+                            "port_data" : input_port_data}
                 data.append(node_data)
 
             with open(file_path[0], 'w') as file:

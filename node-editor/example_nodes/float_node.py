@@ -23,12 +23,12 @@ class FloatNode(LogicNode):
         self._node_operation()
     
     def _create_inputs(self):
-        input_port = LogicPort(is_input=True, parent_node=self, name="Input")
+        input_port = LogicPort(is_input=True, parent_node=self, name="Input", data=self.default_value)
         input_dict = {input_port.name : input_port}
         return input_dict
     
     def _create_outputs(self):
-        output_port = LogicPort(is_input=False, parent_node=self, name="Output")
+        output_port = LogicPort(is_input=False, parent_node=self, name="Output", data=self.default_value)
         output_dict = {output_port.name : output_port}
         return output_dict
     

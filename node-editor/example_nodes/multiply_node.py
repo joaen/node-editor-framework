@@ -14,12 +14,12 @@ class MultiplyNode(LogicNode):
         self.output_ports = self._create_outputs()
         
     def _create_inputs(self):
-        input_port_1 = LogicPort(is_input=True, parent_node=self, name="Input 1")
-        input_port_2 = LogicPort(is_input=True, parent_node=self, name="Input 2")
+        input_port_1 = LogicPort(is_input=True, parent_node=self, name="Input 1", data=self.default_value)
+        input_port_2 = LogicPort(is_input=True, parent_node=self, name="Input 2", data=self.default_value)
         return {input_port_1.name : input_port_1, input_port_2.name : input_port_2}
     
     def _create_outputs(self):
-        output_port = LogicPort(is_input=False, parent_node=self, name="Output")
+        output_port = LogicPort(is_input=False, parent_node=self, name="Output", data=self.default_value)
         return {output_port.name  : output_port}
     
     def _node_operation(self):
