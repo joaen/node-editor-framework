@@ -11,44 +11,55 @@ class Controller():
         self.connections = []
         self.nodes = {}
 
-    @classmethod
-    def create_connection(cls, port_1: LogicPort, port_2: LogicPort):
-        if port_1.is_connected and port_2.is_connected:
-            print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
-            return None
-        if port_2.is_connected and port_2.is_input:
-            print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
-            return None
-        if port_1.is_connected and port_1.is_input:
-            print("THIS PORT ALREADY HAVE A CONNECTION".format(port_1))
-            return None
-        elif port_1 == port_2:
+    def create_connection(self, port1: LogicPort, port2: LogicPort):
+        if port1.is_connected and port2.is_connected:
+            print("THIS PORT ALREADY HAVE A CONNECTION".format(port1))
+            return False
+        if port2.is_connected and port2.is_input:
+            print("THIS PORT ALREADY HAVE A CONNECTION".format(port1))
+            return False
+        if port1.is_connected and port1.is_input:
+            print("THIS PORT ALREADY HAVE A CONNECTION".format(port1))
+            return False
+        elif port1 == port2:
             print("CAN'T CONNECT PORT TO ITSELF")
-            return None
-        elif port_1.is_input and port_2.is_input:
+            return False
+        elif port1.is_input and port2.is_input:
             print("YOU CAN'T CONNECT TWO INPUT PORTS")
-            return None
-        elif port_1.is_input == False and port_2.is_input == False:
+            return False
+        elif port1.is_input == False and port2.is_input == False:
             print("YOU CAN'T CONNECT TWO OUTPUT PORTS")
-            return None
-        elif port_1.parent_node == port_2.parent_node:
+            return False
+        elif port1.parent_node == port2.parent_node:
             print("YOU CAN'T CONNECT NODE TO ITSELF")
-            return None
+            return False
         else:
-            port_1.connection = port_2
-            port_2.connection = port_1
-            port_1.is_connected = True
-            port_2.is_connected = True
-            print("Connected: {} || {}".format(port_1.parent_node, port_2.parent_node))
-            return [port_1, port_2]
+            port1.connection = port2
+            port2.connection = port1
+            port1.is_connected = True
+            port2.is_connected = True
+            print("Connected: {} || {}".format(port1.parent_node, port2.parent_node))
+            self.connections.append((port1, self.get_ui_node(port1), port2, self.get_ui_node(port2)))
+            return True
 
-    @classmethod
-    def break_connection(cls, port_1: LogicPort, port_2: LogicPort):
+    def get_ui_node(self, port: LogicPort):
+        for ui_node in self.nodes.values():
+            for logic_port, ui_port in ui_node.ports.items():
+                if logic_port == port:
+                    return ui_port
+                else: 
+                    return None
+
+    def break_connection(self, port_1: LogicPort, port_2: LogicPort):
         port_1.connection = None
         port_2.connection = None
         port_1.is_connected = False
         port_2.is_connected = False
+
+        ports_to_check = {port_1, port_2}
+        self.connections = [connection for connection in self.connections if not ports_to_check.issubset(set(connection))]
         print("Broke connection between: {} AND {} ".format(port_1, port_2))
+        print(len(self.connections))
 
     def delete_node(self, node : LogicNode):
         node.exsist = False

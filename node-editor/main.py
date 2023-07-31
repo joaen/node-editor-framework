@@ -94,7 +94,7 @@ class MainWindow(QtWidgets.QWidget):
                 port_2_shape.set_input_text(port_1_shape.port_id.data)
 
     def create_connection(self, port1: LogicPort, port2: LogicPort):
-        connection = Controller.create_connection(port1, port2)
+        connection = self.controller.create_connection(port1, port2)
         if connection:
             ports_to_connect = []
             for ui_node in self.controller.nodes.values():
@@ -147,7 +147,7 @@ class MainWindow(QtWidgets.QWidget):
         try:
             for item in self.scene.selectedItems():
                 if isinstance(item, GraphicsLine):
-                    Controller.break_connection(item.port_one.port_id, item.port_two.port_id)
+                    self.controller.break_connection(item.port_one.port_id, item.port_two.port_id)
                     self.scene.removeItem(item)
                 if isinstance(item, GraphicsNode):
                     for node in self.controller.nodes.keys():
@@ -159,7 +159,7 @@ class MainWindow(QtWidgets.QWidget):
             for line in self.lines:
                 if line.port_one.parent_node.scene() == None or line.port_two.parent_node.scene() == None:
                         self.scene.removeItem(line)
-                        Controller.break_connection(line.port_one, line.port_two)
+                        self.controller.break_connection(line.port_one, line.port_two)
         except:
             traceback.print_exc()
         
