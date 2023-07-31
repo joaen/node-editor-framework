@@ -41,9 +41,9 @@ class MainWindow(QtWidgets.QWidget):
         main_layout.addWidget(self.view)
 
     def create_ui_connections(self):
-        self.scene.add_contextmenu_item(self.create_add_node, "Add Node")
-        self.scene.add_contextmenu_item(self.create_multiply_node, "Multiply Node")
-        self.scene.add_contextmenu_item(self.create_float_node, "Float Node")
+        self.scene.add_contextmenu_item(partial(self.create_node, "AddNode"), "Add Node")
+        self.scene.add_contextmenu_item(partial(self.create_node, "MultiplyNode"), "Multiply Node")
+        self.scene.add_contextmenu_item(partial(self.create_node, "FloatNode"), "Float Node")
 
         self.scene.contextMenu.addSeparator()
         save_action = self.scene.add_contextmenu_item(self.save_scene, "Save Scene")
@@ -73,18 +73,8 @@ class MainWindow(QtWidgets.QWidget):
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
-    def create_multiply_node(self):
-        logic_node = self.controller.create_node("MultiplyNode")
-        graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
-        self.controller.nodes[logic_node] = graphics_node
-
-    def create_float_node(self):
-        logic_node = self.controller.create_node("FloatNode")
-        graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
-        self.controller.nodes[logic_node] = graphics_node
-
-    def create_add_node(self):
-        logic_node = self.controller.create_node("AddNode")
+    def create_node(self, node_name):
+        logic_node = self.controller.create_node(node_name)
         graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
         self.controller.nodes[logic_node] = graphics_node
 
@@ -201,11 +191,7 @@ class MainWindow(QtWidgets.QWidget):
                 connections = data_set.get('connections') 
                 if connections:
                     for connection in connections:
-                        print(connection)
-                        port1 : str
-                        port2 : str
                         port1, port2 = connection
-
                         port1_parent = port1.split(".")[0]
                         port2_parent = port2.split(".")[0]
                         port1_name = port1.split(".")[1]
