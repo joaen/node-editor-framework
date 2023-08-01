@@ -10,6 +10,7 @@ class LogicNode(ABC):
         self.node_color = (255, 255, 255)
         self.input_ports = self._create_inputs()
         self.output_ports = self._create_outputs()
+        self.connections = []
 
     @abstractmethod
     def _create_inputs(self):

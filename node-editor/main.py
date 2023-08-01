@@ -79,11 +79,36 @@ class MainWindow(QtWidgets.QWidget):
         self.controller.nodes[logic_node] = graphics_node
 
     def update_nodes(self):
-        for node in reversed(self.controller.nodes.keys()):
+        for node in self.topological_sort():
             node.update()
             ports = self.controller.nodes.get(node).ports
             for logic_port in ports.keys():
                 ports.get(logic_port).set_input_text(logic_port.data)
+
+    def topological_sort(self):
+        visited = set()
+        post_order = []
+        source_nodes = []
+
+        for logic_node in list(self.controller.nodes.keys()):
+            for port in list(logic_node.input_ports.values()):
+                if port.is_connected:
+                    break
+                else:
+                    source_nodes.append(logic_node)
+
+        def visit(node):
+            if node not in visited:
+                visited.add(node)
+                for connection in node.connections:
+                    visit(connection)
+                post_order.append(node)
+
+        for node in source_nodes:
+            visit(node)
+
+        post_order.reverse()
+        return post_order
 
     def create_connection(self, port1: LogicPort, port2: LogicPort):
         connection = self.controller.create_connection(port1, port2)
@@ -212,7 +237,8 @@ class MainWindow(QtWidgets.QWidget):
                                         connect_ports.append((port, ui_port))
 
                         self.create_connection(connect_ports[0][0], connect_ports[1][0])
-
+        print(self.topological_sort())
+        
     def load_json(self):
         file_path = QtWidgets.QFileDialog.getOpenFileName(self, "Load scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
         if file_path[0]:

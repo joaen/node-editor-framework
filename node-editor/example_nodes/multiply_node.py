@@ -12,6 +12,7 @@ class MultiplyNode(LogicNode):
         self.node_color = (140,195,74)
         self.input_ports = self._create_inputs()
         self.output_ports = self._create_outputs()
+        self.connections = []
         
     def _create_inputs(self):
         input_port_1 = LogicPort(is_input=True, parent_node=self, name="Input 1", data=self.default_value)

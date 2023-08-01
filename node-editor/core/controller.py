@@ -38,6 +38,8 @@ class Controller():
             port2.connection = port1
             port1.is_connected = True
             port2.is_connected = True
+            port1.parent_node.connections.append(port2.parent_node)
+            port2.parent_node.connections.append(port1.parent_node)
             print("Connected: {} || {}".format(port1.parent_node, port2.parent_node))
             return True
 
