@@ -23,7 +23,6 @@ class EditorGraphicsScene(QtWidgets.QGraphicsScene):
         self.grid_color = QtGui.QColor(45, 45, 48)
         self.grid_spacing = 30
         self.pen = QtGui.QPen(self.grid_color, 1, QtGui.Qt.DotLine)
-
         self.key_events = {}
 
         self.setSceneRect(QtCore.QRectF(-1000, -1000, 2000, 2000))
@@ -46,9 +45,10 @@ class EditorGraphicsScene(QtWidgets.QGraphicsScene):
         super().mouseMoveEvent(event)
 
     def add_contextmenu_item(self, command, name):
-        self.new_example_node_action = QtWidgets.QAction(name, self)
-        self.new_example_node_action.triggered.connect(command)
-        self.contextMenu.addAction(self.new_example_node_action)
+        action = QtWidgets.QAction(name, self)
+        action.triggered.connect(command)
+        self.contextMenu.addAction(action)
+        return action
 
     def contextMenuEvent(self, event):
         self.contextMenu.exec_(event.screenPos())
