@@ -11,7 +11,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
     def __init__(self, name="Node", header_color=None, default_value=0):
         super().__init__()
         self.default_value = default_value
-        self.ports = []
+        self.ports = {}
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
         name_label = QtWidgets.QLabel(name)
@@ -27,19 +27,23 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
 
-    def _create_ports(self, **kwargs):
+    def _create_ports(self, input, output):
         y_position = 50
-        for key, value in kwargs.items():
-            for port in value.keys():
-                x_position = (lambda: 0 if key == "input" else 100)()
-                port_shape = GraphicsPort(port_id=value.get(port), parent=self, pos=QtCore.QPointF(x_position, y_position), is_input=(lambda: True if key == "input" else False)())
+        combined_dict = input.copy()
+        combined_dict.update(output)
+        
+        for name in combined_dict.keys():
+            if name:
+                x_position = (lambda: 0 if combined_dict.get(name).is_input else 100)()
+                port_shape = GraphicsPort(port_id=combined_dict.get(name), parent=self, pos=QtCore.QPointF(x_position, y_position), is_input=combined_dict.get(name).is_input)
                 port_shape.setParentItem(self)
                 port_shape.setZValue(port_shape.zValue() + 1)
-                port_label_widget = self._create_port_widget(label_text=port, port=port_shape, alignment=(lambda: "left" if key == "input" else "right")())
+                port_label_widget = self._create_port_widget(label_text=name, port=port_shape, alignment=(lambda: "left" if combined_dict.get(name).is_input else "right")())
                 port_shape.port_widget = port_label_widget
                 self.node_shape.height += 40
                 y_position += 35
-                self.ports.append((key, port_shape))
+                self.ports[combined_dict.get(name)] = port_shape
+
             
     def _create_port_widget(self, label_text, port, alignment):
         port_label_widget = PortLabelWidget(label=label_text, alignment=alignment)
@@ -47,11 +51,12 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         port_label_proxy = QtWidgets.QGraphicsProxyWidget(parent=self)
         port_label_proxy.setWidget(port_label_widget)
         port_label_proxy.setPos(0, (port.port_pos().y() - 15))
-        port_label_widget.text_edit.textChanged.connect(partial(self._text_changed, port.port_id))
+        port_label_widget.text_edit.returnPressed.connect(partial(self._text_changed, port))
+        port_label_widget.text_edit.editingFinished.connect(partial(self._text_changed, port))    
         return port_label_widget
 
-    def _text_changed(self, port_id, text):
-        self.scene().port_text_changed_signal.emit(port_id, text)
+    def _text_changed(self, port):
+        self.scene().port_text_changed_signal.emit(port.port_id, port.port_widget.text_edit.text())
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
@@ -74,6 +79,6 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
     @classmethod
     def create_ui_node(cls, logic_node, scene):
         graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
-        graphics_node._create_ports(input=logic_node.input_ports_dict, output=logic_node.output_ports_dict)
+        graphics_node._create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
         scene.addItem(graphics_node)
         return graphics_node
