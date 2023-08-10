@@ -1,4 +1,5 @@
 import sys
+import traceback
 from PySide2.QtWidgets import QHBoxLayout, QWidget, QStyle, QApplication
 from PySide2.QtCore import QSize, Qt
 from functools import partial
@@ -91,7 +92,7 @@ class MainWindow(QWidget):
             for line in self.controller.lines:
                 line.update_pos()
         except:
-            pass
+            traceback.print_exc()
 
 
 if __name__ == "__main__":
