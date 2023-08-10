@@ -14,6 +14,15 @@ from example_nodes.float_node import FloatNode # Example node
 from example_nodes.add_node import AddNode # Example node
 
 class Controller():
+    '''
+    Controller for managing node operations in the node editor.
+    
+    This controller holds actions related to both logic and UI nodes, 
+    acting as an intermediary to handle user inputs, update node states, and 
+    reflect changes in the UI. This class holds functionalities like node creation, 
+    deletion, and connection.
+    
+    '''
 
     def __init__(self):
         self.scene = None
@@ -52,14 +61,6 @@ class Controller():
             port2.parent_node.connections.append(port1.parent_node)
             print("Connected: {} || {}".format(port1.parent_node, port2.parent_node))
             return True
-
-    def get_ui_node(self, port: LogicPort):
-        for ui_node in self.nodes.values():
-            for logic_port, ui_port in ui_node.ports.items():
-                if logic_port == port:
-                    return ui_port
-                else: 
-                    return None
 
     def break_connection(self, port_1: LogicPort, port_2: LogicPort):
         port_1.connection = None
