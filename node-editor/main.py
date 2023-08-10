@@ -79,36 +79,11 @@ class MainWindow(QtWidgets.QWidget):
         self.controller.nodes[logic_node] = graphics_node
 
     def update_nodes(self):
-        for node in self.nodes_topological_order():
+        for node in self.controller.nodes_sorted():
             node.update()
             ports = self.controller.nodes.get(node).ports
             for logic_port in ports.keys():
                 ports.get(logic_port).set_input_text(logic_port.data)
-
-    def nodes_topological_order(self):
-        visited = set()
-        post_order = []
-        source_nodes = []
-
-        for logic_node in list(self.controller.nodes.keys()):
-            for port in list(logic_node.input_ports.values()):
-                if port.is_connected:
-                    break
-                else:
-                    source_nodes.append(logic_node)
-
-        def visit(node):
-            if node not in visited:
-                visited.add(node)
-                for connection in node.connections:
-                    visit(connection)
-                post_order.append(node)
-
-        for node in source_nodes:
-            visit(node)
-
-        post_order.reverse()
-        return post_order
 
     def create_connection(self, port1: LogicPort, port2: LogicPort):
         connection = self.controller.create_connection(port1, port2)
