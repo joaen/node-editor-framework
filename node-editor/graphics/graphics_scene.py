@@ -29,13 +29,8 @@ class EditorGraphicsScene(QtWidgets.QGraphicsScene):
         self.setSceneRect(QtCore.QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
 
-    def create_key_event(self, key, command):
-        try:
-            key_value = getattr(Qt, key)
-            self.key_events[key_value] = command
-        except AttributeError:
-            print(f"{key} is not a valid Qt key.")
-        
+    def create_key_event(self, key: Qt.Key, command):
+        self.key_events[key] = command
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         for key in self.key_events.keys():

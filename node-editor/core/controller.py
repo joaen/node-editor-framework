@@ -8,6 +8,7 @@ from graphics.graphics_line import GraphicsLine
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_mouse_line import GraphicsMouseLine
 from graphics.graphics_scene import EditorGraphicsScene
+from PySide2.QtCore import Qt
 
 from core.logic_node import LogicNode
 from core.logic_port import LogicPort
@@ -45,7 +46,7 @@ class Controller():
         self.scene.clicked_view_signal.connect(self.ui_remove_mouse_line)
 
     def connect_keys(self):
-        self.scene.create_key_event("Key_Delete", partial(self.delete_selected))
+        self.scene.create_key_event(Qt.Key_Delete, partial(self.delete_selected))
 
     def ui_remove_mouse_line(self):
         if self.is_following_mouse:

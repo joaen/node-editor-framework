@@ -1,5 +1,4 @@
 import sys
-import traceback
 from PySide2.QtWidgets import QHBoxLayout, QWidget, QStyle, QApplication
 from PySide2.QtCore import QSize
 from functools import partial
