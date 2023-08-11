@@ -1,4 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2.QtCore import Qt
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_node import GraphicsNode
@@ -28,8 +29,13 @@ class EditorGraphicsScene(QtWidgets.QGraphicsScene):
         self.setSceneRect(QtCore.QRectF(-1000, -1000, 2000, 2000))
         self.setBackgroundBrush(self.background_color)
 
-    def create_key_event(self, key : QtCore.Qt.Key, command):
-        self.key_events[key] = command
+    def create_key_event(self, key, command):
+        try:
+            key_value = getattr(Qt, key)
+            self.key_events[key_value] = command
+        except AttributeError:
+            print(f"{key} is not a valid Qt key.")
+        
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         for key in self.key_events.keys():

@@ -1,10 +1,13 @@
 import os
 import json
 import traceback
+from functools import partial
 from PySide2.QtWidgets import QFileDialog
 from graphics.graphics_node import GraphicsNode
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_port import GraphicsPort
+from graphics.graphics_mouse_line import GraphicsMouseLine
+from graphics.graphics_scene import EditorGraphicsScene
 
 from core.logic_node import LogicNode
 from core.logic_port import LogicPort
@@ -21,14 +24,68 @@ class Controller():
     acting as an intermediary to handle user inputs, update node states, and 
     reflect changes in the UI. This class holds functionalities like node creation, 
     deletion, and connection.
-    
     '''
-
-    def __init__(self):
-        self.scene = None
+    def __init__(self, scene):
+        self.scene: EditorGraphicsScene = scene
         self.connections = []
         self.nodes = {}
         self.lines = []
+
+        self.clicked_ports = []
+        self.is_following_mouse = False
+        self.graphics_mouse_line = None
+        self.connect_signals()
+        self.connect_keys()
+
+    def connect_signals(self):
+        self.scene.mouse_position_signal.connect(self.mouse_moved)
+        self.scene.node_moved_signal.connect(self.ui_update_line)
+        self.scene.port_pressed_signal.connect(self.ui_port_pressed)
+        self.scene.port_text_changed_signal.connect(self.ui_port_text_changed)
+        self.scene.clicked_view_signal.connect(self.ui_remove_mouse_line)
+
+    def connect_keys(self):
+        self.scene.create_key_event("Key_Delete", partial(self.delete_selected))
+
+    def ui_remove_mouse_line(self):
+        if self.is_following_mouse:
+            self.is_following_mouse = False
+            self.clicked_ports.clear()
+            self.scene.removeItem(self.graphics_mouse_line)
+
+    def mouse_moved(self, mouse_pos):
+        if self.is_following_mouse == True:
+            clicked_one, clicked_one_graphics = self.clicked_ports[0]
+            self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
+
+    def ui_port_text_changed(self, port, value):
+        port.data = value
+        self.update_nodes()   
+
+    def ui_port_pressed(self, port_id, graphics_port):  
+        self.clicked_ports.append((port_id, graphics_port))
+        
+        if len(self.clicked_ports) >= 2:
+            self.scene.removeItem(self.graphics_mouse_line)
+            clicked_port_1, clicked_port_1_graphics = self.clicked_ports[0]
+            clicked_port_2, clicked_port_2_graphics = self.clicked_ports[1]
+            self.connect_ports(clicked_port_1, clicked_port_2)
+            self.is_following_mouse = False
+            self.clicked_ports.clear()
+        
+        if len(self.clicked_ports) == 1:
+            clicked_port_1, clicked_port_1_graphics = self.clicked_ports[0]
+            self.graphics_mouse_line = GraphicsMouseLine(point_one=clicked_port_1_graphics.port_pos(), point_two=clicked_port_1_graphics.port_pos())
+            self.graphics_mouse_line.setZValue(self.graphics_mouse_line.zValue() - 1)
+            self.scene.addItem(self.graphics_mouse_line)
+            self.is_following_mouse = True
+        
+    def ui_update_line(self):
+        try:
+            for line in self.lines:
+                line.update_pos()
+        except:
+            traceback.print_exc()
 
     def connect_logic_ports(self, port1: LogicPort, port2: LogicPort):
         if port1.is_connected and port2.is_connected:
@@ -117,8 +174,8 @@ class Controller():
     
     def load_scene(self):
         self.select_all_items()
-        self.deleted_selected()
-        data = self.load_json()
+        self.delete_selected()
+        data = self._load_json()
         if data:
             for data_set in data:
                 node_id = data_set.get("id")
@@ -164,7 +221,7 @@ class Controller():
 
                         self.connect_ports(connect_ports[0][0], connect_ports[1][0])
         
-    def load_json(self):
+    def _load_json(self):
         file_path = QFileDialog.getOpenFileName(None, "Load scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
         if file_path[0]:
             import json
@@ -200,7 +257,7 @@ class Controller():
         for item in self.scene.items():
             item.setSelected(True)
 
-    def deleted_selected(self):
+    def delete_selected(self):
         try:
             for item in self.scene.selectedItems():
                 if isinstance(item, GraphicsLine):
