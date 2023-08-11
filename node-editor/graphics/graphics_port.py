@@ -6,9 +6,9 @@ from graphics.port_label_widget import PortLabelWidget
 
 class GraphicsPort(QGraphicsItem):
 
-    def __init__(self, port_id, is_input, pos: QPointF, parent):
+    def __init__(self, port_id, is_input: bool, pos: QPointF, parent_node):
         super().__init__()
-        self.parent_node = parent
+        self.parent_node = parent_node
         self.setPos(pos)
         self.port_id = port_id
         self.is_input = is_input
