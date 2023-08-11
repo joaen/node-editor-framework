@@ -1,12 +1,14 @@
 from functools import partial
-from PySide2 import QtCore, QtWidgets, QtGui
+from PySide2.QtCore import Qt, QPointF
+from PySide2.QtGui import QPen, QColor
+from PySide2.QtWidgets import QGraphicsItem, QLabel, QGraphicsProxyWidget
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_rect import GraphicsRect
 from graphics.graphics_header import GraphicsHeader
 from graphics.port_label_widget import PortLabelWidget
 
 
-class GraphicsNode(QtWidgets.QGraphicsItem):
+class GraphicsNode(QGraphicsItem):
 
     def __init__(self, name="Node", header_color=None, default_value=0):
         super().__init__()
@@ -14,18 +16,18 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         self.ports = {}
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
-        name_label = QtWidgets.QLabel(name)
+        name_label = QLabel(name)
         name_label.setStyleSheet("background-color: transparent; color: white;")
 
-        name_label_widget = QtWidgets.QGraphicsProxyWidget(parent=self)
+        name_label_widget = QGraphicsProxyWidget(parent=self)
         name_label_widget.setWidget(name_label)
         name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (name_label.width() / 2), 15)
         name_label_widget.setZValue(self.zValue() + 1)
 
-        self.header_shape = GraphicsHeader(color=QtGui.QColor(*header_color))
+        self.header_shape = GraphicsHeader(color=QColor(*header_color))
         self.header_shape.setParentItem(self)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable)
-        self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QGraphicsItem.ItemIsMovable)
+        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
     def _create_ports(self, input, output):
         y_position = 50
@@ -35,7 +37,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         for name in combined_dict.keys():
             if name:
                 x_position = (lambda: 0 if combined_dict.get(name).is_input else 100)()
-                port_shape = GraphicsPort(port_id=combined_dict.get(name), parent=self, pos=QtCore.QPointF(x_position, y_position), is_input=combined_dict.get(name).is_input)
+                port_shape = GraphicsPort(port_id=combined_dict.get(name), parent=self, pos=QPointF(x_position, y_position), is_input=combined_dict.get(name).is_input)
                 port_shape.setParentItem(self)
                 port_shape.setZValue(port_shape.zValue() + 1)
                 port_label_widget = self._create_port_widget(label_text=name, port=port_shape, alignment=(lambda: "left" if combined_dict.get(name).is_input else "right")())
@@ -48,7 +50,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
     def _create_port_widget(self, label_text, port, alignment):
         port_label_widget = PortLabelWidget(label=label_text, alignment=alignment)
         port_label_widget.text_edit.setText(str(self.default_value))
-        port_label_proxy = QtWidgets.QGraphicsProxyWidget(parent=self)
+        port_label_proxy = QGraphicsProxyWidget(parent=self)
         port_label_proxy.setWidget(port_label_widget)
         port_label_proxy.setPos(0, (port.port_pos().y() - 15))
         port_label_widget.text_edit.returnPressed.connect(partial(self._text_changed, port))
@@ -63,7 +65,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
         self.scene().node_moved_signal.emit()
 
     def itemChange(self, change, value):
-        if change == QtWidgets.QGraphicsItem.ItemSelectedChange:
+        if change == QGraphicsItem.ItemSelectedChange:
             if value:
                 self.scene().node_pressed_signal.emit(self)
         return super().itemChange(change, value)
@@ -73,7 +75,7 @@ class GraphicsNode(QtWidgets.QGraphicsItem):
 
     def paint(self, painter, option, widget):
         if self.isSelected():
-            painter.setPen(QtGui.QPen(QtGui.QColor(255, 255, 255), 5, QtGui.Qt.SolidLine))
+            painter.setPen(QPen(QColor(255, 255, 255), 5, Qt.SolidLine))
             painter.drawRoundedRect(0, 0, self.node_shape.width, self.node_shape.height, 15, 15)
 
     @classmethod
