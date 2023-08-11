@@ -65,7 +65,10 @@ class Controller():
         self.update_nodes()   
 
     def ui_port_pressed(self, port_id, graphics_port):  
-        self.clicked_ports.append((port_id, graphics_port))
+        ### WHEN PORTS ARE CREATED ADD THEM TO A LIST IN THE CONTROLLER
+        logic_port = self.ports.get(graphics_port)
+        self.clicked_ports.append((logic_port, graphics_port))
+        # self.clicked_ports.append((port_id, graphics_port))
         
         if len(self.clicked_ports) >= 2:
             self.scene.removeItem(self.graphics_mouse_line)
