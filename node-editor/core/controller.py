@@ -30,6 +30,7 @@ class Controller():
         self.scene: EditorGraphicsScene = scene
         self.connections = []
         self.nodes = {}
+        self.ports = []
         self.lines = []
 
         self.clicked_ports = []
@@ -301,7 +302,9 @@ class Controller():
 
     def create_node(self, node_name):
         logic_node = self.create_logic_node(node_name)
-        graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene)
+        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
+        graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
+        self.scene.addItem(graphics_node)
         self.nodes[logic_node] = graphics_node
         return logic_node, graphics_node
 
