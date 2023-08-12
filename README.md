@@ -37,68 +37,34 @@ In your new class need to define and declare a few things:
 Here is an example on how you can create your own expression node:
 
 ```python
-from core.logic_port import LogicPort
 import uuid
+from core.logic_port import LogicPort
 
 class ExampleNode(LogicNode):
 
-    def __int__(self):
-        self._name = "NAME" # Name of the node, displayed in the UI
-        self._id = uuid.uuid4() # The node need an unique id for save/load functionality to work
-        self._ports = {"InputPort" : LogicPort(is_input=True), "OutputPort" : LogicPort(is_input=False)} # The io ports of the node.
-        self._connections = [] # This list is used to determine the evaluation order of the nodes.
-        self._node_color = (255, 255, 255) # Variable used in the UI to add unique color to the node.
+    NAME = None # Name of the node displayed in the UI.
 
-    @property
-    @abstractmethod
-    def name(self):
-        return self._name
-    
-    @property
-    @abstractmethod
-    def node_color(self):
-        return self._node_color
-    
+    def __int__(self):
+        self.id = uuid.uuid4() # The node need an unique id for save/load functionality to work
+        self.node_color = (255, 255, 255) # Color of the node displayed in the UI.
+        self.io_ports: = {"Input" : LogicPort(is_input=True), "Output" : LogicPort(is_input=False)} # The ports of the node.
+        self.connections = [] # All connected nodes will be added here, to determine evaluation order of the nodes.
+
     @abstractmethod
     def update(self):
         ''' 
         This method can be used to trigger the node operation externally.
         '''
-        pass
+        return self._node_operation()
 
     @abstractmethod
     def _node_operation(self):
         ''' 
         This is where the node operation is done.
         For example, a math node would do the calculations here
-        before the data is sent to the ouput port.
+        before the data is sent to the ouput.
         '''
         pass
-
-    @property
-    @abstractmethod
-    def ports(self):
-        return self._ports
-
-    @property
-    @abstractmethod
-    def id(self):
-        return self._id
-
-    @id.setter
-    @abstractmethod
-    def id(self, new_id):
-        self._id = new_id
-
-    @property
-    @abstractmethod
-    def connections(self):
-        return self._connections
-    
-    @connections.setter
-    @abstractmethod
-    def connections(self, new_connection):
-        self._connections.append(new_connection)
 
 ```
 
