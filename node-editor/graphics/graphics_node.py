@@ -80,10 +80,3 @@ class GraphicsNode(QGraphicsItem):
         if self.isSelected():
             painter.setPen(QPen(QColor(255, 255, 255), 5, Qt.SolidLine))
             painter.drawRoundedRect(0, 0, self.node_shape.width, self.node_shape.height, 15, 15)
-
-    # @classmethod
-    # def create_ui_node(cls, logic_node, scene):
-    #     graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
-    #     graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
-    #     scene.addItem(graphics_node)
-    #     return graphics_node
