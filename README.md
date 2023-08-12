@@ -3,6 +3,9 @@ Node editor framework which can be used as a standalone application or integrate
 
 ![Animation](https://github.com/joaen/node-editor-framework/assets/6629861/51a84e31-ebde-419b-9013-a154e5efb311)
 
+# Compatibility
+* This application was created using **Python 3.10.11**.
+* Tested with Windows 10 and OSX v10.12.
 
  # Dependencies
 * PySide2==5.15.2.1
@@ -12,6 +15,7 @@ To install the dependencies in your current environment you can run the followin
 ```
 pip install -r requirements.txt
 ```
+
 # How to use
 * Start the application by running main.py (Make sure the dependencies have been installed first).
 * Use mouse right-click button to show the context menu and create nodes.
@@ -19,70 +23,60 @@ pip install -r requirements.txt
 * Use scroll to zoom in/out and middle-mouse button to pan the view.
 
 # How to create a custom nodes
-To create your own custom node you can easily create new child class of the abstract class **LogicNode** and use it as a template.
+To create your own custom node you can simply create new child class of the abstract class ***LogicNode*** and use it as a template.
 
-In your new class need to define the name of your node and define the input and ouput ports of the node by creating instances of the **LogicPort** class. 
-
-You also need to create a node_operation method which is the expression or action of the node. For example, a multiply expression node would have the node_operation look something like this:
+In your new class need to define and declare a few things:
+1. The name of the node, using the constant ***NAME*** attribute.
+2. An unique id for the node, using the ***id*** variable (Preferrebly using uuid like the LogicNode class).
+3. An empty list where the node can store its connections, using the ***connections*** variable. This is used for determine the node evaluation order.
+4. The UI color of the node, using the ***node_color*** variable.
+5. The input/output, using the ***io_ports*** variable. This variable should be a dict. The keys in the dict should be a string and the values should be an instance of the ***LogicPort*** class.
+6. You also need to define a ***execute*** method which should hold the actual expression of the node and then pass that data to the output port. For example, a multiply expression node would have the ***execute*** look something like this:
 > output_port.data = (input1_port.data + input2_port.data)
 
 Here is an example on how you can create your own expression node:
 
 ```python
+import uuid
 from core.logic_port import LogicPort
-from core.logic_node import LogicNode
 
 class ExampleNode(LogicNode):
 
-    NAME = "Example Node"
+    NAME = "My Custom Node" # Name of the node displayed in the UI.
 
-    def __init__(self):
-        self.default_value = 0.0
-        self.input_ports_dict = self._create_inputs()
-        self.output_ports_dict = self._create_outputs()
+    def __int__(self):
+        self.id = uuid.uuid4() # The node need an unique id for save/load functionality to work
+        self.node_color = (255, 255, 255) # Color of the node displayed in the UI.
+        self.connections = [] # Used in runtime to determine evaluation order of the connected nodes.
 
-    def _node_operation(self):
+        # Declare io ports by adding a dict with name keys and instances of LogicPort as values.
+        self.io_ports = {"Input" : LogicPort(is_input=True), "Output" : LogicPort(is_input=False)}
+
+    def execute(self):
+        ''' 
+        This is where the node operation is done and then passed to the output port.
         '''
-        Write the actual node expression here
-        Eg. output_port.data = (input1_port.data + input2_port.data)
-        '''
-    
-    def update(self):
-        '''
-        This method is used to update the node externally
-        '''
-        self._node_operation()
-    
-    def _create_inputs(self):
-        '''
-        Create inputs using the LogicPort class
-        '''
-        input_port = LogicPort(is_input=True, parent_node=self)
-        return {"Input" : input_port}
-    
-    def _create_outputs(self):
-        '''
-        Create inputs using the LogicPort class
-        '''
-        ourtput_port = LogicPort(is_input=False, parent_node=self)
-        return {"Output" : output_port}
+        output_port = self.io_ports.get("Output")
+        output_port.data = (5 + 5)
 
 ```
 
-To make the node show up in the application you need to pass an instance of your logic node to the create_ui_node class method in the **GraphicsNode** class.
-The easiest approach is to create a new context menu item, create new a method where you create the logic node and graphics node, and then connect that context menu item action to your method:
-
+To make the custom node show up in the scene in the application you need to call the **create_node** method of the controller class and pass the name of your node class.
 
 ```python
-self.scene.add_contextmenu_item(self.create_my_custom_node, "Custom Node")
+controller = Controller(scene)
+controller.create_node("ExampleNode")
 ```
 
+The example nodes in the applications are created by connecting the create_node method to a context menu action. Like this:
+
 ```python
-def create_my_custom_node(self):
-    logic_node = self.controller.create_node("ExampleNode") # Create the logic node
-    graphics_node = GraphicsNode.create_ui_node(logic_node, scene=self.scene) # Create the ui node
-    self.controller.nodes[logic_node] = graphics_node # Add the node to the controller
+self.controller.scene.add_contextmenu_item(partial(self.controller.create_node, "AddNode"), "Add Node")
 ```
+
+
+
+
 
 
 
