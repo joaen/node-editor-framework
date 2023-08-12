@@ -30,7 +30,7 @@ class Controller():
         self.scene: EditorGraphicsScene = scene
         self.connections = []
         self.nodes = {}
-        self.ports = []
+        self.ports = {}
         self.lines = []
 
         self.clicked_ports = []
@@ -64,11 +64,10 @@ class Controller():
         port.data = value
         self.update_nodes()   
 
-    def ui_port_pressed(self, port_id, graphics_port):  
-        ### WHEN PORTS ARE CREATED ADD THEM TO A LIST IN THE CONTROLLER
-        logic_port = self.ports.get(graphics_port)
+    def ui_port_pressed(self, node_id, graphics_port): 
+        node_ports = self.ports.get(str(node_id))
+        logic_port = node_ports.get(graphics_port)
         self.clicked_ports.append((logic_port, graphics_port))
-        # self.clicked_ports.append((port_id, graphics_port))
         
         if len(self.clicked_ports) >= 2:
             self.scene.removeItem(self.graphics_mouse_line)
@@ -290,30 +289,30 @@ class Controller():
 
     def connect_ports(self, port1: LogicPort, port2: LogicPort):
         connection = self.connect_logic_ports(port1, port2)
+        ports_to_connect = []
         if connection:
-            ports_to_connect = []
-            for ui_node in self.nodes.values():
-                for logic_port, ui_port in ui_node.ports.items():
+            for id, ports in self.ports.items():
+                for ui_port, logic_port in ports.items():
                     if logic_port == port1:
                         ports_to_connect.append(ui_port)
                     if logic_port == port2:
                         ports_to_connect.append(ui_port)
-
             self.create_line(ports_to_connect[0], ports_to_connect[1])
             self.connections.append((port1, ports_to_connect[0], port2, ports_to_connect[1]))
             self.update_nodes()
 
     def create_node(self, node_name):
         logic_node = self.create_logic_node(node_name)
-        graphics_node = GraphicsNode(name=logic_node.NAME, header_color=logic_node.node_color, default_value=logic_node.default_value)
-        graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
+        graphics_node = GraphicsNode(name=logic_node.NAME, id=logic_node.id, header_color=logic_node.node_color, default_value=logic_node.default_value)
+        ports = graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
         self.scene.addItem(graphics_node)
         self.nodes[logic_node] = graphics_node
+        self.ports[str(logic_node.id)] = ports
         return logic_node, graphics_node
 
     def update_nodes(self):
         for node in self.nodes_sorted():
             node.update()
-            ports = self.nodes.get(node).ports
-            for logic_port in ports.keys():
-                ports.get(logic_port).set_input_text(logic_port.data)
+            ports = self.ports.get(str(node.id))
+            for ui_port, logic_port in ports.items():
+                ui_port.set_input_text(logic_port.data)

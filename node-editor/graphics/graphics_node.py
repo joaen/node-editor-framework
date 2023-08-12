@@ -10,10 +10,10 @@ from graphics.port_label_widget import PortLabelWidget
 
 class GraphicsNode(QGraphicsItem):
 
-    def __init__(self, name="Node", header_color=None, default_value=0):
+    def __init__(self, name="Node", header_color=None, default_value=0, id=None):
         super().__init__()
         self.default_value = default_value
-        self.ports = {}
+        self.id = id
         self.node_shape = GraphicsRect()
         self.node_shape.setParentItem(self)
         name_label = QLabel(name)
@@ -30,21 +30,24 @@ class GraphicsNode(QGraphicsItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
     def create_ports(self, input, output):
+        ports = {}
+        io_dict = {}
+        io_dict.update(input)
+        io_dict.update(output)
         y_position = 50
-        combined_dict = input.copy()
-        combined_dict.update(output)
         
-        for name in combined_dict.keys():
-            if name:
-                x_position = (lambda: 0 if combined_dict.get(name).is_input else 100)()
-                port_shape = GraphicsPort(port_id=combined_dict.get(name), parent=self, pos=QPointF(x_position, y_position), is_input=combined_dict.get(name).is_input)
+        for port_name in io_dict.keys():
+            if port_name:
+                x_position = (lambda: 0 if io_dict.get(port_name).is_input else 100)()
+                port_shape = GraphicsPort(port_id=io_dict.get(port_name), parent=self, pos=QPointF(x_position, y_position), is_input=io_dict.get(port_name).is_input)
                 port_shape.setParentItem(self)
                 port_shape.setZValue(port_shape.zValue() + 1)
-                port_label_widget = self._create_port_widget(label_text=name, port=port_shape, alignment=(lambda: "left" if combined_dict.get(name).is_input else "right")())
+                port_label_widget = self._create_port_widget(label_text=port_name, port=port_shape, alignment=(lambda: "left" if io_dict.get(port_name).is_input else "right")())
                 port_shape.port_widget = port_label_widget
                 self.node_shape.height += 40
                 y_position += 35
-                self.ports[combined_dict.get(name)] = port_shape
+                ports[port_shape] = io_dict.get(port_name)
+        return ports
 
             
     def _create_port_widget(self, label_text, port, alignment):
