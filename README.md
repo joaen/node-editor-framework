@@ -47,8 +47,11 @@ class ExampleNode(LogicNode):
     def __int__(self):
         self.id = uuid.uuid4() # The node need an unique id for save/load functionality to work
         self.node_color = (255, 255, 255) # Color of the node displayed in the UI.
-        self.io_ports: = {"Input" : LogicPort(is_input=True), "Output" : LogicPort(is_input=False)} # The ports of the node.
+        self.io_ports: = {} # The ports of the node.
         self.connections = [] # All connected nodes will be added here, to determine evaluation order of the nodes.
+
+        # Declare io ports by adding a dict with name keys and instances of LogicPort as values.
+        self.io_ports = {"Input" : LogicPort(is_input=True), "Output" : LogicPort(is_input=False)}
 
     @abstractmethod
     def update(self):
