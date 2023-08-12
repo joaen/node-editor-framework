@@ -23,15 +23,15 @@ pip install -r requirements.txt
 * Use scroll to zoom in/out and middle-mouse button to pan the view.
 
 # How to create a custom nodes
-To create your own custom node you can simply create new child class of the abstract class **LogicNode** and use it as a template.
+To create your own custom node you can simply create new child class of the abstract class ***LogicNode*** and use it as a template.
 
 In your new class need to define and declare a few things:
-1. The name of the node, using the constant **NAME** attribute.
-2. An unique id for the node, using the **id** variable (Preferrebly using uuid like the LogicNode class).
-3. An empty list where the node can store its connections, using the **connections** variable. This is used for determine the node evaluation order.
-4. The UI color of the node, using the **node_color** variable.
-5. The input/output, using the **io_ports** variable. This variable should be a dict. The keys in the dict should be a string and the values should be an instance of the **LogicPort** class.
-6. Lastly, you need an **update** method to be able to update the node externally. You also need to define a **_node_operation** method which should hold the actual expression of the node and then pass that data to the output port. For example, a multiply expression node would have the **_node_operation** look something like this:
+1. The name of the node, using the constant ***NAME*** attribute.
+2. An unique id for the node, using the ***id*** variable (Preferrebly using uuid like the LogicNode class).
+3. An empty list where the node can store its connections, using the ***connections*** variable. This is used for determine the node evaluation order.
+4. The UI color of the node, using the ***node_color*** variable.
+5. The input/output, using the ***io_ports*** variable. This variable should be a dict. The keys in the dict should be a string and the values should be an instance of the ***LogicPort*** class.
+6. Lastly, you need an ***update*** method to be able to update the node externally. You also need to define a ***_node_operation*** method which should hold the actual expression of the node and then pass that data to the output port. For example, a multiply expression node would have the ***_node_operation*** look something like this:
 > output_port.data = (input1_port.data + input2_port.data)
 
 Here is an example on how you can create your own expression node:
