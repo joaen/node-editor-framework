@@ -42,12 +42,11 @@ from core.logic_port import LogicPort
 
 class ExampleNode(LogicNode):
 
-    NAME = None # Name of the node displayed in the UI.
+    NAME = "My Custom Node" # Name of the node displayed in the UI.
 
     def __int__(self):
         self.id = uuid.uuid4() # The node need an unique id for save/load functionality to work
         self.node_color = (255, 255, 255) # Color of the node displayed in the UI.
-        self.io_ports: = {} # The ports of the node.
         self.connections = [] # Used in runtime to determine evaluation order of the connected nodes.
 
         # Declare io ports by adding a dict with name keys and instances of LogicPort as values.
@@ -63,15 +62,14 @@ class ExampleNode(LogicNode):
     @abstractmethod
     def _node_operation(self):
         ''' 
-        This is where the node operation is done.
-        For example, a math node would do the calculations here
-        before the data is sent to the ouput.
+        This is where the node operation is done and then passed to the output port.
         '''
-        pass
+        output_port = self.io_ports.get("Output")
+        output_port.data = (5 + 5)
 
 ```
 
-To make the custom node show up in the scene in the application you need to call the **create_node** method of the controller class.
+To make the custom node show up in the scene in the application you need to call the **create_node** method of the controller class and pass the name of your node class.
 
 ```python
 controller = Controller(scene)
