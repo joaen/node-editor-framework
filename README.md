@@ -31,7 +31,7 @@ In your new class need to define and declare a few things:
 3. An empty list where the node can store its connections, using the ***connections*** variable. This is used for determine the node evaluation order.
 4. The UI color of the node, using the ***node_color*** variable.
 5. The input/output, using the ***io_ports*** variable. This variable should be a dict. The keys in the dict should be a string and the values should be an instance of the ***LogicPort*** class.
-6. Lastly, you need an ***update*** method to be able to update the node externally. You also need to define a ***_node_operation*** method which should hold the actual expression of the node and then pass that data to the output port. For example, a multiply expression node would have the ***_node_operation*** look something like this:
+6. You also need to define a ***execute*** method which should hold the actual expression of the node and then pass that data to the output port. For example, a multiply expression node would have the ***execute*** look something like this:
 > output_port.data = (input1_port.data + input2_port.data)
 
 Here is an example on how you can create your own expression node:
@@ -52,13 +52,7 @@ class ExampleNode(LogicNode):
         # Declare io ports by adding a dict with name keys and instances of LogicPort as values.
         self.io_ports = {"Input" : LogicPort(is_input=True), "Output" : LogicPort(is_input=False)}
 
-    def update(self):
-        ''' 
-        This method can be used to trigger the node operation externally.
-        '''
-        return self._node_operation()
-
-    def _node_operation(self):
+    def execute(self):
         ''' 
         This is where the node operation is done and then passed to the output port.
         '''
