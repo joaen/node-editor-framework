@@ -148,10 +148,7 @@ class Controller():
         else:
             raise ValueError(f"No LogicNode subclass named {node_name} exists in the current namespace")
 
-    def nodes_sorted(self):
-        """
-        Perform a topological sort on the nodes in the current scene and return them as a list.
-        """
+    def get_nodes_topological(self):
         visited = set()
         post_order = []
         source_nodes = []
@@ -311,7 +308,7 @@ class Controller():
         return logic_node, graphics_node
 
     def update_nodes(self):
-        for node in self.nodes_sorted():
+        for node in self.get_nodes_topological():
             node.update()
             ports = self.node_ports.get(str(node.id))
             for ui_port, logic_port in ports.items():
