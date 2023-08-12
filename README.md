@@ -52,14 +52,12 @@ class ExampleNode(LogicNode):
         # Declare io ports by adding a dict with name keys and instances of LogicPort as values.
         self.io_ports = {"Input" : LogicPort(is_input=True), "Output" : LogicPort(is_input=False)}
 
-    @abstractmethod
     def update(self):
         ''' 
         This method can be used to trigger the node operation externally.
         '''
         return self._node_operation()
 
-    @abstractmethod
     def _node_operation(self):
         ''' 
         This is where the node operation is done and then passed to the output port.
