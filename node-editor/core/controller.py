@@ -89,7 +89,7 @@ class Controller():
         try:
             for line in self.lines:
                 line.update_pos()
-        except:
+        except RuntimeError:
             traceback.print_exc()
 
     def connect_logic_ports(self, port1: LogicPort, port2: LogicPort):
@@ -276,7 +276,7 @@ class Controller():
                 if line.port_one.parent_node.scene() == None or line.port_two.parent_node.scene() == None:
                         self.scene.removeItem(line)
                         self.break_connection(line.port_one, line.port_two)
-        except:
+        except RuntimeError:
             traceback.print_exc()
 
     def create_line(self, port_one : GraphicsPort, port_two : GraphicsPort):
@@ -300,17 +300,23 @@ class Controller():
             self.update_nodes()
 
     def create_node(self, node_name):
-        logic_node = self.create_logic_node(node_name)
-        graphics_node = GraphicsNode(name=logic_node.NAME, id=logic_node.id, header_color=logic_node.node_color, default_value=logic_node.default_value)
-        ports = graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
-        self.scene.addItem(graphics_node)
-        self.nodes[logic_node] = graphics_node
-        self.node_ports[str(logic_node.id)] = ports
-        return logic_node, graphics_node
+        try:
+            logic_node = self.create_logic_node(node_name)
+            graphics_node = GraphicsNode(name=logic_node.NAME, id=logic_node.id, header_color=logic_node.node_color, default_value=logic_node.default_value)
+            ports = graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
+            self.scene.addItem(graphics_node)
+            self.nodes[logic_node] = graphics_node
+            self.node_ports[str(logic_node.id)] = ports
+            return logic_node, graphics_node
+        except RuntimeError:
+            traceback.print_exc()
 
     def update_nodes(self):
-        for node in self.get_nodes_topological():
-            node.update()
-            ports = self.node_ports.get(str(node.id))
-            for ui_port, logic_port in ports.items():
-                ui_port.set_input_text(logic_port.data)
+        try:
+            for node in self.get_nodes_topological():
+                node.update()
+                ports = self.node_ports.get(str(node.id))
+                for ui_port, logic_port in ports.items():
+                    ui_port.set_input_text(logic_port.data)
+        except RuntimeError:
+            traceback.print_exc()
