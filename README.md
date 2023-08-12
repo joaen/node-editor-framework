@@ -48,7 +48,7 @@ controller = Controller(scene)
 controller.create_node("ExampleNode")
 ```
 
-The exmaples nodes in the applications are created by connection the create_node method to a context menu action. Like this:
+The examples nodes in the applications are created by connection the create_node method to a context menu action. Like this:
 
 ```python
 self.controller.scene.add_contextmenu_item(partial(self.controller.create_node, "AddNode"), "Add Node")
