@@ -174,13 +174,16 @@ class Controller():
         post_order.reverse()
         return post_order
     
-    def load_scene(self):
+    def new_scene(self):
         self.select_all_items()
         self.delete_selected()
         self.nodes.clear()
         self.node_ports.clear()
+
+    def load_scene(self):
         data = self._load_json()
         if data:
+            self.new_scene()
             for data_set in data:
                 node_id = data_set.get("id")
                 node_name = data_set.get("node_name")

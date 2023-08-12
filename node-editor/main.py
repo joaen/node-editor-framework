@@ -32,10 +32,12 @@ class MainWindow(QWidget):
         self.controller.scene.add_contextmenu_item(partial(self.controller.create_node, "MultiplyNode"), "Multiply Node")
         self.controller.scene.add_contextmenu_item(partial(self.controller.create_node, "FloatNode"), "Float Node")
         self.controller.scene.contextMenu.addSeparator()
+        new_action = self.controller.scene.add_contextmenu_item(self.controller.new_scene, "New Scene")
         save_action = self.controller.scene.add_contextmenu_item(self.controller.save_scene, "Save Scene")
         load_action = self.controller.scene.add_contextmenu_item(self.controller.load_scene, "Load Scene")
         save_action.setIcon(app.style().standardIcon(QStyle.SP_DialogSaveButton))
         load_action.setIcon(app.style().standardIcon(QStyle.SP_DialogOpenButton))
+        new_action.setIcon(app.style().standardIcon(QStyle.SP_FileIcon))
 
 
 if __name__ == "__main__":
