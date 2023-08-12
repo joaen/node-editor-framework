@@ -31,7 +31,7 @@ class GraphicsPort(QGraphicsItem):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            self.scene().port_pressed_signal.emit(self.parent_node.id, self)
+            self.scene().port_pressed_signal.emit(str(self.parent_node.id), self)
             self.brush.setColor(self.click_color)
             self.update()
         else:

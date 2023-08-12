@@ -4,17 +4,16 @@ from PySide2.QtWidgets import QGraphicsScene, QMenu, QAction
 from graphics.graphics_line import GraphicsLine
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_node import GraphicsNode
-from core.logic_port import LogicPort
 
 
 class EditorGraphicsScene(QGraphicsScene):
 
     node_moved_signal = Signal()
     mouse_position_signal = Signal(QPointF)
-    port_pressed_signal = Signal(LogicPort, GraphicsPort)
+    port_pressed_signal = Signal(str, GraphicsPort)
     line_pressed_signal = Signal(GraphicsLine)
     node_pressed_signal = Signal(GraphicsNode)
-    port_text_changed_signal = Signal(LogicPort, str)
+    port_text_changed_signal = Signal(str, GraphicsPort, str)
     clicked_view_signal = Signal()
 
     def __init__(self):

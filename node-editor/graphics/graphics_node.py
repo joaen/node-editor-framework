@@ -61,7 +61,7 @@ class GraphicsNode(QGraphicsItem):
         return port_label_widget
 
     def _text_changed(self, port):
-        self.scene().port_text_changed_signal.emit(port.port_id, port.port_widget.text_edit.text())
+        self.scene().port_text_changed_signal.emit(str(self.id), port, port.port_widget.text_edit.text())
 
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)

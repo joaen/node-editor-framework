@@ -60,11 +60,12 @@ class Controller():
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
-    def ui_port_text_changed(self, port, value):
-        port.data = value
-        self.update_nodes()   
+    def ui_port_text_changed(self, node_id, port, value):
+        ports = self.node_ports.get(str(node_id))
+        ports.get(port).data = value
+        self.update_nodes()
 
-    def ui_port_pressed(self, node_id, graphics_port): 
+    def ui_port_pressed(self, node_id, graphics_port):
         node_ports = self.node_ports.get(str(node_id))
         logic_port = node_ports.get(graphics_port)
         self.clicked_ports.append((logic_port, graphics_port))
