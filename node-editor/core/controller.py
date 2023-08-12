@@ -272,11 +272,13 @@ class Controller():
     def delete_selected(self):
         all_ports = {key: value for inner_dict in self.node_ports.values() for key, value in inner_dict.items()}
         try:
+            lines_to_remove = []
             for item in self.scene.selectedItems():
                 if isinstance(item, GraphicsLine):
-                    delete_connection = self.break_connection(all_ports.get(item.port_one), all_ports.get(item.port_two))
-                    if delete_connection:
-                        self.scene.removeItem(item)
+                    deleted_connection = self.break_connection(all_ports.get(item.port_one), all_ports.get(item.port_two))
+                    if deleted_connection:
+                        lines_to_remove.append(item)
+
                 if isinstance(item, GraphicsNode):
                     for node in self.nodes.keys():
                         if self.nodes.get(node) == item:
@@ -284,11 +286,15 @@ class Controller():
                             break
                     self.scene.removeItem(item)
             
-            for line in self.lines:
-                if line.port_one.parent_node.scene() == None or line.port_two.parent_node.scene() == None:
-                        break_connection = self.break_connection(all_ports.get(line.port_one), all_ports.get(line.port_two))
-                        if break_connection:
-                            self.scene.removeItem(line)
+                    for line in self.lines:
+                        if line.port_one.parent_node.scene() == None or line.port_two.parent_node.scene() == None:
+                            removed_connection = self.break_connection(all_ports.get(line.port_one), all_ports.get(line.port_two))
+                            if removed_connection:
+                                lines_to_remove.append(line)
+            for line in lines_to_remove:
+                self.lines.remove(line)
+                self.scene.removeItem(line)
+        
         except RuntimeError:
             traceback.print_exc()
 
