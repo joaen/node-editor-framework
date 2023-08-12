@@ -1,56 +1,22 @@
 from abc import ABC, abstractmethod
 import uuid
+from core.logic_port import LogicPort
 
 class LogicNode(ABC):
 
-    NAME = None
+    NAME = None # Name of the node displayed in the UI.
 
     def __int__(self):
-        self._id = uuid.uuid4() # The node need an unique id for save/load functionality to work
-        self.node_color = (255, 255, 255)
-        self.input_ports = self._create_inputs()
-        self.output_ports = self._create_outputs()
-        self.connections = []
+        self.id = uuid.uuid4() # The node need an unique id for save/load functionality to work
+        self.node_color = (255, 255, 255) # Color of the node displayed in the UI.
+        self.io_ports: {str, LogicPort} = {} # The ports of the node.
+        self.connections = [] # All connected nodes will be added here, to determine evaluation order of the nodes.
 
     @abstractmethod
-    def _create_inputs(self):
-        ''' 
-        This is where the input LogicPort instances are created and
-        then added to the input_ports.
-        '''
-        return {}
-    
-    @abstractmethod
-    def _create_outputs(self):
-        ''' 
-        This is where the output LogicPort instances are created and
-        then added to the output_ports.
-        '''
-        return {}
-
-    @abstractmethod
-    def update(self):
-        ''' 
-        This method can be used to trigger the node operation externally.
-        '''
-        pass
-
-    @abstractmethod
-    def _node_operation(self):
+    def execute(self):
         ''' 
         This is where the node operation is done.
         For example, a math node would do the calculations here
         before the data is sent to the ouput.
         '''
         pass
-
-    @property
-    @abstractmethod
-    def id(self):
-        return self._id
-
-    @id.setter
-    @abstractmethod
-    def id(self, new_id):
-        self._id = new_id
-

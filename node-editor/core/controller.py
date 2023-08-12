@@ -155,7 +155,7 @@ class Controller():
         source_nodes = []
 
         for logic_node in list(self.nodes.keys()):
-            for port in list(logic_node.input_ports.values()):
+            for port in list(logic_node.io_ports.values()):
                 if port.is_connected:
                     break
                 else:
@@ -239,7 +239,7 @@ class Controller():
             for node in self.nodes.keys():
                 connections = []
                 input_port_data = {}
-                for port in node.input_ports.values():
+                for port in node.io_ports.values():
                     input_port_data["{}.{}".format(node.id, port.name)] = port.data
                     if port.is_connected:
                         connections.append(["{}.{}".format(node.id, port.name), "{}.{}".format(port.connection.parent_node.id, port.connection.name)])
@@ -303,7 +303,7 @@ class Controller():
         try:
             logic_node = self.create_logic_node(node_name)
             graphics_node = GraphicsNode(name=logic_node.NAME, id=logic_node.id, header_color=logic_node.node_color, default_value=logic_node.default_value)
-            ports = graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
+            ports = graphics_node.create_ports(ports=logic_node.io_ports)
             self.scene.addItem(graphics_node)
             self.nodes[logic_node] = graphics_node
             self.node_ports[str(logic_node.id)] = ports
@@ -314,7 +314,7 @@ class Controller():
     def update_nodes(self):
         try:
             for node in self.get_nodes_topological():
-                node.update()
+                node.execute()
                 ports = self.node_ports.get(str(node.id))
                 for ui_port, logic_port in ports.items():
                     ui_port.set_input_text(logic_port.data)
