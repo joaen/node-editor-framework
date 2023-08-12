@@ -37,7 +37,7 @@ class GraphicsNode(QGraphicsItem):
         for port_name in io_ports.keys():
             if port_name:
                 x_position = (lambda: 0 if io_ports.get(port_name).is_input else 100)()
-                port_shape = GraphicsPort(port_id=io_ports.get(port_name), parent=self, pos=QPointF(x_position, y_position), is_input=io_ports.get(port_name).is_input)
+                port_shape = GraphicsPort(parent=self, pos=QPointF(x_position, y_position), is_input=io_ports.get(port_name).is_input)
                 port_shape.setParentItem(self)
                 port_shape.setZValue(port_shape.zValue() + 1)
                 port_label_widget = self._create_port_widget(label_text=port_name, port=port_shape, alignment=(lambda: "left" if io_ports.get(port_name).is_input else "right")())

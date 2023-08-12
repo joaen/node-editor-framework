@@ -56,10 +56,10 @@ class Controller():
             self.scene.removeItem(self.graphics_mouse_line)
 
     def mouse_moved(self, mouse_pos):
-        if self.is_following_mouse == True:
+        if self.is_following_mouse:
             clicked_one, clicked_one_graphics = self.clicked_ports[0]
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
-
+    
     def ui_port_text_changed(self, node_id, port, value):
         ports = self.node_ports.get(node_id)
         ports.get(port).data = value
@@ -125,14 +125,19 @@ class Controller():
             return True
 
     def break_connection(self, port_1: LogicPort, port_2: LogicPort):
-        port_1.connection = None
-        port_2.connection = None
-        port_1.is_connected = False
-        port_2.is_connected = False
+        if isinstance(port_1, LogicPort) and isinstance(port_2, LogicPort):
+            port_1.connection = None
+            port_2.connection = None
+            port_1.is_connected = False
+            port_2.is_connected = False
 
-        ports_to_check = {port_1, port_2}
-        self.connections = [connection for connection in self.connections if not ports_to_check.issubset(set(connection))]
-        print("Broke connection between: {} AND {} ".format(port_1, port_2))
+            ports_to_check = {port_1, port_2}
+            self.connections = [connection for connection in self.connections if not ports_to_check.issubset(set(connection))]
+            print("Broke connection between: {} AND {} ".format(port_1, port_2))
+            return True
+        else:
+            print("CAN'T BREAK CONNECTION BETWEEN: {} AND {} ".format(port_1, port_2))
+            return False
 
     def delete_node(self, node : LogicNode):
         node.exsist = False
@@ -265,11 +270,13 @@ class Controller():
             item.setSelected(True)
 
     def delete_selected(self):
+        all_ports = {key: value for inner_dict in self.node_ports.values() for key, value in inner_dict.items()}
         try:
             for item in self.scene.selectedItems():
                 if isinstance(item, GraphicsLine):
-                    self.break_connection(item.port_one.port_id, item.port_two.port_id)
-                    self.scene.removeItem(item)
+                    delete_connection = self.break_connection(all_ports.get(item.port_one), all_ports.get(item.port_two))
+                    if delete_connection:
+                        self.scene.removeItem(item)
                 if isinstance(item, GraphicsNode):
                     for node in self.nodes.keys():
                         if self.nodes.get(node) == item:
@@ -279,8 +286,9 @@ class Controller():
             
             for line in self.lines:
                 if line.port_one.parent_node.scene() == None or line.port_two.parent_node.scene() == None:
-                        self.scene.removeItem(line)
-                        self.break_connection(line.port_one, line.port_two)
+                        break_connection = self.break_connection(all_ports.get(line.port_one), all_ports.get(line.port_two))
+                        if break_connection:
+                            self.scene.removeItem(line)
         except RuntimeError:
             traceback.print_exc()
 
