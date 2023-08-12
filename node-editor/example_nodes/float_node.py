@@ -7,7 +7,7 @@ class FloatNode(LogicNode):
     NAME = "Float Node"
 
     def __init__(self):
-        self.id = uuid.uuid4()
+        self.id = str(uuid.uuid4())
         self.default_value = 0.0
         self.node_color = (0, 169, 244)
         self.io_ports = self._create_ports()

@@ -61,7 +61,7 @@ class Controller():
             self.graphics_mouse_line.update_pos(pos1=clicked_one_graphics.port_pos(), pos2=mouse_pos)
 
     def ui_port_text_changed(self, node_id, port, value):
-        ports = self.node_ports.get(str(node_id))
+        ports = self.node_ports.get(node_id)
         ports.get(port).data = value
         self.update_nodes()
 
@@ -177,6 +177,8 @@ class Controller():
     def load_scene(self):
         self.select_all_items()
         self.delete_selected()
+        self.nodes.clear()
+        self.node_ports.clear()
         data = self._load_json()
         if data:
             for data_set in data:
@@ -184,12 +186,10 @@ class Controller():
                 node_name = data_set.get("node_name")
                 node_pos = data_set.get("pos")
 
-                logic_node, graphics_node = self.create_node(node_name)
-                self.nodes[logic_node] = graphics_node
-                logic_node.id = node_id
+                logic_node, graphics_node = self.create_node(node_name=node_name, id=node_id)
                 graphics_node.setPos(node_pos[0], node_pos[1])
             
-            for data_set in data: 
+            for data_set in data:
                 connections = data_set.get("connections") 
                 port_data = data_set.get("port_data")
 
@@ -199,7 +199,7 @@ class Controller():
                         port_name = port.split(".")[1]
                         for node, ui_node in self.nodes.items():
                             if port_parent == node.id:
-                                node.input_ports.get(port_name).data = data
+                                node.io_ports.get(port_name).data = data    
                                 self.update_nodes()
 
                 if connections:
@@ -213,15 +213,16 @@ class Controller():
                         connect_ports = []
                         for node, ui_node in self.nodes.items():
                             if port1_parent == node.id:
-                                for port, ui_port in ui_node.ports.items():
-                                    if port.name == port1_name:
-                                        connect_ports.append((port, ui_port))
-                            if port2_parent == node.id:
-                                for port, ui_port in ui_node.ports.items():
-                                    if port.name == port2_name:
-                                        connect_ports.append((port, ui_port))
-
-                        self.connect_ports(connect_ports[0][0], connect_ports[1][0])
+                                ports = self.node_ports.get(node.id)
+                                for ui_port, logic_port in ports.items():
+                                    if logic_port.name == port1_name:
+                                        connect_ports.append(logic_port)
+                            elif port2_parent == node.id:
+                                ports = self.node_ports.get(node.id)
+                                for ui_port, logic_port in ports.items():
+                                    if logic_port.name == port2_name:
+                                        connect_ports.append(logic_port)
+                        self.connect_ports(connect_ports[0], connect_ports[1])
         
     def _load_json(self):
         file_path = QFileDialog.getOpenFileName(None, "Load scene", os.path.dirname(os.path.abspath(__file__)), "Scene file (*.json);;All files (*.*)")
@@ -240,12 +241,13 @@ class Controller():
                 connections = []
                 input_port_data = {}
                 for port in node.io_ports.values():
-                    input_port_data["{}.{}".format(node.id, port.name)] = port.data
-                    if port.is_connected:
-                        connections.append(["{}.{}".format(node.id, port.name), "{}.{}".format(port.connection.parent_node.id, port.connection.name)])
+                    if port.is_input:
+                        input_port_data["{}.{}".format(node.id, port.name)] = port.data
+                        if port.is_connected:
+                            connections.append(["{}.{}".format(node.id, port.name), "{}.{}".format(port.connection.parent_node.id, port.connection.name)])
 
                 graphics_node = self.nodes.get(node)
-                node_data = {"id" : str(node.id),
+                node_data = {"id" : node.id,
                             "node_name" : str(type(node).__name__),
                             "pos" : [graphics_node.pos().x(), graphics_node.pos().y()],
                             "connections" : connections,
@@ -299,9 +301,11 @@ class Controller():
             self.connections.append((port1, ports_to_connect[0], port2, ports_to_connect[1]))
             self.update_nodes()
 
-    def create_node(self, node_name):
+    def create_node(self, node_name, id=None):
         try:
             logic_node = self.create_logic_node(node_name)
+            node_id = (lambda: logic_node.id if id == None else id)()
+            logic_node.id = node_id
             graphics_node = GraphicsNode(name=logic_node.NAME, id=logic_node.id, header_color=logic_node.node_color, default_value=logic_node.default_value)
             ports = graphics_node.create_ports(ports=logic_node.io_ports)
             self.scene.addItem(graphics_node)
@@ -315,7 +319,8 @@ class Controller():
         try:
             for node in self.get_nodes_topological():
                 node.execute()
-                ports = self.node_ports.get(str(node.id))
+                ports = self.node_ports.get(node.id)
+
                 for ui_port, logic_port in ports.items():
                     ui_port.set_input_text(logic_port.data)
         except RuntimeError:
