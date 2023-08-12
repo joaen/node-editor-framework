@@ -30,7 +30,7 @@ class Controller():
         self.scene: EditorGraphicsScene = scene
         self.connections = []
         self.nodes = {}
-        self.ports = {}
+        self.node_ports = {}
         self.lines = []
 
         self.clicked_ports = []
@@ -65,7 +65,7 @@ class Controller():
         self.update_nodes()   
 
     def ui_port_pressed(self, node_id, graphics_port): 
-        node_ports = self.ports.get(str(node_id))
+        node_ports = self.node_ports.get(str(node_id))
         logic_port = node_ports.get(graphics_port)
         self.clicked_ports.append((logic_port, graphics_port))
         
@@ -291,7 +291,7 @@ class Controller():
         connection = self.connect_logic_ports(port1, port2)
         ports_to_connect = []
         if connection:
-            for id, ports in self.ports.items():
+            for id, ports in self.node_ports.items():
                 for ui_port, logic_port in ports.items():
                     if logic_port == port1:
                         ports_to_connect.append(ui_port)
@@ -307,12 +307,12 @@ class Controller():
         ports = graphics_node.create_ports(input=logic_node.input_ports, output=logic_node.output_ports)
         self.scene.addItem(graphics_node)
         self.nodes[logic_node] = graphics_node
-        self.ports[str(logic_node.id)] = ports
+        self.node_ports[str(logic_node.id)] = ports
         return logic_node, graphics_node
 
     def update_nodes(self):
         for node in self.nodes_sorted():
             node.update()
-            ports = self.ports.get(str(node.id))
+            ports = self.node_ports.get(str(node.id))
             for ui_port, logic_port in ports.items():
                 ui_port.set_input_text(logic_port.data)
