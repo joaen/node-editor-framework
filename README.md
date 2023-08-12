@@ -26,12 +26,12 @@ pip install -r requirements.txt
 To create your own custom node you can simply create new child class of the abstract class **LogicNode** and use it as a template.
 
 In your new class need to define and declare a few things:
-1. The name of the node, using the constant **_name** variable and **name** property method.
-2. An unique id for the node, using the **_id** variable and the **id** property method (Preferrebly using uuid like the LogicNode class).
-3. An empty list where the node can store its connections, using the **_connections** variable and **connections** property method.
-4. The UI color of the node, using the **_node_color** variable and **node_color** property method.
-5. The input/output, using the **_ports** variable and the **ports** property method. This variable should be a dict. The keys in the dict should be a name string of the ports and the values should be an instance of the **LogicPort** class.
-6. Lastly, you also need to define a **node_operation** method which should hold the actual expression or action of the node and then pass that data to the output port. For example, a multiply expression node would have the **node_operation** look something like this:
+1. The name of the node, using the constant **NAME** attribute.
+2. An unique id for the node, using the **id** variable (Preferrebly using uuid like the LogicNode class).
+3. An empty list where the node can store its connections, using the **connections** variable. This is used for determine the node evaluation order.
+4. The UI color of the node, using the **node_color** variable.
+5. The input/output, using the **io_ports** variable. This variable should be a dict. The keys in the dict should be a string and the values should be an instance of the **LogicPort** class.
+6. Lastly, you need an **update** method to be able to update the node externally. You also need to define a **_node_operation** method which should hold the actual expression of the node and then pass that data to the output port. For example, a multiply expression node would have the **_node_operation** look something like this:
 > output_port.data = (input1_port.data + input2_port.data)
 
 Here is an example on how you can create your own expression node:
