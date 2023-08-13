@@ -18,7 +18,9 @@ class GraphicsNode(QGraphicsItem):
         self.node_shape.setParentItem(self)
         name_label = QLabel(name)
         name_label.setStyleSheet("background-color: transparent; color: white;")
-
+        font = QFont()
+        font.setPointSize(11)
+        name_label.setFont(font)
         name_label_widget = QGraphicsProxyWidget(parent=self)
         name_label_widget.setWidget(name_label)
         name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (name_label.width() / 2), 15)

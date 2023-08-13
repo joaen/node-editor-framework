@@ -1,6 +1,5 @@
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QLabel, QWidget, QLineEdit, QHBoxLayout
-from PySide2.QtGui import QFont
 
 
 class PortLabelWidget(QWidget):
