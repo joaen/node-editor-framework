@@ -47,7 +47,7 @@ if __name__ == "__main__":
     reference_resolution = 2560
     screen_resolution = QGuiApplication.primaryScreen().size().width()
     scaling_factor = screen_resolution / reference_resolution
-    font_size = int(12 * scaling_factor * screen_dpi / 96)
+    font_size = int(11 * scaling_factor * screen_dpi / 96)
     default_font = app.font()
     default_font.setPointSize(font_size)
     app.setFont(default_font)
