@@ -1,5 +1,6 @@
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QLabel, QWidget, QLineEdit, QHBoxLayout
+from PySide2.QtGui import QFont
 
 
 class PortLabelWidget(QWidget):
@@ -17,6 +18,10 @@ class PortLabelWidget(QWidget):
         self.text_edit.setFixedWidth(60)
         self.text_edit.setFixedHeight(25)
         self.text_label.setStyleSheet("color: #FFFFFF;")
+        font = QFont()
+        font.setPointSize(12)
+        self.text_label.setFont(font)
+        self.text_edit.setFont(font)
         self.text_edit.setStyleSheet(
                         "color: #FFFFFF;"
                         "border-radius: 5px;"
