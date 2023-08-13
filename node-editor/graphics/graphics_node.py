@@ -1,6 +1,6 @@
 from functools import partial
 from PySide2.QtCore import Qt, QPointF
-from PySide2.QtGui import QPen, QColor
+from PySide2.QtGui import QPen, QColor, QFont
 from PySide2.QtWidgets import QGraphicsItem, QLabel, QGraphicsProxyWidget
 from graphics.graphics_port import GraphicsPort
 from graphics.graphics_rect import GraphicsRect
@@ -18,6 +18,9 @@ class GraphicsNode(QGraphicsItem):
         self.node_shape.setParentItem(self)
         name_label = QLabel(name)
         name_label.setStyleSheet("background-color: transparent; color: white;")
+        font = QFont()
+        font.setPointSize(12)
+        name_label.setFont(font)
 
         name_label_widget = QGraphicsProxyWidget(parent=self)
         name_label_widget.setWidget(name_label)
@@ -28,6 +31,7 @@ class GraphicsNode(QGraphicsItem):
         self.header_shape.setParentItem(self)
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
+        self.setFlag(QGraphicsItem.ItemIsFocusable, True)
 
     def create_ports(self, ports):
         io_ports = ports
@@ -64,6 +68,12 @@ class GraphicsNode(QGraphicsItem):
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
         self.scene().node_moved_signal.emit()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_F:
+            if self.scene() is not None:
+                view = self.scene().views()[0]
+                view.centerOn(self)
 
     def itemChange(self, change, value):
         if change == QGraphicsItem.ItemSelectedChange:
