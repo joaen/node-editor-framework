@@ -1,7 +1,7 @@
 # Python + PySide2 Node Editor
 Node editor framework which can be used as a standalone application or integrated into Python + PySide2 projects.
-![Animation](https://github.com/joaen/node-editor-framework/assets/6629861/3763f1c7-0fb1-468b-ba5e-75790b3c1ac6)
 
+![anim_node](https://github.com/joaen/node-editor-framework/assets/6629861/c152faed-7729-4389-9df3-884e0464bb9d)
 
 # Compatibility
 * This application was created using **Python 3.10.11**.
@@ -18,9 +18,19 @@ pip install -r requirements.txt
 
 # How to use
 * Start the application by running main.py (Make sure the dependencies have been installed first).
-* Use mouse right-click button to show the context menu and create nodes.
-* Click the **Delete** keyboard button to delete nodes and connections.
-* Use scroll to zoom in/out and middle-mouse button to pan the view.
+
+Command           | Key binding    
+---| ---
+Open context menu | RMB            
+Focus on selected | F              
+Delete selected   | Del            
+Pan scene view    | MMB            
+Zoom in/out       | Scroll up/down 
+
+* The context menu contains these actions:
+
+![image](https://github.com/joaen/node-editor-framework/assets/6629861/0e9d3e7c-38f8-419e-94e7-e2e899fe7308)
+
 
 # How to create a custom nodes
 To create your own custom node you can simply create new child class of the abstract class ***LogicNode*** and use it as a template.
