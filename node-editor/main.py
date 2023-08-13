@@ -44,7 +44,10 @@ class MainWindow(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     screen_dpi = QGuiApplication.primaryScreen().logicalDotsPerInch()
-    font_size = int(12 * screen_dpi / 96)
+    reference_resolution = 2560
+    screen_resolution = QGuiApplication.primaryScreen().size().width()
+    scaling_factor = screen_resolution / reference_resolution
+    font_size = int(12 * scaling_factor * screen_dpi / 96)
     default_font = app.font()
     default_font.setPointSize(font_size)
     app.setFont(default_font)
