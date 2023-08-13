@@ -23,11 +23,12 @@ class GraphicsNode(QGraphicsItem):
         name_label.setFont(font)
         name_label_widget = QGraphicsProxyWidget(parent=self)
         name_label_widget.setWidget(name_label)
-        name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (name_label.width() / 2), 15)
         name_label_widget.setZValue(self.zValue() + 1)
 
         self.header_shape = GraphicsHeader(color=QColor(*header_color))
         self.header_shape.setParentItem(self)
+        name_label_widget.setPos((self.node_shape.boundingRect().width() / 2) - (name_label.width() / 2), self.header_shape.boundingRect().y() + (self.header_shape.boundingRect().height() / 2) - (name_label.height() / 2))
+    
         self.setFlag(QGraphicsItem.ItemIsMovable)
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
