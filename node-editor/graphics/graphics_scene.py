@@ -26,9 +26,9 @@ class EditorGraphicsScene(QGraphicsScene):
         self.pen = QPen(self.grid_color, 1, Qt.DotLine)
         self.key_events = {}
 
-        self.setSceneRect(QRectF(-1000, -1000, 2000, 2000))
+        self.setSceneRect(QRectF(-10000, -10000, 20000, 20000))
         self.setBackgroundBrush(self.background_color)
-
+        
     def create_key_event(self, key: Qt.Key, command):
         self.key_events[key] = command
 

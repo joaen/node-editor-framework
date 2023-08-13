@@ -1,6 +1,7 @@
 import sys
 from PySide2.QtWidgets import QHBoxLayout, QWidget, QStyle, QApplication
 from PySide2.QtCore import QSize
+from PySide2.QtGui import QFont, QGuiApplication
 from functools import partial
 from core.controller import Controller
 from graphics.graphics_scene import EditorGraphicsScene
