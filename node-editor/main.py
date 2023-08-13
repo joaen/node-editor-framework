@@ -1,6 +1,7 @@
 import sys
 from PySide2.QtWidgets import QHBoxLayout, QWidget, QStyle, QApplication
 from PySide2.QtCore import QSize
+from PySide2.QtGui import QFont, QGuiApplication
 from functools import partial
 from core.controller import Controller
 from graphics.graphics_scene import EditorGraphicsScene
@@ -42,6 +43,12 @@ class MainWindow(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    screen_dpi = QGuiApplication.primaryScreen().logicalDotsPerInch()
+    font_size = int(12 * screen_dpi / 96)
+    default_font = app.font()
+    default_font.setPointSize(font_size)
+    app.setFont(default_font)
+
     window = MainWindow()
     window.show()
     app.exec_()
